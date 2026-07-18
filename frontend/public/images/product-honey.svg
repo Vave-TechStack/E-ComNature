@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fef3c7"/>
+      <stop offset="100%" stop-color="#fde68a"/>
+    </linearGradient>
+    <linearGradient id="honey" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#bg)" rx="20"/>
+  <!-- Jar body -->
+  <rect x="120" y="160" width="160" height="150" rx="15" fill="url(#honey)" opacity="0.9"/>
+  <rect x="120" y="160" width="160" height="30" rx="5" fill="#92400e" opacity="0.3"/>
+  <!-- Jar lid -->
+  <rect x="135" y="130" width="130" height="35" rx="8" fill="#92400e"/>
+  <rect x="155" y="125" width="90" height="12" rx="4" fill="#78350f"/>
+  <!-- Honey label -->
+  <rect x="145" y="210" width="110" height="60" rx="8" fill="#fffbeb" opacity="0.85"/>
+  <text x="200" y="235" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold" font-family="sans-serif">FOREST</text>
+  <text x="200" y="250" text-anchor="middle" font-size="9" fill="#b45309" font-family="sans-serif">HONEY</text>
+  <!-- Honey drips -->
+  <ellipse cx="160" cy="300" rx="8" ry="12" fill="#d97706" opacity="0.6"/>
+  <ellipse cx="240" cy="295" rx="6" ry="10" fill="#d97706" opacity="0.5"/>
+  <ellipse cx="200" cy="305" rx="10" ry="6" fill="#d97706" opacity="0.4"/>
+  <!-- Honeycomb decoration -->
+  <polygon points="290,170 302,163 314,170 314,184 302,191 290,184" fill="#fbbf24" opacity="0.5" transform="rotate(30 302 177)"/>
+  <polygon points="270,145 282,138 294,145 294,159 282,166 270,159" fill="#fbbf24" opacity="0.4" transform="rotate(10 282 152)"/>
+  <!-- Bee -->
+  <ellipse cx="315" cy="200" rx="12" ry="8" fill="#f59e0b"/>
+  <line x1="303" y1="200" x2="295" y2="196" stroke="#1c1917" stroke-width="1.5"/>
+  <line x1="303" y1="200" x2="295" y2="204" stroke="#1c1917" stroke-width="1.5"/>
+</svg>

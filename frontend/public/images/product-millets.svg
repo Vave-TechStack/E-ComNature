@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fef9c3"/>
+      <stop offset="100%" stop-color="#fde68a"/>
+    </linearGradient>
+    <linearGradient id="grain" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#bg)" rx="20"/>
+  <!-- Bowl -->
+  <ellipse cx="200" cy="290" rx="130" ry="30" fill="#a16207" opacity="0.15"/>
+  <path d="M70 280 Q70 310 200 310 Q330 310 330 280" fill="#fef3c7" stroke="#a16207" stroke-width="2"/>
+  <path d="M70 280 Q70 250 200 250 Q330 250 330 280" fill="url(#grain)" opacity="0.9"/>
+  <!-- Grain stalks -->
+  <g transform="translate(200, 160)">
+    <line x1="0" y1="0" x2="0" y2="-80" stroke="#65a30d" stroke-width="3" stroke-linecap="round"/>
+    <path d="M-8,-80 Q-15,-95 -25,-90" stroke="#d97706" stroke-width="2.5" fill="none"/>
+    <path d="M-3,-80 Q-5,-100 -12,-98" stroke="#d97706" stroke-width="2.5" fill="none"/>
+    <path d="M5,-80 Q8,-98 15,-95" stroke="#d97706" stroke-width="2.5" fill="none"/>
+    <path d="M-12,-70 Q-20,-80 -30,-75" stroke="#d97706" stroke-width="2.5" fill="none"/>
+    <path d="M10,-72 Q18,-82 28,-78" stroke="#d97706" stroke-width="2.5" fill="none"/>
+    <!-- Leaves -->
+    <path d="M2,-40 Q30,-50 40,-35" stroke="#4d7c0f" stroke-width="2" fill="#65a30d" opacity="0.7"/>
+    <path d="M-2,-50 Q-30,-60 -38,-42" stroke="#4d7c0f" stroke-width="2" fill="#65a30d" opacity="0.7"/>
+  </g>
+  <!-- Scattered grains -->
+  <ellipse cx="140" cy="285" rx="6" ry="4" fill="#d97706"/>
+  <ellipse cx="170" cy="282" rx="5" ry="3.5" fill="#b45309"/>
+  <ellipse cx="230" cy="283" rx="6" ry="4" fill="#d97706"/>
+  <ellipse cx="260" cy="286" rx="5" ry="3.5" fill="#b45309"/>
+  <ellipse cx="200" cy="280" rx="5" ry="3.5" fill="#a16207"/>
+  <!-- Label -->
+  <text x="200" y="235" text-anchor="middle" font-size="13" fill="#78350f" font-weight="bold" font-family="sans-serif">FOXTAIL MILLET</text>
+  <text x="200" y="252" text-anchor="middle" font-size="10" fill="#92400e" font-family="sans-serif">Organic · Gluten Free</text>
+</svg>

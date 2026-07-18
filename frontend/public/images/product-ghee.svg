@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fffbeb"/>
+      <stop offset="100%" stop-color="#fef3c7"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#bg)" rx="20"/>
+  <!-- Clay pot -->
+  <path d="M120 200 Q120 300 200 310 Q280 300 280 200" fill="#d97706" opacity="0.85"/>
+  <path d="M100 200 Q100 190 200 190 Q300 190 300 200 Z" fill="#b45309"/>
+  <ellipse cx="200" cy="192" rx="100" ry="12" fill="#92400e"/>
+  <!-- Ghee inside -->
+  <ellipse cx="200" cy="240" rx="60" ry="25" fill="#fbbf24" opacity="0.6"/>
+  <!-- Ghee shine -->
+  <ellipse cx="185" cy="235" rx="20" ry="8" fill="#fde68a" opacity="0.5"/>
+  <!-- Label on pot -->
+  <rect x="155" y="250" width="90" height="35" rx="6" fill="#fffbeb" opacity="0.85"/>
+  <text x="200" y="267" text-anchor="middle" font-size="10" fill="#78350f" font-weight="bold" font-family="sans-serif">A2 GHEE</text>
+  <text x="200" y="279" text-anchor="middle" font-size="7" fill="#92400e" font-family="sans-serif">Bilona Method</text>
+  <!-- Cow silhouette -->
+  <g transform="translate(130, 130)">
+    <ellipse cx="20" cy="15" rx="22" ry="12" fill="#a16207" opacity="0.3"/>
+    <ellipse cx="-15" cy="12" rx="8" ry="10" fill="#a16207" opacity="0.3"/>
+    <path d="M-13 0 Q-15 -8 -18 -5" stroke="#a16207" stroke-width="1.5" fill="none" opacity="0.3"/>
+    <path d="M-10 -2 Q-8 -10 -6 -5" stroke="#a16207" stroke-width="1.5" fill="none" opacity="0.3"/>
+  </g>
+  <text x="200" y="350" text-anchor="middle" font-size="14" fill="#92400e" font-weight="bold" font-family="sans-serif">DESI COW GHEE</text>
+  <text x="200" y="367" text-anchor="middle" font-size="10" fill="#b45309" font-family="sans-serif">Traditional Bilona Churned</text>
+</svg>

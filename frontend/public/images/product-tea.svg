@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f0fdf4"/>
+      <stop offset="100%" stop-color="#ecfdf5"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#bg)" rx="20"/>
+  <!-- Tea cup -->
+  <path d="M130 140 L140 240 Q140 260 200 260 Q260 260 260 240 L270 140" fill="#22c55e" opacity="0.7"/>
+  <ellipse cx="200" cy="140" rx="72" ry="12" fill="#15803d"/>
+  <!-- Tea liquid -->
+  <path d="M138 148 Q138 230 200 235 Q262 230 262 148" fill="#a16207" opacity="0.6"/>
+  <!-- Steam -->
+  <path d="M175 120 Q170 105 175 90" stroke="#86efac" stroke-width="2" fill="none" opacity="0.5"/>
+  <path d="M200 115 Q195 100 200 85" stroke="#86efac" stroke-width="2" fill="none" opacity="0.4"/>
+  <path d="M225 120 Q220 105 225 90" stroke="#86efac" stroke-width="2" fill="none" opacity="0.5"/>
+  <!-- Tea bag tag -->
+  <rect x="270" y="150" width="25" height="30" rx="3" fill="#166534" opacity="0.7"/>
+  <text x="282" y="168" text-anchor="middle" font-size="7" fill="#fffbeb" font-weight="bold" font-family="sans-serif">TEA</text>
+  <line x1="260" y1="155" x2="270" y2="160" stroke="#166534" stroke-width="1"/>
+  <!-- Tulsi leaf -->
+  <g transform="translate(140, 100) rotate(-20)">
+    <ellipse cx="0" cy="0" rx="18" ry="8" fill="#4d7c0f" opacity="0.6"/>
+    <line x1="-16" y1="0" x2="16" y2="0" stroke="#3f6212" stroke-width="1" opacity="0.6"/>
+  </g>
+  <!-- Ginger slice -->
+  <ellipse cx="280" cy="220" rx="12" ry="8" fill="#d97706" opacity="0.4" transform="rotate(30 280 220)"/>
+  <text x="200" y="340" text-anchor="middle" font-size="14" fill="#166534" font-weight="bold" font-family="sans-serif">HERBAL GREEN TEA</text>
+  <text x="200" y="357" text-anchor="middle" font-size="10" fill="#15803d" font-family="sans-serif">Tulsi &amp; Ginger · Immunity Boost</text>
+</svg>
