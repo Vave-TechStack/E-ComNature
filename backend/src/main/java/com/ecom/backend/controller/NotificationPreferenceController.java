@@ -1,0 +1,37 @@
+package com.ecom.backend.controller;
+
+import com.ecom.backend.dto.request.NotificationPreferenceRequest;
+import com.ecom.backend.dto.response.ApiResponse;
+import com.ecom.backend.dto.response.NotificationPreferenceResponse;
+import com.ecom.backend.security.UserPrincipal;
+import com.ecom.backend.service.NotificationPreferenceService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/profile/notifications")
+@RequiredArgsConstructor
+public class NotificationPreferenceController {
+
+    private final NotificationPreferenceService notificationPreferenceService;
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<NotificationPreferenceResponse>> getPreferences(
+            @AuthenticationPrincipal UserPrincipal principal) {
+        NotificationPreferenceResponse preferences = notificationPreferenceService
+                .getPreferences(principal.getId());
+        return ResponseEntity.ok(ApiResponse.success(preferences));
+    }
+
+    @PutMapping
+    public ResponseEntity<ApiResponse<NotificationPreferenceResponse>> updatePreferences(
+            @AuthenticationPrincipal UserPrincipal principal,
+            @Valid @RequestBody NotificationPreferenceRequest request) {
+        NotificationPreferenceResponse updated = notificationPreferenceService
+                .updatePreferences(principal.getId(), request);
+        return ResponseEntity.ok(ApiResponse.success("Preferences updated successfully", updated));
+    }
+}

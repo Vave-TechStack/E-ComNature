@@ -1,0 +1,20 @@
+package com.ecom.backend.entity.enums;
+
+public enum NotificationType {
+    ORDER_CONFIRMATION,
+    ORDER_SHIPPED,
+    ORDER_DELIVERED,
+    ORDER_CANCELLED,
+    PAYMENT_SUCCESS,
+    PAYMENT_FAILED,
+    REFUND_PROCESSED,
+    RETURN_APPROVED,
+    WELCOME,
+    PROMOTIONAL,
+    ABANDONED_CART,
+    LOW_STOCK,
+    PRICE_DROP,
+    BACK_IN_STOCK,
+    REVIEW_REQUEST,
+    SUPPORT_TICKET
+}
