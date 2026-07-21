@@ -14,7 +14,14 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "orders")
+@Table(name = "orders", indexes = {
+    @Index(name = "idx_order_number", columnList = "order_number", unique = true),
+    @Index(name = "idx_order_user", columnList = "user_id"),
+    @Index(name = "idx_order_status", columnList = "status"),
+    @Index(name = "idx_order_payment_status", columnList = "payment_status"),
+    @Index(name = "idx_order_created", columnList = "created_at"),
+    @Index(name = "idx_order_tracking", columnList = "tracking_number")
+})
 public class Order extends BaseEntity {
 
     @Column(name = "order_number", unique = true, nullable = false, length = 50)

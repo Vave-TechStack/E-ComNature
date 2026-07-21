@@ -1,9 +1,8 @@
 # Java / Maven
 backend/target/
-backend/.mvn/
 backend/*.log
-backend/mvnw
-backend/mvnw.cmd
+backend/nul
+backend/logs/
 
 # Node / dependencies
 node_modules/

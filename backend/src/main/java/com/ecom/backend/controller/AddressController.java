@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+@Tag(name = "Addresses", description = "Addresses API")
 @RestController
 @RequestMapping("/profile/addresses")
 @RequiredArgsConstructor
@@ -21,6 +25,7 @@ public class AddressController {
 
     private final AddressService addressService;
 
+    @Operation(summary = "Get Addresses", description = "Get Addresses")
     @GetMapping
     public ResponseEntity<ApiResponse<List<AddressResponse>>> getAddresses(
             @AuthenticationPrincipal UserPrincipal principal) {
@@ -28,6 +33,7 @@ public class AddressController {
         return ResponseEntity.ok(ApiResponse.success(addresses));
     }
 
+    @Operation(summary = "Get Address", description = "Get Address")
     @GetMapping("/{addressId}")
     public ResponseEntity<ApiResponse<AddressResponse>> getAddress(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -36,6 +42,7 @@ public class AddressController {
         return ResponseEntity.ok(ApiResponse.success(address));
     }
 
+    @Operation(summary = "Create Address", description = "Create Address")
     @PostMapping
     public ResponseEntity<ApiResponse<AddressResponse>> createAddress(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -45,6 +52,7 @@ public class AddressController {
                 .body(ApiResponse.success("Address created successfully", created));
     }
 
+    @Operation(summary = "Update Address", description = "Update Address")
     @PutMapping("/{addressId}")
     public ResponseEntity<ApiResponse<AddressResponse>> updateAddress(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -54,6 +62,7 @@ public class AddressController {
         return ResponseEntity.ok(ApiResponse.success("Address updated successfully", updated));
     }
 
+    @Operation(summary = "Delete Address", description = "Delete Address")
     @DeleteMapping("/{addressId}")
     public ResponseEntity<ApiResponse<Void>> deleteAddress(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -62,6 +71,7 @@ public class AddressController {
         return ResponseEntity.ok(ApiResponse.success("Address deleted successfully"));
     }
 
+    @Operation(summary = "Set Default Address", description = "Set Default Address")
     @PutMapping("/{addressId}/default")
     public ResponseEntity<ApiResponse<AddressResponse>> setDefaultAddress(
             @AuthenticationPrincipal UserPrincipal principal,

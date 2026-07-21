@@ -11,6 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+@Tag(name = "Authentication", description = "Authentication API")
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -18,6 +22,7 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @Operation(summary = "Register", description = "Register")
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<AuthResponse>> register(
             @Valid @RequestBody RegisterRequest request,
@@ -27,6 +32,7 @@ public class AuthController {
                 .body(ApiResponse.success("Registration successful", response));
     }
 
+    @Operation(summary = "Login", description = "Login")
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<AuthResponse>> login(
             @Valid @RequestBody LoginRequest request,
@@ -35,6 +41,7 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success("Login successful", response));
     }
 
+    @Operation(summary = "Refresh Token", description = "Refresh Token")
     @PostMapping("/refresh")
     public ResponseEntity<ApiResponse<AuthResponse>> refreshToken(
             @Valid @RequestBody RefreshTokenRequest request,
@@ -43,6 +50,7 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success("Token refreshed successfully", response));
     }
 
+    @Operation(summary = "Logout", description = "Logout")
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(
             @RequestHeader("Authorization") String authorizationHeader) {
@@ -51,12 +59,14 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success("Logged out successfully"));
     }
 
+    @Operation(summary = "Send Otp", description = "Send Otp")
     @PostMapping("/otp/send")
     public ResponseEntity<ApiResponse<Void>> sendOtp(@Valid @RequestBody OtpRequest request) {
         authService.sendOtp(request.getPhone());
         return ResponseEntity.ok(ApiResponse.success("OTP sent successfully"));
     }
 
+    @Operation(summary = "Verify Otp", description = "Verify Otp")
     @PostMapping("/otp/verify")
     public ResponseEntity<ApiResponse<AuthResponse>> verifyOtp(
             @Valid @RequestBody OtpVerifyRequest request,
@@ -65,6 +75,7 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success("OTP verified successfully", response));
     }
 
+    @Operation(summary = "Forgot Password", description = "Forgot Password")
     @PostMapping("/forgot-password")
     public ResponseEntity<ApiResponse<Void>> forgotPassword(
             @Valid @RequestBody ForgotPasswordRequest request) {
@@ -72,6 +83,7 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success("Password reset link sent if account exists"));
     }
 
+    @Operation(summary = "Reset Password", description = "Reset Password")
     @PostMapping("/reset-password")
     public ResponseEntity<ApiResponse<Void>> resetPassword(
             @Valid @RequestBody ResetPasswordRequest request) {

@@ -43,16 +43,4 @@ public class ProductReview extends BaseEntity {
     private Set<ReviewImage> images = new HashSet<>();
 }
 
-@Getter
-@Setter
-@Entity
-@Table(name = "review_images")
-class ReviewImage extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "review_id", nullable = false)
-    private ProductReview review;
-
-    @Column(name = "image_url", nullable = false, length = 500)
-    private String imageUrl;
-}

@@ -11,6 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+@Tag(name = "Notifications", description = "Notifications API")
 @RestController
 @RequestMapping("/profile/notifications")
 @RequiredArgsConstructor
@@ -18,6 +22,7 @@ public class NotificationPreferenceController {
 
     private final NotificationPreferenceService notificationPreferenceService;
 
+    @Operation(summary = "Get Preferences", description = "Get Preferences")
     @GetMapping
     public ResponseEntity<ApiResponse<NotificationPreferenceResponse>> getPreferences(
             @AuthenticationPrincipal UserPrincipal principal) {
@@ -26,6 +31,7 @@ public class NotificationPreferenceController {
         return ResponseEntity.ok(ApiResponse.success(preferences));
     }
 
+    @Operation(summary = "Update Preferences", description = "Update Preferences")
     @PutMapping
     public ResponseEntity<ApiResponse<NotificationPreferenceResponse>> updatePreferences(
             @AuthenticationPrincipal UserPrincipal principal,

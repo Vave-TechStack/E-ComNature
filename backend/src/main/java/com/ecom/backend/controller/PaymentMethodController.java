@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+@Tag(name = "Payment Methods", description = "Payment Methods API")
 @RestController
 @RequestMapping("/profile/payments")
 @RequiredArgsConstructor
@@ -25,6 +29,7 @@ public class PaymentMethodController {
 
     // ============ CARDS ============
 
+    @Operation(summary = "Get Saved Cards", description = "Get Saved Cards")
     @GetMapping("/cards")
     public ResponseEntity<ApiResponse<List<SavedCardResponse>>> getSavedCards(
             @AuthenticationPrincipal UserPrincipal principal) {
@@ -32,6 +37,7 @@ public class PaymentMethodController {
         return ResponseEntity.ok(ApiResponse.success(cards));
     }
 
+    @Operation(summary = "Save Card", description = "Save Card")
     @PostMapping("/cards")
     public ResponseEntity<ApiResponse<SavedCardResponse>> saveCard(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -41,6 +47,7 @@ public class PaymentMethodController {
                 .body(ApiResponse.success("Card saved successfully", card));
     }
 
+    @Operation(summary = "Delete Card", description = "Delete Card")
     @DeleteMapping("/cards/{cardId}")
     public ResponseEntity<ApiResponse<Void>> deleteCard(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -49,6 +56,7 @@ public class PaymentMethodController {
         return ResponseEntity.ok(ApiResponse.success("Card deleted successfully"));
     }
 
+    @Operation(summary = "Set Default Card", description = "Set Default Card")
     @PutMapping("/cards/{cardId}/default")
     public ResponseEntity<ApiResponse<SavedCardResponse>> setDefaultCard(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -59,6 +67,7 @@ public class PaymentMethodController {
 
     // ============ UPIS ============
 
+    @Operation(summary = "Get Saved Upis", description = "Get Saved Upis")
     @GetMapping("/upis")
     public ResponseEntity<ApiResponse<List<SavedUPIResponse>>> getSavedUPIs(
             @AuthenticationPrincipal UserPrincipal principal) {
@@ -66,6 +75,7 @@ public class PaymentMethodController {
         return ResponseEntity.ok(ApiResponse.success(upis));
     }
 
+    @Operation(summary = "Save Upi", description = "Save Upi")
     @PostMapping("/upis")
     public ResponseEntity<ApiResponse<SavedUPIResponse>> saveUPI(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -75,6 +85,7 @@ public class PaymentMethodController {
                 .body(ApiResponse.success("UPI saved successfully", upi));
     }
 
+    @Operation(summary = "Delete Upi", description = "Delete Upi")
     @DeleteMapping("/upis/{upiId}")
     public ResponseEntity<ApiResponse<Void>> deleteUPI(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -83,6 +94,7 @@ public class PaymentMethodController {
         return ResponseEntity.ok(ApiResponse.success("UPI deleted successfully"));
     }
 
+    @Operation(summary = "Set Default Upi", description = "Set Default Upi")
     @PutMapping("/upis/{upiId}/default")
     public ResponseEntity<ApiResponse<SavedUPIResponse>> setDefaultUPI(
             @AuthenticationPrincipal UserPrincipal principal,

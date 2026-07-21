@@ -2,11 +2,13 @@ package com.ecom.backend.controller;
 
 import com.ecom.backend.config.TestSecurityConfig;
 import com.ecom.backend.dto.request.*;
+import org.springframework.context.annotation.Import;
 import com.ecom.backend.dto.response.ApiResponse;
 import com.ecom.backend.dto.response.AuthResponse;
 import com.ecom.backend.entity.User;
 import com.ecom.backend.entity.enums.UserRole;
 import com.ecom.backend.repository.UserRepository;
+import com.ecom.backend.security.RateLimitingFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
@@ -28,9 +31,9 @@ import static org.assertj.core.api.Assertions.*;
  * Tests the complete authentication flow end-to-end.
  */
 @SpringBootTest(
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = {TestSecurityConfig.class}
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
+@Import(TestSecurityConfig.class)
 @ActiveProfiles("test")
 class AuthControllerIntegrationTest {
 
@@ -44,6 +47,9 @@ class AuthControllerIntegrationTest {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
+    private RateLimitingFilter rateLimitingFilter;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     private RestTemplate restTemplate;
@@ -52,6 +58,7 @@ class AuthControllerIntegrationTest {
     @BeforeEach
     void setUp() {
         userRepository.deleteAll();
+        rateLimitingFilter.reset();
         restTemplate = new RestTemplate();
         baseUrl = "http://localhost:" + port + "/api/v1/auth";
     }
@@ -93,20 +100,21 @@ class AuthControllerIntegrationTest {
             loginRequest.setEmailOrPhone("integration@example.com");
             loginRequest.setPassword("Test@1234");
 
-            ResponseEntity<AuthResponse> loginResponse = restTemplate.exchange(
+            ResponseEntity<ApiResponse<AuthResponse>> loginResponse = restTemplate.exchange(
                 baseUrl + "/login",
                 HttpMethod.POST,
                 new HttpEntity<>(loginRequest),
-                AuthResponse.class
+                new ParameterizedTypeReference<ApiResponse<AuthResponse>>() {}
             );
 
             assertThat(loginResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
             assertThat(loginResponse.getBody()).isNotNull();
-            assertThat(loginResponse.getBody().getAccessToken()).isNotBlank();
-            assertThat(loginResponse.getBody().getRefreshToken()).isNotBlank();
+            assertThat(loginResponse.getBody().getData()).isNotNull();
+            assertThat(loginResponse.getBody().getData().getAccessToken()).isNotBlank();
+            assertThat(loginResponse.getBody().getData().getRefreshToken()).isNotBlank();
 
-            String accessToken = loginResponse.getBody().getAccessToken();
-            String refreshToken = loginResponse.getBody().getRefreshToken();
+            String accessToken = loginResponse.getBody().getData().getAccessToken();
+            String refreshToken = loginResponse.getBody().getData().getRefreshToken();
 
             // Step 3: Try accessing protected endpoint with the token
             HttpHeaders headers = new HttpHeaders();
@@ -125,18 +133,20 @@ class AuthControllerIntegrationTest {
             RefreshTokenRequest refreshRequest = new RefreshTokenRequest();
             refreshRequest.setRefreshToken(refreshToken);
 
-            ResponseEntity<AuthResponse> refreshResponse = restTemplate.exchange(
+            ResponseEntity<ApiResponse<AuthResponse>> refreshResponse = restTemplate.exchange(
                 baseUrl + "/refresh",
                 HttpMethod.POST,
                 new HttpEntity<>(refreshRequest),
-                AuthResponse.class
+                new ParameterizedTypeReference<ApiResponse<AuthResponse>>() {}
             );
 
             assertThat(refreshResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
-            assertThat(refreshResponse.getBody().getAccessToken()).isNotBlank();
+            assertThat(refreshResponse.getBody()).isNotNull();
+            assertThat(refreshResponse.getBody().getData()).isNotNull();
+            assertThat(refreshResponse.getBody().getData().getAccessToken()).isNotBlank();
 
             // Step 5: Logout
-            String newRefreshToken = refreshResponse.getBody().getRefreshToken();
+            String newRefreshToken = refreshResponse.getBody().getData().getRefreshToken();
             HttpHeaders logoutHeaders = new HttpHeaders();
             logoutHeaders.set("Authorization", "Bearer " + newRefreshToken);
 

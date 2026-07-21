@@ -10,7 +10,16 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "products")
+@Table(name = "products", indexes = {
+    @Index(name = "idx_product_slug", columnList = "slug", unique = true),
+    @Index(name = "idx_product_sku", columnList = "sku"),
+    @Index(name = "idx_product_category", columnList = "category_id"),
+    @Index(name = "idx_product_brand", columnList = "brand_id"),
+    @Index(name = "idx_product_active", columnList = "is_active"),
+    @Index(name = "idx_product_featured", columnList = "is_featured"),
+    @Index(name = "idx_product_price", columnList = "selling_price"),
+    @Index(name = "idx_product_created", columnList = "created_at")
+})
 public class Product extends BaseEntity {
 
     @Column(name = "name", nullable = false, length = 255)

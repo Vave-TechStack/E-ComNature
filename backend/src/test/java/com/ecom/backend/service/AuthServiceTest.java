@@ -159,8 +159,8 @@ class AuthServiceTest {
             given(passwordEncoder.encode("Password@123")).willReturn("encodedPassword");
             given(userRepository.findByReferralCodeAndIsDeletedFalse("REF123"))
                     .willReturn(Optional.of(referrer));
-            given(userRepository.save(any(User.class))).willAnswer(invocation -> invocation.getArgument(0));
-            given(jwtTokenProvider.generateAccessTokenFromUserId(anyLong(), anyString(), anyString()))
+            given(userRepository.save(any(User.class))).willReturn(user);
+            given(jwtTokenProvider.generateAccessTokenFromUserId(user.getId(), user.getEmail(), user.getRole().name()))
                     .willReturn("access-token");
             given(jwtTokenProvider.generateRefreshToken(anyLong())).willReturn("refresh-token");
             given(jwtTokenProvider.getAccessTokenExpiration()).willReturn(900000L);

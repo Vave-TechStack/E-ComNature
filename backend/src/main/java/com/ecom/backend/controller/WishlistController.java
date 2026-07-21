@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Set;
 
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+@Tag(name = "Wishlist", description = "Wishlist API")
 @RestController
 @RequestMapping("/profile/wishlist")
 @RequiredArgsConstructor
@@ -22,6 +26,7 @@ public class WishlistController {
 
     private final WishlistService wishlistService;
 
+    @Operation(summary = "Get Wishlist", description = "Get Wishlist")
     @GetMapping
     public ResponseEntity<ApiResponse<List<WishlistItemResponse>>> getWishlist(
             @AuthenticationPrincipal UserPrincipal principal) {
@@ -29,6 +34,7 @@ public class WishlistController {
         return ResponseEntity.ok(ApiResponse.success(items));
     }
 
+    @Operation(summary = "Get Wishlist Count", description = "Get Wishlist Count")
     @GetMapping("/count")
     public ResponseEntity<ApiResponse<Long>> getWishlistCount(
             @AuthenticationPrincipal UserPrincipal principal) {
@@ -36,6 +42,7 @@ public class WishlistController {
         return ResponseEntity.ok(ApiResponse.success(count));
     }
 
+    @Operation(summary = "Get Wishlist Product Ids", description = "Get Wishlist Product Ids")
     @GetMapping("/product-ids")
     public ResponseEntity<ApiResponse<Set<Long>>> getWishlistProductIds(
             @AuthenticationPrincipal UserPrincipal principal) {
@@ -43,6 +50,7 @@ public class WishlistController {
         return ResponseEntity.ok(ApiResponse.success(ids));
     }
 
+    @Operation(summary = "Check In Wishlist", description = "Check In Wishlist")
     @GetMapping("/check/{productId}")
     public ResponseEntity<ApiResponse<Boolean>> checkInWishlist(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -51,6 +59,7 @@ public class WishlistController {
         return ResponseEntity.ok(ApiResponse.success(inWishlist));
     }
 
+    @Operation(summary = "Add To Wishlist", description = "Add To Wishlist")
     @PostMapping
     public ResponseEntity<ApiResponse<WishlistItemResponse>> addToWishlist(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -60,6 +69,7 @@ public class WishlistController {
                 .body(ApiResponse.success("Added to wishlist", item));
     }
 
+    @Operation(summary = "Remove From Wishlist", description = "Remove From Wishlist")
     @DeleteMapping("/{itemId}")
     public ResponseEntity<ApiResponse<Void>> removeFromWishlist(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -68,6 +78,7 @@ public class WishlistController {
         return ResponseEntity.ok(ApiResponse.success("Removed from wishlist"));
     }
 
+    @Operation(summary = "Remove By Product", description = "Remove By Product")
     @DeleteMapping("/product/{productId}")
     public ResponseEntity<ApiResponse<Void>> removeByProduct(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -76,6 +87,7 @@ public class WishlistController {
         return ResponseEntity.ok(ApiResponse.success("Removed from wishlist"));
     }
 
+    @Operation(summary = "Clear Wishlist", description = "Clear Wishlist")
     @DeleteMapping("/clear")
     public ResponseEntity<ApiResponse<Void>> clearWishlist(
             @AuthenticationPrincipal UserPrincipal principal) {
@@ -83,6 +95,7 @@ public class WishlistController {
         return ResponseEntity.ok(ApiResponse.success("Wishlist cleared"));
     }
 
+    @Operation(summary = "Move To Cart", description = "Move To Cart")
     @PostMapping("/{itemId}/move-to-cart")
     public ResponseEntity<ApiResponse<WishlistItemResponse>> moveToCart(
             @AuthenticationPrincipal UserPrincipal principal,

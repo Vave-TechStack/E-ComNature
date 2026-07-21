@@ -152,7 +152,6 @@ class AddressServiceTest {
         @DisplayName("Should create address successfully")
         void shouldCreateAddress() {
             given(userRepository.findByIdAndIsDeletedFalse(1L)).willReturn(Optional.of(user));
-            given(addressRepository.countByUserIdAndIsDeletedFalse(1L)).willReturn(1L);
             given(addressRepository.save(any(Address.class))).willAnswer(invocation -> {
                 Address saved = invocation.getArgument(0);
                 saved.setId(3L);

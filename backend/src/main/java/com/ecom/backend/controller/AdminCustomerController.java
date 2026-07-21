@@ -4,6 +4,7 @@ import com.ecom.backend.dto.request.AdminPointAdjustmentRequest;
 import com.ecom.backend.dto.response.*;
 import com.ecom.backend.security.UserPrincipal;
 import com.ecom.backend.service.AdminCustomerService;
+import com.ecom.backend.service.AdminDashboardService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +14,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+@Tag(name = "Admin Customers", description = "Admin Customers API")
 @RestController
 @RequestMapping("/admin/customers")
 @RequiredArgsConstructor
 public class AdminCustomerController {
 
     private final AdminCustomerService adminCustomerService;
+    private final AdminDashboardService adminDashboardService;
 
+    @Operation(summary = "List Customers", description = "List Customers")
     @GetMapping
     public ResponseEntity<ApiResponse<AdminCustomerPageResponse>> listCustomers(
             @RequestParam(required = false) String search,
@@ -34,6 +41,7 @@ public class AdminCustomerController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
+    @Operation(summary = "Get Customer Detail", description = "Get Customer Detail")
     @GetMapping("/{customerId}")
     public ResponseEntity<ApiResponse<AdminCustomerDetailResponse>> getCustomerDetail(
             @PathVariable Long customerId) {
@@ -41,6 +49,7 @@ public class AdminCustomerController {
         return ResponseEntity.ok(ApiResponse.success(detail));
     }
 
+    @Operation(summary = "Lock Account", description = "Lock Account")
     @PostMapping("/{customerId}/lock")
     public ResponseEntity<ApiResponse<UserDto>> lockAccount(
             @PathVariable Long customerId,
@@ -57,6 +66,7 @@ public class AdminCustomerController {
         return ResponseEntity.ok(ApiResponse.success("Account locked successfully", user));
     }
 
+    @Operation(summary = "Unlock Account", description = "Unlock Account")
     @PostMapping("/{customerId}/unlock")
     public ResponseEntity<ApiResponse<UserDto>> unlockAccount(
             @PathVariable Long customerId,
@@ -71,6 +81,7 @@ public class AdminCustomerController {
         return ResponseEntity.ok(ApiResponse.success("Account unlocked successfully", user));
     }
 
+    @Operation(summary = "Impersonate", description = "Impersonate")
     @PostMapping("/{customerId}/impersonate")
     public ResponseEntity<ApiResponse<ImpersonationResponse>> impersonate(
             @PathVariable Long customerId,
@@ -85,6 +96,7 @@ public class AdminCustomerController {
         return ResponseEntity.ok(ApiResponse.success("Impersonation token generated", response));
     }
 
+    @Operation(summary = "Adjust Reward Points", description = "Adjust Reward Points")
     @PostMapping("/{customerId}/rewards")
     public ResponseEntity<ApiResponse<RewardTransactionResponse>> adjustRewardPoints(
             @PathVariable Long customerId,
@@ -103,6 +115,16 @@ public class AdminCustomerController {
         return ResponseEntity.ok(ApiResponse.success(message, transaction));
     }
 
+    @Operation(summary = "Toggle Customer Status", description = "Activate or deactivate a customer account")
+    @PutMapping("/{customerId}/status")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> toggleCustomerStatus(
+            @PathVariable Long customerId,
+            @RequestParam boolean active) {
+        Map<String, Object> result = adminDashboardService.toggleCustomerStatus(customerId, active);
+        return ResponseEntity.ok(ApiResponse.success("Customer status updated", result));
+    }
+
+    @Operation(summary = "Customer Stats", description = "Customer Stats")
     @GetMapping("/stats")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getCustomerStats() {
         long totalCustomers = 0;

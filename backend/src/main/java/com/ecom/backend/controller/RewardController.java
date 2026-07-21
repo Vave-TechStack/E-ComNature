@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+@Tag(name = "Rewards", description = "Rewards API")
 @RestController
 @RequestMapping("/profile/rewards")
 @RequiredArgsConstructor
@@ -19,6 +23,7 @@ public class RewardController {
 
     private final RewardService rewardService;
 
+    @Operation(summary = "Get Reward Summary", description = "Get Reward Summary")
     @GetMapping("/summary")
     public ResponseEntity<ApiResponse<RewardSummaryResponse>> getRewardSummary(
             @AuthenticationPrincipal UserPrincipal principal) {
@@ -26,6 +31,7 @@ public class RewardController {
         return ResponseEntity.ok(ApiResponse.success(summary));
     }
 
+    @Operation(summary = "Get Transaction History", description = "Get Transaction History")
     @GetMapping("/transactions")
     public ResponseEntity<ApiResponse<List<RewardTransactionResponse>>> getTransactionHistory(
             @AuthenticationPrincipal UserPrincipal principal,

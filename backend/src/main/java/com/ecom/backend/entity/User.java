@@ -12,7 +12,14 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "users")
+@Table(name = "users", indexes = {
+    @Index(name = "idx_user_email", columnList = "email", unique = true),
+    @Index(name = "idx_user_phone", columnList = "phone", unique = true),
+    @Index(name = "idx_user_role", columnList = "role"),
+    @Index(name = "idx_user_active", columnList = "is_active"),
+    @Index(name = "idx_user_created", columnList = "created_at"),
+    @Index(name = "idx_user_referral", columnList = "referral_code")
+})
 public class User extends BaseEntity {
 
     @Column(name = "email", unique = true, length = 100)
