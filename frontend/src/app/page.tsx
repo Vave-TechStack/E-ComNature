@@ -256,7 +256,7 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-7">
             {dealProducts.map((product, i) => (
               <motion.div
                 key={product.id}
@@ -264,118 +264,128 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
+                className="h-full"
               >
-                <div className="group relative rounded-2xl bg-white border-2 border-accent-100 hover:border-accent-300 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 overflow-hidden">
-                  {/* Deal Badge */}
-                  <div className="absolute top-3 left-3 z-10">
-                    <Badge className="bg-accent-500 text-white border-0 text-xs font-bold px-2.5 py-1 shadow-lg shadow-accent-500/30">
-                      {product.discountPercentage}% OFF
-                    </Badge>
-                  </div>
-
-                  {/* Timer Badge */}
-                  <div className="absolute top-3 right-3 z-10">
-                    <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm text-xs border-0 gap-1 px-2 py-1">
-                      <Timer className="h-3 w-3 text-red-500" />
-                      <span className="text-red-500 font-semibold">12:45:30</span>
-                    </Badge>
-                  </div>
-
-                  {/* Wishlist Button */}
-                  <button className="absolute right-3 bottom-20 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="h-9 w-9 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors">
-                      <Heart className="h-4 w-4 text-gray-600 hover:text-red-500 transition-colors" />
+                  <div className="group relative rounded-2xl bg-white border border-accent-200/80 hover:border-accent-400 transition-all duration-500 hover:shadow-xl hover:-translate-y-1.5 overflow-hidden flex flex-col h-full">
+                    {/* Deal Badge */}
+                    <div className="absolute top-2.5 left-2.5 z-10">
+                      <Badge className="bg-gradient-to-r from-accent-500 to-amber-600 text-white border-0 text-[11px] font-bold px-2 py-0.5 shadow-md shadow-accent-500/25">
+                        {product.discountPercentage}% OFF
+                      </Badge>
                     </div>
-                  </button>
 
-                  {/* Image */}
-                  <Link href={`/products/${product.slug}`} className="block">
-                    <div className="relative aspect-square overflow-hidden bg-primary-50">
-                      <Image
-                        src={product.images[0].imageUrl}
-                        alt={product.name}
-                        fill
-                        className="object-cover transition-all duration-700 group-hover:scale-110"
-                        sizes="(max-width: 768px) 50vw, 25vw"
-                        loading="lazy"
-                      />
-                      {/* Quick add overlay */}
-                      <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <Button size="sm" className="w-full bg-white text-gray-900 hover:bg-gray-100 font-semibold text-xs gap-1.5">
-                          <ShoppingCart className="h-3.5 w-3.5" />
-                          Quick Add
-                        </Button>
+                    {/* Timer Badge */}
+                    <div className="absolute top-2.5 right-2.5 z-10">
+                      <Badge variant="secondary" className="bg-white/90 backdrop-blur-md text-[11px] border-0 gap-1 px-2 py-0.5 shadow-sm">
+                        <Timer className="h-3 w-3 text-red-500 animate-pulse" />
+                        <span className="text-red-600 font-bold font-mono">12:45:30</span>
+                      </Badge>
+                    </div>
+
+                    {/* Wishlist Button */}
+                    <button className="absolute right-2.5 top-12 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="h-8 w-8 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center shadow-md hover:bg-white hover:scale-110 transition-all">
+                        <Heart className="h-4 w-4 text-gray-600 hover:text-red-500 transition-colors" />
                       </div>
-                    </div>
-                  </Link>
+                    </button>
 
-                  {/* Info */}
-                  <div className="p-3 md:p-4">
-                    <Link href={`/products/${product.slug}`}>
-                      <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 hover:text-primary-600 transition-colors min-h-[2.5rem]">
-                        {product.name}
-                      </h3>
-                    </Link>
-                    
-                    {/* Rating */}
-                    <div className="flex items-center gap-1.5 mt-1.5">
-                      <div className="flex items-center gap-0.5">
-                        <Star className="h-3.5 w-3.5 fill-accent-400 text-accent-400" />
-                        <span className="text-xs font-medium text-gray-700">{product.averageRating}</span>
-                      </div>
-                      <span className="text-xs text-gray-400">({product.ratingCount})</span>
-                    </div>
-
-                    {/* Weight */}
-                    <p className="text-xs text-gray-400 mt-1">{product.variants[0]?.variantValue}</p>
-
-                    {/* Price */}
-                    <div className="mt-2 flex items-baseline gap-2">
-                      <span className="text-lg font-bold text-gray-900">{formatPrice(product.sellingPrice)}</span>
-                      <span className="text-sm text-gray-400 line-through">{formatPrice(product.basePrice)}</span>
-                    </div>
-
-                    {/* Stock Bar */}
-                    <div className="mt-2">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-orange-600 font-medium">
-                          Only {product.availableStock} left
-                        </span>
-                        <span className="text-gray-400">
-                          {Math.max(0, Math.round(((100 - product.availableStock) / 100) * 100))}% sold
-                        </span>
-                      </div>
-                      <div className="mt-1 h-1.5 rounded-full bg-gray-100 overflow-hidden">
-                        <div
-                          className="h-full rounded-full bg-gradient-to-r from-accent-500 to-red-500"
-                          style={{ width: `${Math.max(0, Math.min(100, 100 - product.availableStock))}%` }}
+                    {/* Image */}
+                    <Link href={`/products/${product.slug}`} className="block shrink-0">
+                      <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-b from-primary-50/40 to-white">
+                        <Image
+                          src={product.images[0].imageUrl}
+                          alt={product.name}
+                          fill
+                          className="object-cover transition-all duration-700 group-hover:scale-108"
+                          sizes="(max-width: 768px) 50vw, 25vw"
+                          loading="lazy"
                         />
+                        {/* Quick add overlay */}
+                        <div className="absolute inset-x-0 bottom-0 p-2.5 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <Button 
+                            size="sm" 
+                            onClick={(e) => { e.preventDefault(); handleAddToCart(product); }}
+                            className="w-full bg-white text-gray-900 hover:bg-gray-100 font-semibold text-xs h-8 rounded-xl gap-1.5 shadow-lg"
+                          >
+                            <ShoppingCart className="h-3.5 w-3.5 text-primary-600" />
+                            Quick Add
+                          </Button>
+                        </div>
+                      </div>
+                    </Link>
+
+                    {/* Info */}
+                    <div className="p-3.5 sm:p-4 flex flex-col flex-1">
+                      <Link href={`/products/${product.slug}`}>
+                        <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 hover:text-primary-600 transition-colors min-h-[2.5rem] leading-snug">
+                          {product.name}
+                        </h3>
+                      </Link>
+                      
+                      {/* Rating & Weight */}
+                      <div className="flex items-center justify-between gap-1 mt-1.5">
+                        <div className="flex items-center gap-1">
+                          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                          <span className="text-xs font-semibold text-gray-800">{product.averageRating}</span>
+                          <span className="text-xs text-gray-400">({product.ratingCount})</span>
+                        </div>
+                        {product.variants[0]?.variantValue && (
+                          <span className="text-[11px] font-medium text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-md">
+                            {product.variants[0].variantValue}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Price */}
+                      <div className="mt-2.5 flex items-baseline gap-2">
+                        <span className="text-base sm:text-lg font-bold text-gray-900">{formatPrice(product.sellingPrice)}</span>
+                        <span className="text-xs text-gray-400 line-through">{formatPrice(product.basePrice)}</span>
+                      </div>
+
+                      {/* Stock Bar */}
+                      <div className="mt-2.5">
+                        <div className="flex items-center justify-between text-[11px]">
+                          <span className="text-amber-700 font-semibold">
+                            Only {product.availableStock} left
+                          </span>
+                          <span className="text-gray-400 font-medium">
+                            {Math.max(0, Math.round(((100 - product.availableStock) / 100) * 100))}% sold
+                          </span>
+                        </div>
+                        <div className="mt-1 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                          <div
+                            className="h-full rounded-full bg-gradient-to-r from-amber-500 to-red-500 transition-all duration-500"
+                            style={{ width: `${Math.max(0, Math.min(100, 100 - product.availableStock))}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Spacer */}
+                      <div className="flex-1 min-h-[0.75rem]" />
+
+                      {/* Add to Cart & View Buttons */}
+                      <div className="mt-3 flex gap-2">
+                        <Button 
+                          className="flex-1 gap-1.5 gradient-primary text-white font-semibold text-xs h-9 rounded-xl shadow-sm hover:shadow-md transition-all"
+                          onClick={() => handleAddToCart(product)}
+                        >
+                          <ShoppingCart className="h-3.5 w-3.5" />
+                          Add
+                        </Button>
+                        <Link href={`/products/${product.slug}`} className="flex-[0.6]">
+                          <Button 
+                            variant="outline" 
+                            className="w-full gap-1 border-gray-200 text-gray-700 hover:bg-gray-50 text-xs font-semibold h-9 rounded-xl"
+                          >
+                            <Eye className="h-3.5 w-3.5" />
+                            View
+                          </Button>
+                        </Link>
                       </div>
                     </div>
-
-                    {/* Add to Cart & Buy Now Buttons */}
-                    <div className="mt-3 flex gap-2">
-                      <Button 
-                        className="flex-1 gap-2 gradient-primary text-white font-semibold text-xs shadow-md shadow-primary-200 hover:shadow-lg hover:shadow-primary-300 transition-all"
-                        onClick={() => handleAddToCart(product)}
-                      >
-                        <ShoppingCart className="h-3.5 w-3.5" />
-                        Add
-                      </Button>
-                      <Link href={`/products/${product.slug}`} className="flex-[0.6]">
-                        <Button 
-                          variant="outline" 
-                          className="w-full gap-1.5 border-primary-200 text-primary-700 hover:bg-primary-50 text-xs font-semibold"
-                        >
-                          <Eye className="h-3.5 w-3.5" />
-                          View
-                        </Button>
-                      </Link>
-                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
           </div>
 
           {/* Mobile View All */}
@@ -430,12 +440,13 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
+                className="h-full"
               >
                 <Link
                   href={`/products/${product.slug}`}
-                  className="group block rounded-2xl border border-primary-100 bg-white overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                  className="group block rounded-2xl border border-primary-100 bg-white overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full"
                 >
-                  <div className="relative aspect-square overflow-hidden bg-primary-50">
+                  <div className="relative aspect-square overflow-hidden bg-primary-50 shrink-0">
                     <Image
                       src={product.images[0].imageUrl}
                       alt={product.name}
@@ -451,7 +462,7 @@ export default function HomePage() {
                       <Heart className="h-4 w-4 text-white drop-shadow-md" />
                     </div>
                   </div>
-                  <div className="p-4">
+                  <div className="p-4 flex flex-col flex-1">
                     <p className="text-xs text-primary-600 font-medium mb-1">{product.brand.name}</p>
                     <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-primary-600 transition-colors min-h-[2.5rem]">
                       {product.name}
@@ -465,6 +476,7 @@ export default function HomePage() {
                       <span className="text-lg font-bold text-gray-900">{formatPrice(product.sellingPrice)}</span>
                       <span className="text-xs text-gray-400 line-through">{formatPrice(product.basePrice)}</span>
                     </div>
+                    <div className="flex-1" />
                     <Button 
                       size="sm" 
                       className="mt-3 w-full gap-1.5 bg-primary-600 text-white hover:bg-primary-700 text-xs font-semibold"

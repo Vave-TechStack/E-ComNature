@@ -4,18 +4,20 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import {
   TrendingUp, TrendingDown, DollarSign, ShoppingBag, Users, Package,
-  Clock, AlertTriangle, ArrowUpRight, ArrowDownRight, MoreHorizontal,
-  Activity, Download, RefreshCw, FileText, Eye, CheckCircle, XCircle,
-  CreditCard, Truck, ShoppingCart, AlertCircle, Zap, CalendarDays, Tag
+  Clock, AlertTriangle, ArrowUpRight, ArrowDownRight,
+  Activity, Download, RefreshCw, Eye, CheckCircle, XCircle,
+  CreditCard, Truck, ShoppingCart, AlertCircle, Zap, CalendarDays, Tag,
+  Leaf, Sparkles, TrendingUpIcon
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, PieChart, Pie, Cell, BarChart as RechartsBarChart
+  ResponsiveContainer, PieChart, Pie, Cell
 } from 'recharts';
 import { formatPrice, cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 // ===== Animated Counter Hook =====
 function useCountUp(target: number, duration = 1500, enabled = true) {
@@ -29,7 +31,6 @@ function useCountUp(target: number, duration = 1500, enabled = true) {
       if (!startTime.current) startTime.current = timestamp;
       const elapsed = timestamp - startTime.current;
       const progress = Math.min(elapsed / duration, 1);
-      // Ease out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
       setCount(Math.round(eased * target));
       if (progress < 1) requestAnimationFrame(animate);
@@ -40,11 +41,12 @@ function useCountUp(target: number, duration = 1500, enabled = true) {
   return count;
 }
 
+// ===== Data =====
 const statCards = [
-  { label: 'Total Revenue', value: 12456789, change: 12.5, trend: 'up', icon: DollarSign, color: 'from-blue-500 to-blue-600', bg: 'bg-blue-50', format: (v: number) => formatPrice(v) },
-  { label: 'Total Orders', value: 12456, change: 8.2, trend: 'up', icon: ShoppingBag, color: 'from-emerald-500 to-emerald-600', bg: 'bg-emerald-50', format: (v: number) => v.toLocaleString() },
-  { label: 'Total Customers', value: 34256, change: -3.1, trend: 'down', icon: Users, color: 'from-purple-500 to-purple-600', bg: 'bg-purple-50', format: (v: number) => v.toLocaleString() },
-  { label: 'Active Products', value: 5678, change: 15.7, trend: 'up', icon: Package, color: 'from-orange-500 to-orange-600', bg: 'bg-orange-50', format: (v: number) => v.toLocaleString() },
+  { label: 'Total Revenue', value: 12456789, change: 12.5, trend: 'up', icon: DollarSign, gradient: 'from-emerald-500 to-emerald-600', bg: 'bg-emerald-50', format: (v: number) => formatPrice(v) },
+  { label: 'Total Orders', value: 12456, change: 8.2, trend: 'up', icon: ShoppingBag, gradient: 'from-blue-500 to-blue-600', bg: 'bg-blue-50', format: (v: number) => v.toLocaleString() },
+  { label: 'Total Customers', value: 34256, change: -3.1, trend: 'down', icon: Users, gradient: 'from-purple-500 to-purple-600', bg: 'bg-purple-50', format: (v: number) => v.toLocaleString() },
+  { label: 'Active Products', value: 5678, change: 15.7, trend: 'up', icon: Package, gradient: 'from-orange-500 to-orange-600', bg: 'bg-orange-50', format: (v: number) => v.toLocaleString() },
 ];
 
 const dailyComparison = {
@@ -74,10 +76,7 @@ const activityIcons: Record<string, typeof Activity> = {
   shipping: Truck, user: Users, return: XCircle, coupon: Tag,
 };
 
-const iconColorMap: Record<string, string> = {
-  blue: 'text-blue-600', emerald: 'text-emerald-600',
-  purple: 'text-purple-600', orange: 'text-orange-600',
-};
+const iconColorMap: Record<string, string> = { blue: 'text-blue-600', emerald: 'text-emerald-600', purple: 'text-purple-600', orange: 'text-orange-600' };
 
 const revenueData = [
   { month: 'Jan', revenue: 450000, orders: 1200, profit: 180000 },
@@ -113,21 +112,13 @@ const recentOrders = [
   { id: '#ORD-007', customer: 'Rahul Jain', items: 6, amount: 45999, status: 'Processing', date: '1 day ago' },
 ];
 
-const topProducts = [
-  { name: 'Wireless Headphones', sales: 3456, revenue: 6890000, growth: 23 },
-  { name: 'Smart Watch Pro', sales: 2890, revenue: 11560000, growth: 45 },
-  { name: 'Cotton T-Shirt Pack', sales: 5678, revenue: 7380000, growth: -5 },
-  { name: 'DSLR Camera', sales: 1234, revenue: 9250000, growth: 12 },
-  { name: 'Scented Candle Set', sales: 4567, revenue: 4560000, growth: 34 },
-];
-
 const ChartTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="rounded-lg border border-gray-200 bg-white p-3 shadow-lg">
-        <p className="text-sm font-medium text-gray-900 mb-1">{label}</p>
+      <div className="rounded-xl border border-noble-200 bg-white/95 backdrop-blur-md p-3 shadow-xl shadow-noble-200/50">
+        <p className="text-sm font-bold text-noble-800 mb-1.5">{label}</p>
         {payload.map((entry: any, index: number) => (
-          <p key={index} className="text-sm" style={{ color: entry.color }}>
+          <p key={index} className="text-sm font-medium" style={{ color: entry.color }}>
             {entry.name}: {entry.name === 'revenue' || entry.name === 'profit' ? formatPrice(entry.value) : entry.value.toLocaleString()}
           </p>
         ))}
@@ -137,112 +128,153 @@ const ChartTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-// ===== Animated Stat Card =====
-function AnimatedStatCard({ stat: s }: { stat: typeof statCards[0] }) {
+// ===== Animated Stat Card Component =====
+function AnimatedStatCard({ stat: s, index }: { stat: typeof statCards[0]; index: number }) {
   const Icon = s.icon;
   const animatedValue = useCountUp(s.value);
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4 sm:p-6 hover:shadow-lg transition-all duration-300 group">
-      <div className="flex items-start justify-between">
-        <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${s.bg} group-hover:scale-110 transition-transform duration-300`}>
-          <Icon className={`h-5 w-5 ${iconColorMap[s.color.split('-')[1]] || 'text-gray-600'}`} />
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.08 }}
+      className="relative overflow-hidden rounded-2xl border border-noble-200 bg-gradient-to-br from-white to-noble-50/50 p-5 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 group"
+    >
+      <div className="absolute -top-10 -right-10 w-24 h-24 bg-primary-100/20 rounded-full blur-2xl pointer-events-none group-hover:bg-primary-100/30 transition-all" />
+      <div className="relative">
+        <div className="flex items-start justify-between">
+          <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${s.bg} group-hover:scale-110 transition-transform duration-300`}>
+            <Icon className={`h-5 w-5 ${iconColorMap[s.gradient.split('-')[1]] || 'text-gray-600'}`} />
+          </div>
+          <Badge className={cn(
+            'gap-1 text-xs font-semibold rounded-full border-0',
+            s.trend === 'up' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
+          )}>
+            {s.trend === 'up' ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+            {Math.abs(s.change)}%
+          </Badge>
         </div>
-        <Badge variant={s.trend === 'up' ? 'secondary' : 'destructive'} className="gap-1 text-xs">
-          {s.trend === 'up' ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-          {Math.abs(s.change)}%
-        </Badge>
+        <p className="mt-4 text-2xl font-bold text-noble-900 tabular-nums">
+          {s.format(animatedValue)}
+        </p>
+        <p className="mt-1 text-sm text-noble-400">{s.label}</p>
+        <div className="mt-3 h-1.5 rounded-full bg-noble-100 overflow-hidden">
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: `${Math.min(100, (s.value / (s.value * 1.3)) * 100)}%` }}
+            transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
+            className={`h-full rounded-full bg-gradient-to-r ${s.gradient}`}
+          />
+        </div>
       </div>
-      <p className="mt-4 text-2xl font-bold text-gray-900">
-        {s.format(animatedValue)}
-      </p>
-      <p className="mt-1 text-sm text-gray-500">{s.label}</p>
-      {/* Mini sparkline bar */}
-      <div className="mt-3 h-1 rounded-full bg-gray-100 overflow-hidden">
-        <div className={`h-full rounded-full bg-gradient-to-r ${s.color} transition-all duration-1000`} style={{ width: `${Math.min(100, (s.value / (s.value * 1.3)) * 100)}%` }} />
-      </div>
-    </div>
+    </motion.div>
   );
 }
 
+// ===== Main Dashboard Page =====
 export default function AdminDashboard() {
   const [revenuePeriod, setRevenuePeriod] = useState<'yearly' | 'monthly'>('yearly');
   const [selectedPeriod, setSelectedPeriod] = useState('7days');
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* ===== HEADER ===== */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+      >
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-sm text-gray-500">Your e-commerce performance at a glance</p>
+          <div className="flex items-center gap-2 mb-1">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary-50 to-primary-100">
+              <Sparkles className="h-4 w-4 text-primary-600" />
+            </div>
+            <span className="text-xs font-bold text-primary-600 uppercase tracking-widest">Analytics</span>
+          </div>
+          <h1 className="text-2xl font-bold text-noble-900">Dashboard</h1>
+          <p className="text-sm text-noble-400">Your e-commerce performance at a glance</p>
         </div>
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide -mx-2 px-2">
-          <div className="flex items-center gap-1 rounded-lg border border-gray-200 bg-white p-1 shrink-0">
+          <div className="flex items-center gap-1 rounded-xl border border-noble-200 bg-white p-1 shadow-sm shrink-0">
             {['7days', '30days', '90days', 'year'].map((p) => (
               <button
                 key={p}
                 onClick={() => setSelectedPeriod(p)}
                 className={cn(
-                  'px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap',
-                  selectedPeriod === p ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:text-gray-900'
+                  'px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded-lg transition-all whitespace-nowrap',
+                  selectedPeriod === p ? 'bg-noble-900 text-white shadow-sm' : 'text-noble-500 hover:text-noble-800'
                 )}
               >
                 {p === '7days' ? '7 Days' : p === '30days' ? '30 Days' : p === '90days' ? '90 Days' : 'Year'}
               </button>
             ))}
           </div>
-          <Button size="sm" variant="outline" className="gap-2 shrink-0">
+          <Button size="sm" variant="outline" className="gap-2 shrink-0 rounded-xl border-noble-200 text-noble-600 hover:bg-noble-50 hover:border-noble-300">
             <Download className="h-4 w-4" /> <span className="hidden sm:inline">Export</span>
           </Button>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Stats Cards with Animated Counters */}
+      {/* ===== STATS CARDS ===== */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {statCards.map((stat) => (
-          <AnimatedStatCard key={stat.label} stat={stat} />
+        {statCards.map((stat, i) => (
+          <AnimatedStatCard key={stat.label} stat={stat} index={i} />
         ))}
       </div>
 
-      {/* Daily Comparison */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      {/* ===== DAILY COMPARISON ===== */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="grid grid-cols-2 sm:grid-cols-4 gap-3"
+      >
         {Object.entries(dailyComparison.today).map(([key, value]) => {
           const yesterday = dailyComparison.yesterday[key as keyof typeof dailyComparison.yesterday];
           const diff = ((value - yesterday) / yesterday) * 100;
           const isPositive = diff >= 0;
           return (
-            <div key={key} className="rounded-xl border border-gray-200 bg-white p-3 sm:p-4">
-              <div className="flex items-center justify-between">
-                <p className="text-xs text-gray-500 capitalize">{key} <span className="text-[10px] text-gray-400">(today)</span></p>
-                <Badge className={cn('gap-0.5 text-[10px]', isPositive ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700')}>
+            <div key={key} className="rounded-xl border border-noble-200 bg-gradient-to-br from-white to-noble-50/50 p-3.5 hover:shadow-md transition-shadow">
+              <div className="flex items-center justify-between mb-1.5">
+                <p className="text-xs text-noble-500 capitalize font-medium">{key}</p>
+                <Badge className={cn(
+                  'gap-0.5 text-[10px] rounded-full border-0',
+                  isPositive ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
+                )}>
                   {isPositive ? <TrendingUp className="h-2.5 w-2.5" /> : <TrendingDown className="h-2.5 w-2.5" />}
                   {Math.abs(diff).toFixed(1)}%
                 </Badge>
               </div>
-              <p className="mt-1 text-lg font-bold text-gray-900">
+              <p className="text-lg font-bold text-noble-900">
                 {key === 'revenue' ? formatPrice(value) : key === 'conversion' ? `${value}%` : value.toLocaleString()}
               </p>
-              <p className="text-[10px] text-gray-400">Yesterday: {key === 'revenue' ? formatPrice(yesterday) : key === 'conversion' ? `${yesterday}%` : yesterday}</p>
+              <p className="text-[10px] text-noble-400 mt-0.5">
+                Yesterday: {key === 'revenue' ? formatPrice(yesterday) : key === 'conversion' ? `${yesterday}%` : yesterday}
+              </p>
             </div>
           );
         })}
-      </div>
+      </motion.div>
 
-      {/* Charts Row */}
+      {/* ===== CHARTS ROW ===== */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Revenue Chart */}
-        <div className="lg:col-span-2 rounded-xl border border-gray-200 bg-white p-6">
+        {/* Revenue Area Chart */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="lg:col-span-2 rounded-2xl border border-noble-200 bg-gradient-to-br from-white to-noble-50/50 p-6 shadow-sm hover:shadow-md transition-shadow"
+        >
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-base font-semibold text-gray-900">Revenue Overview</h3>
-              <p className="text-sm text-gray-500">Monthly revenue and profit trends</p>
+              <h3 className="text-base font-bold text-noble-800">Revenue Overview</h3>
+              <p className="text-sm text-noble-400">Monthly revenue and profit trends</p>
             </div>
-            <div className="flex gap-1 sm:gap-2">
+            <div className="flex gap-1.5 p-0.5 rounded-lg bg-noble-50 border border-noble-200">
               <button
                 onClick={() => setRevenuePeriod('yearly')}
                 className={cn(
-                  'px-2.5 sm:px-3 py-1 text-xs font-medium rounded-md transition-all',
-                  revenuePeriod === 'yearly' ? 'bg-gray-100 text-gray-900' : 'text-gray-500 hover:text-gray-700'
+                  'px-3 py-1 text-xs font-semibold rounded-md transition-all',
+                  revenuePeriod === 'yearly' ? 'bg-white text-noble-800 shadow-sm' : 'text-noble-500 hover:text-noble-700'
                 )}
               >
                 Yearly
@@ -250,182 +282,248 @@ export default function AdminDashboard() {
               <button
                 onClick={() => setRevenuePeriod('monthly')}
                 className={cn(
-                  'px-2.5 sm:px-3 py-1 text-xs font-medium rounded-md transition-all',
-                  revenuePeriod === 'monthly' ? 'bg-gray-100 text-gray-900' : 'text-gray-500 hover:text-gray-700'
+                  'px-3 py-1 text-xs font-semibold rounded-md transition-all',
+                  revenuePeriod === 'monthly' ? 'bg-white text-noble-800 shadow-sm' : 'text-noble-500 hover:text-noble-700'
                 )}
               >
                 Monthly
               </button>
             </div>
           </div>
-          <div className="h-60 sm:h-80">
+          <div className="h-64 sm:h-80">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={revenueData}>
                 <defs>
                   <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#10B981" stopOpacity={0.25}/>
+                    <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
                   </linearGradient>
                   <linearGradient id="profitGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#22c55e" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#059669" stopOpacity={0.2}/>
+                    <stop offset="95%" stopColor="#059669" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="month" tick={{ fontSize: 12 }} stroke="#9ca3af" />
-                <YAxis tick={{ fontSize: 12 }} stroke="#9ca3af" tickFormatter={(v) => `₹${(v / 100000).toFixed(1)}L`} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E3E4DA" strokeOpacity={0.5} />
+                <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#888A7C' }} axisLine={{ stroke: '#E3E4DA' }} tickLine={false} />
+                <YAxis tick={{ fontSize: 12, fill: '#888A7C' }} axisLine={false} tickLine={false} tickFormatter={(v) => `₹${(v / 100000).toFixed(1)}L`} />
                 <Tooltip content={<ChartTooltip />} />
-                <Area type="monotone" dataKey="revenue" stroke="#3b82f6" fill="url(#revenueGradient)" strokeWidth={2} name="revenue" />
-                <Area type="monotone" dataKey="profit" stroke="#22c55e" fill="url(#profitGradient)" strokeWidth={2} name="profit" />
+                <Area type="monotone" dataKey="revenue" stroke="#10B981" strokeWidth={2.5} fill="url(#revenueGradient)" name="revenue" />
+                <Area type="monotone" dataKey="profit" stroke="#059669" strokeWidth={2} fill="url(#profitGradient)" name="profit" strokeDasharray="5 5" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </motion.div>
 
         {/* Orders by Status Pie */}
-        <div className="rounded-xl border border-gray-200 bg-white p-6">
-          <h3 className="text-base font-semibold text-gray-900 mb-2">Orders by Status</h3>
-          <p className="text-sm text-gray-500 mb-6">Distribution of order statuses</p>
-          <div className="flex flex-col items-center justify-center">
-            <div className="h-56 sm:h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie data={orderStatusData} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={4} dataKey="value">
-                  {orderStatusData.map((entry, index) => (
-                    <Cell key={index} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35 }}
+          className="rounded-2xl border border-noble-200 bg-gradient-to-br from-white to-noble-50/50 p-6 shadow-sm hover:shadow-md transition-shadow"
+        >
+          <h3 className="text-base font-bold text-noble-800 mb-1">Orders by Status</h3>
+          <p className="text-sm text-noble-400 mb-4">Distribution of order statuses</p>
+          <div className="flex flex-col items-center">
+            <div className="h-56 sm:h-64 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={orderStatusData} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={4} dataKey="value">
+                    {orderStatusData.map((entry, index) => (
+                      <Cell key={index} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip content={<ChartTooltip />} />
+                </PieChart>
+              </ResponsiveContainer>
             </div>
-            <div className="mt-4 grid grid-cols-2 gap-x-4 sm:gap-x-6 gap-y-2 w-full max-w-sm">
+            <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2 w-full max-w-sm">
               {orderStatusData.map((item) => (
                 <div key={item.name} className="flex items-center gap-2 text-sm">
                   <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: item.color }} />
-                  <span className="text-gray-600">{item.name}</span>
-                  <span className="font-medium text-gray-900 ml-auto">{item.value.toLocaleString()}</span>
+                  <span className="text-noble-500">{item.name}</span>
+                  <span className="font-semibold text-noble-800 ml-auto tabular-nums">{item.value.toLocaleString()}</span>
                 </div>
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
-      {/* Low Stock Alerts */}
-      <div className="rounded-xl border border-red-200 bg-white p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5 text-red-500" />
-            <h3 className="text-base font-semibold text-gray-900">Low Stock Alerts</h3>
+      {/* ===== LOW STOCK ALERTS ===== */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="relative overflow-hidden rounded-2xl border border-red-200/60 bg-gradient-to-br from-white to-red-50/30 p-6 shadow-sm"
+      >
+        <div className="absolute -top-20 -right-20 w-40 h-40 bg-red-100/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-50 border border-red-200">
+                <AlertTriangle className="h-4 w-4 text-red-500" />
+              </div>
+              <h3 className="text-base font-bold text-noble-800">Low Stock Alerts</h3>
+            </div>
+            <Badge className="bg-red-50 text-red-700 border border-red-200 rounded-full text-xs font-semibold">
+              {lowStockItems.length} items
+            </Badge>
           </div>
-          <Badge className="bg-red-50 text-red-700 border-red-200">{lowStockItems.length} items</Badge>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {lowStockItems.map((item, i) => {
+              const stockPercent = Math.round((item.stock / item.threshold) * 100);
+              const isCritical = item.stock <= 5;
+              return (
+                <motion.div
+                  key={item.sku}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                >
+                  <Link
+                    href={`/admin/products?sku=${item.sku}`}
+                    className="block rounded-xl border border-red-100 bg-white p-3.5 hover:bg-red-50/50 transition-all duration-200 hover:shadow-md group"
+                  >
+                    <div className="flex items-start justify-between mb-2.5">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-noble-800 truncate group-hover:text-red-600 transition-colors">{item.name}</p>
+                        <p className="text-xs text-noble-400">{item.category} · {item.sku}</p>
+                      </div>
+                      <Badge className={cn(
+                        'rounded-full text-xs font-bold border-0',
+                        isCritical ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'
+                      )}>
+                        {item.stock} left
+                      </Badge>
+                    </div>
+                    <div className="h-1.5 rounded-full bg-white overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${stockPercent}%` }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        className={cn('h-full rounded-full', isCritical ? 'bg-red-500' : 'bg-amber-500')}
+                      />
+                    </div>
+                    <p className="mt-1.5 text-[10px] text-noble-400">Threshold: {item.threshold} units</p>
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {lowStockItems.map((item) => {
-            const stockPercent = Math.round((item.stock / item.threshold) * 100);
-            const isCritical = item.stock <= 5;
-            return (
-              <Link key={item.sku} href={`/admin/products?sku=${item.sku}`} className="block rounded-xl border border-red-100 bg-red-50/50 p-3 hover:bg-red-50 transition-colors group">
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate group-hover:text-red-600 transition-colors">{item.name}</p>
-                    <p className="text-xs text-gray-500">{item.category} · {item.sku}</p>
-                  </div>
-                  <Badge className={cn(isCritical ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700')}>
-                    {item.stock} left
-                  </Badge>
-                </div>
-                <Progress value={stockPercent} className={cn('h-1.5', isCritical ? '[&>div]:bg-red-500' : '[&>div]:bg-amber-500')} />
-                <p className="mt-1.5 text-[10px] text-gray-400">Threshold: {item.threshold} units — {stockPercent}% of stock level</p>
-              </Link>
-            );
-          })}
-        </div>
-      </div>
+      </motion.div>
 
-      {/* Bottom Row */}
+      {/* ===== BOTTOM ROW ===== */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Orders */}
-        <div className="rounded-xl border border-gray-200 bg-white p-6 lg:col-span-2">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.45 }}
+          className="rounded-2xl border border-noble-200 bg-gradient-to-br from-white to-noble-50/50 p-6 shadow-sm lg:col-span-2 hover:shadow-md transition-shadow"
+        >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-semibold text-gray-900">Recent Orders</h3>
+            <h3 className="text-base font-bold text-noble-800">Recent Orders</h3>
             <Link href="/admin/orders">
-              <Button variant="ghost" size="sm" className="text-primary-600 hover:text-primary-700">View All →</Button>
+              <Button variant="ghost" size="sm" className="text-primary-600 hover:text-primary-700 hover:bg-primary-50 rounded-xl text-xs font-semibold">
+                View All →
+              </Button>
             </Link>
           </div>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto -mx-2 px-2">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-100">
-                  <th className="text-left py-3 px-2 font-medium text-gray-500">Order</th>
-                  <th className="text-left py-3 px-2 font-medium text-gray-500">Customer</th>
-                  <th className="text-left py-3 px-2 font-medium text-gray-500">Items</th>
-                  <th className="text-left py-3 px-2 font-medium text-gray-500">Amount</th>
-                  <th className="text-left py-3 px-2 font-medium text-gray-500">Status</th>
+                <tr className="border-b border-noble-100">
+                  <th className="text-left py-3 px-3 font-semibold text-noble-400 text-xs uppercase tracking-wider">Order</th>
+                  <th className="text-left py-3 px-3 font-semibold text-noble-400 text-xs uppercase tracking-wider">Customer</th>
+                  <th className="text-left py-3 px-3 font-semibold text-noble-400 text-xs uppercase tracking-wider">Items</th>
+                  <th className="text-left py-3 px-3 font-semibold text-noble-400 text-xs uppercase tracking-wider">Amount</th>
+                  <th className="text-left py-3 px-3 font-semibold text-noble-400 text-xs uppercase tracking-wider">Status</th>
                 </tr>
               </thead>
               <tbody>
-                {recentOrders.map((order) => (
-                  <tr key={order.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                    <td className="py-3 px-2 font-medium text-gray-900">{order.id}</td>
-                    <td className="py-3 px-2 text-gray-600">{order.customer}</td>
-                    <td className="py-3 px-2 text-gray-600">{order.items}</td>
-                    <td className="py-3 px-2 font-medium text-gray-900">{formatPrice(order.amount)}</td>
-                    <td className="py-3 px-2">
-                      <Badge className={
+                {recentOrders.map((order, i) => (
+                  <motion.tr
+                    key={order.id}
+                    initial={{ opacity: 0, x: -5 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.03 }}
+                    className="border-b border-noble-50 hover:bg-white/80 transition-colors cursor-pointer"
+                  >
+                    <td className="py-3 px-3 font-semibold text-noble-800">{order.id}</td>
+                    <td className="py-3 px-3 text-noble-500">{order.customer}</td>
+                    <td className="py-3 px-3 text-noble-500 tabular-nums">{order.items}</td>
+                    <td className="py-3 px-3 font-semibold text-noble-800">{formatPrice(order.amount)}</td>
+                    <td className="py-3 px-3">
+                      <Badge className={cn(
+                        'rounded-full text-[10px] font-semibold border-0',
                         order.status === 'Delivered' ? 'bg-green-100 text-green-700' :
                         order.status === 'Processing' ? 'bg-blue-100 text-blue-700' :
                         order.status === 'Shipped' ? 'bg-purple-100 text-purple-700' :
-                        order.status === 'Pending' ? 'bg-yellow-100 text-yellow-700' :
+                        order.status === 'Pending' ? 'bg-amber-100 text-amber-700' :
                         'bg-red-100 text-red-700'
-                      }>
+                      )}>
                         {order.status}
                       </Badge>
                     </td>
-                  </tr>
+                  </motion.tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </div>
+        </motion.div>
 
         {/* Recent Activity Feed */}
-        <div className="rounded-xl border border-gray-200 bg-white p-6">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="rounded-2xl border border-noble-200 bg-gradient-to-br from-white to-noble-50/50 p-6 shadow-sm hover:shadow-md transition-shadow"
+        >
           <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Activity className="h-4 w-4 text-primary-600" />
-              <h3 className="text-base font-semibold text-gray-900">Activity</h3>
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary-50 to-primary-100">
+                <Activity className="h-4 w-4 text-primary-600" />
+              </div>
+              <h3 className="text-base font-bold text-noble-800">Activity</h3>
             </div>
-            <Badge className="bg-primary-50 text-primary-700 border-0">{recentActivities.length} new</Badge>
+            <Badge className="bg-primary-50 text-primary-700 border border-primary-200 rounded-full text-xs font-semibold">
+              {recentActivities.length} new
+            </Badge>
           </div>
           <div className="space-y-0">
             {recentActivities.map((act, i) => {
               const Icon = (activityIcons[act.type] || Activity) as React.ComponentType<{ className?: string }>;
               const iconColors: Record<string, string> = {
-                order: 'text-blue-500 bg-blue-50',
-                payment: 'text-green-500 bg-green-50',
-                alert: 'text-red-500 bg-red-50',
-                shipping: 'text-purple-500 bg-purple-50',
-                user: 'text-primary-500 bg-primary-50',
-                return: 'text-orange-500 bg-orange-50',
-                coupon: 'text-amber-500 bg-amber-50',
+                order: 'text-blue-500 bg-blue-50 border-blue-200',
+                payment: 'text-green-500 bg-green-50 border-green-200',
+                alert: 'text-red-500 bg-red-50 border-red-200',
+                shipping: 'text-purple-500 bg-purple-50 border-purple-200',
+                user: 'text-primary-500 bg-primary-50 border-primary-200',
+                return: 'text-orange-500 bg-orange-50 border-orange-200',
+                coupon: 'text-amber-500 bg-amber-50 border-amber-200',
               };
               return (
-                <div key={i} className="flex gap-3 py-3 border-b border-gray-50 last:border-0">
-                  <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${iconColors[act.type] || 'bg-gray-50 text-gray-500'}`}>
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -5 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.03 }}
+                  className="flex gap-3 py-3 border-b border-noble-50 last:border-0 group hover:bg-noble-50/30 -mx-2 px-2 rounded-lg transition-colors"
+                >
+                  <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border ${iconColors[act.type] || 'bg-noble-50 text-noble-500 border-noble-200'}`}>
                     <Icon className="h-4 w-4" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900">{act.action}</p>
-                    <p className="text-xs text-gray-500 truncate">{act.detail}</p>
+                    <p className="text-sm font-semibold text-noble-700 group-hover:text-primary-600 transition-colors">{act.action}</p>
+                    <p className="text-xs text-noble-400 truncate">{act.detail}</p>
                   </div>
-                  <span className="text-[10px] text-gray-400 whitespace-nowrap shrink-0">{act.time}</span>
-                </div>
+                  <span className="text-[10px] text-noble-400 whitespace-nowrap shrink-0 mt-0.5">{act.time}</span>
+                </motion.div>
               );
             })}
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

@@ -3,14 +3,13 @@
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CreditCard, Smartphone, Building2, Wallet, Truck, Check, Shield, Loader2, Zap, Leaf } from 'lucide-react';
+import { CreditCard, Smartphone, Building2, Wallet, Truck, Check, CheckCircle, Shield, Loader2, Leaf, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { cn, formatPrice } from '@/lib/utils';
 import { useAppSelector } from '@/store/hooks';
 import { initiateRazorpayPayment, createRazorpayOrder } from '@/services/payment';
-import { sendOrderWhatsApp, requestNotificationPermission } from '@/services/notifications';
+import { sendOrderWhatsApp } from '@/services/notifications';
 import toast from 'react-hot-toast';
 
 type PaymentMethod = 'upi' | 'card' | 'netbanking' | 'wallet' | 'cod';
@@ -47,11 +46,8 @@ export function RazorpayPayment({ phoneNumber, customerName, customerEmail }: Ra
 
     try {
       if (selectedPayment === 'cod') {
-        // For COD, just create the order directly
         await new Promise((resolve) => setTimeout(resolve, 1500));
         toast.success('Order placed successfully! 🎉');
-
-        // Send WhatsApp notification
         if (phoneNumber) {
           await sendOrderWhatsApp({
             phone: phoneNumber,
@@ -60,7 +56,6 @@ export function RazorpayPayment({ phoneNumber, customerName, customerEmail }: Ra
             customerName: customerName || user?.displayName || 'Valued Customer',
           });
         }
-
         router.push(`/checkout/confirmation?order=${orderNumber}&method=cod`);
         return;
       }
@@ -71,7 +66,6 @@ export function RazorpayPayment({ phoneNumber, customerName, customerEmail }: Ra
         return;
       }
 
-      // For online payments: Create Razorpay order and initiate payment
       const paymentOrder = await createRazorpayOrder(totalAmount + 49);
       const phone = phoneNumber || user?.phone || '';
 
@@ -83,8 +77,6 @@ export function RazorpayPayment({ phoneNumber, customerName, customerEmail }: Ra
         customerPhone: phone,
         onSuccess: async (response) => {
           toast.success('Payment successful! 🎉', { duration: 3000 });
-
-          // Try to send WhatsApp confirmation
           if (phone) {
             await sendOrderWhatsApp({
               phone,
@@ -93,7 +85,6 @@ export function RazorpayPayment({ phoneNumber, customerName, customerEmail }: Ra
               customerName: customerName || user?.displayName || 'Valued Customer',
             });
           }
-
           router.push(`/checkout/confirmation?order=${orderNumber}&payment_id=${response.razorpay_payment_id}&method=online`);
         },
         onFailure: (error) => {
@@ -125,50 +116,68 @@ export function RazorpayPayment({ phoneNumber, customerName, customerEmail }: Ra
   };
 
   return (
-    <div className="space-y-6">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-6"
+    >
+      {/* Header */}
       <div className="flex items-center gap-3 mb-2">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-50">
-          <Zap className="h-5 w-5 text-primary-600" />
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 shadow-sm">
+          <Sparkles className="h-5 w-5 text-primary-600" />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Payment Method</h2>
-          <p className="text-sm text-gray-500">Choose your preferred payment — powered by <strong>Razorpay</strong></p>
+          <h2 className="text-xl font-bold text-noble-800">Payment Method</h2>
+          <p className="text-sm text-noble-400">Choose your preferred payment — powered by <strong className="text-noble-600">Razorpay</strong></p>
         </div>
       </div>
 
       {/* Payment Methods */}
       <div className="space-y-3">
-        {paymentMethods.map((method) => {
+        {paymentMethods.map((method, index) => {
           const Icon = method.icon;
           const isSelected = selectedPayment === method.id;
           return (
             <motion.div
               key={method.id}
-              whileHover={{ scale: 1.005 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+              whileHover={{ y: -1 }}
               onClick={() => setSelectedPayment(method.id)}
               className={cn(
-                'relative flex cursor-pointer items-center gap-4 rounded-2xl border-2 p-5 transition-all',
+                'relative flex cursor-pointer items-center gap-4 rounded-2xl border-2 p-5 transition-all duration-200',
                 isSelected
-                  ? 'border-primary-500 bg-primary-50 shadow-md shadow-primary-100'
-                  : 'border-primary-100 hover:border-primary-300 bg-white hover:shadow-sm'
+                  ? 'border-primary-500 bg-gradient-to-br from-primary-50 to-white shadow-lg shadow-primary-100'
+                  : 'border-noble-200 bg-white hover:border-noble-300 hover:shadow-md'
               )}
             >
               {isSelected && (
-                <div className="absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-full bg-primary-600 shadow-sm">
-                  <Check className="h-4 w-4 text-white" />
-                </div>
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  className="absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-primary-600 to-emerald-500 shadow-sm"
+                >
+                  <Check className="h-4 w-4 text-white" strokeWidth={3} />
+                </motion.div>
               )}
-              <div className={cn('flex h-14 w-14 items-center justify-center rounded-2xl', isSelected ? 'bg-primary-100' : 'bg-primary-50')}>
-                <Icon className={cn('h-7 w-7', isSelected ? 'text-primary-600' : 'text-primary-400')} />
+              <div className={cn(
+                'flex h-14 w-14 items-center justify-center rounded-2xl transition-all',
+                isSelected ? 'bg-gradient-to-br from-primary-100 to-primary-50 shadow-sm' : 'bg-noble-50'
+              )}>
+                <Icon className={cn('h-7 w-7', isSelected ? 'text-primary-600' : 'text-noble-400')} />
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <p className="font-semibold text-gray-900">{method.name}</p>
+                  <p className="font-bold text-noble-800">{method.name}</p>
                   {method.badge && (
-                    <Badge className="bg-primary-100 text-primary-700 border-0 text-[10px] px-1.5 py-0">{method.badge}</Badge>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary-50 text-primary-700 border border-primary-200">
+                      {method.badge}
+                    </span>
                   )}
                 </div>
-                <p className="text-sm text-gray-500 mt-0.5">{method.description}</p>
+                <p className="text-sm text-noble-400 mt-0.5">{method.description}</p>
               </div>
             </motion.div>
           );
@@ -178,29 +187,34 @@ export function RazorpayPayment({ phoneNumber, customerName, customerEmail }: Ra
       {/* UPI Input */}
       <AnimatePresence>
         {selectedPayment === 'upi' && (
-          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-            <div className="rounded-2xl border border-primary-100 bg-white p-5 space-y-3">
-              <div className="flex items-center gap-4">
-                <div className="flex gap-2">
-                  {['Google Pay', 'PhonePe', 'Paytm'].map((app) => (
-                    <button
-                      key={app}
-                      type="button"
-                      onClick={() => setUpiId(`${app.toLowerCase()}@upi`)}
-                      className="px-3 py-1.5 text-xs font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-primary-50 hover:text-primary-700 border border-gray-200 hover:border-primary-200 transition-all"
-                    >
-                      {app}
-                    </button>
-                  ))}
-                </div>
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="rounded-2xl border border-noble-200 bg-gradient-to-br from-white to-noble-50 p-5 space-y-3">
+              <div className="flex items-center gap-2">
+                {['Google Pay', 'PhonePe', 'Paytm'].map((app) => (
+                  <motion.button
+                    key={app}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    type="button"
+                    onClick={() => setUpiId(`${app.toLowerCase()}@upi`)}
+                    className="px-3 py-1.5 text-xs font-medium rounded-lg bg-white text-noble-600 hover:bg-primary-50 hover:text-primary-700 border border-noble-200 hover:border-primary-200 transition-all"
+                  >
+                    {app}
+                  </motion.button>
+                ))}
               </div>
               <Input
                 placeholder="Enter UPI ID (e.g. name@upi)"
                 value={upiId}
                 onChange={(e) => setUpiId(e.target.value)}
-                className="border-primary-200"
+                className="border-noble-200 focus:border-primary-400 rounded-xl"
               />
-              <p className="text-xs text-gray-400">You will be redirected to your UPI app to complete payment</p>
+              <p className="text-xs text-noble-400">You will be redirected to your UPI app to complete payment</p>
             </div>
           </motion.div>
         )}
@@ -209,70 +223,86 @@ export function RazorpayPayment({ phoneNumber, customerName, customerEmail }: Ra
       {/* COD Verification */}
       <AnimatePresence>
         {selectedPayment === 'cod' && !phoneVerified && (
-          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-            <div className="rounded-2xl border border-amber-200 bg-amber-50/50 p-5 space-y-3">
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50/80 to-white p-5 space-y-3">
               <div className="flex items-center gap-2">
                 <Shield className="h-4 w-4 text-amber-600" />
-                <p className="text-sm font-semibold text-amber-800">Phone Verification Required for COD</p>
+                <p className="text-sm font-bold text-amber-800">Phone Verification Required for COD</p>
               </div>
               <div className="flex gap-2">
                 <Input
                   placeholder="Enter OTP"
                   value={otpValue}
                   onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                  className="flex-1 border-amber-200"
+                  className="flex-1 border-amber-200 focus:border-amber-400 rounded-xl"
                   maxLength={6}
                 />
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={otpSent ? handleVerifyOtp : handleSendOtp}
-                  className="border-amber-300 text-amber-700 hover:bg-amber-50 text-xs"
+                  className="border-amber-300 text-amber-700 hover:bg-amber-50 text-xs rounded-xl px-5"
                 >
                   {otpSent ? 'Verify' : 'Send OTP'}
                 </Button>
               </div>
-              {phoneVerified && <p className="text-xs text-green-600 font-medium">✓ Phone verified</p>}
+              {phoneVerified && (
+                <p className="text-xs text-green-600 font-medium flex items-center gap-1">
+                  <CheckCircle className="h-3 w-3" /> Phone verified
+                </p>
+              )}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Security Notice */}
-      <div className="rounded-2xl bg-gradient-to-r from-primary-50 to-accent-50 border border-primary-100 p-4 flex items-start gap-3">
-        <Shield className="h-5 w-5 text-primary-600 shrink-0 mt-0.5" />
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <p className="text-sm font-semibold text-primary-800">🔒 Secure Payment via Razorpay</p>
-            <div className="flex items-center gap-1">
-              <img src="https://cdn.razorpay.com/assets/razorpay-logo.svg" alt="Razorpay" className="h-4" />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary-50/80 to-accent-50/80 border border-primary-100 p-4 flex items-start gap-3"
+      >
+        <div className="absolute -top-10 -right-10 w-24 h-24 bg-primary-100/30 rounded-full blur-2xl pointer-events-none" />
+        <div className="relative flex items-start gap-3">
+          <Shield className="h-5 w-5 text-primary-600 shrink-0 mt-0.5" />
+          <div>
+            <div className="flex items-center gap-2 mb-0.5">
+              <p className="text-sm font-bold text-primary-800">🔒 Secure Payment via Razorpay</p>
             </div>
+            <p className="text-xs text-noble-500">100% secure. PCI-DSS compliant. Your card details are never stored with us.</p>
           </div>
-          <p className="text-xs text-gray-500">100% secure. PCI-DSS compliant. Your card details are never stored with us.</p>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Place Order Button */}
-      <div className="flex flex-col gap-2 pt-4 border-t border-primary-100">
+      {/* Place Order */}
+      <div className="flex flex-col gap-2 pt-4 border-t border-noble-100">
         <Button
           onClick={handlePlaceOrder}
           disabled={!selectedPayment || isProcessing || (selectedPayment === 'cod' && !phoneVerified) || (selectedPayment === 'upi' && !upiId)}
-          className="w-full gap-2 gradient-primary text-white h-14 text-base font-bold shadow-lg shadow-primary-200 disabled:opacity-50 rounded-xl"
+          className="w-full gap-2 gradient-primary text-white h-14 text-base font-bold shadow-xl shadow-primary-200/50 hover:shadow-2xl hover:shadow-primary-300/50 transition-all disabled:opacity-50 rounded-xl"
         >
           {isProcessing ? (
-            <>
+            <span className="flex items-center gap-2">
               <Loader2 className="h-5 w-5 animate-spin" />
               Processing your order...
-            </>
+            </span>
           ) : (
-            <>
+            <span className="flex items-center gap-2">
               <Leaf className="h-5 w-5" />
               Place Order — {formatPrice(totalAmount + 49)}
-            </>
+            </span>
           )}
         </Button>
-        <p className="text-xs text-gray-400 text-center">By placing this order, you agree to our Terms & Conditions</p>
+        <p className="text-xs text-noble-400 text-center">
+          By placing this order, you agree to our Terms & Conditions
+        </p>
       </div>
-    </div>
+    </motion.div>
   );
 }

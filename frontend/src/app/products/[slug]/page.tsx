@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Star, Heart, Share2, ShoppingCart, Check, Shield, Truck, RotateCcw,
-  Minus, Plus, MapPin, Copy, ExternalLink, Clock, Zap, Gift, ChevronDown,
-  Users, Info, CreditCard, ChevronUp, X, Package, RefreshCw, Sparkles
+  Minus, Plus, MapPin, Gift, ChevronDown,
+  Users, Info, CreditCard, Package, RefreshCw, Sparkles,
+  Leaf, Award, BadgePercent, PackageCheck, Store, ChevronRight,
+  Eye, MessageCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -76,12 +78,17 @@ const relatedProducts: Product[] = [
 
 const ratingDistribution = { 5: 156, 4: 52, 3: 18, 2: 6, 1: 2 };
 
-// Banner offers
 const offers = [
   { icon: Gift, label: 'Combo Offer', desc: 'Buy 2 Get 10% Off on Honey Collection' },
   { icon: CreditCard, label: 'Bank Offer', desc: '10% Instant Discount on HDFC Credit Card' },
   { icon: Truck, label: 'Free Shipping', desc: 'Free delivery on orders above ₹499' },
   { icon: RefreshCw, label: 'Easy Returns', desc: '30-day return policy. No questions asked.' },
+];
+
+const sectionTabs = [
+  { id: 'overview', label: 'Overview', icon: Eye },
+  { id: 'details', label: 'Details', icon: PackageCheck },
+  { id: 'reviews', label: 'Reviews', icon: MessageCircle },
 ];
 
 export default function ProductDetailPage() {
@@ -95,8 +102,11 @@ export default function ProductDetailPage() {
   const [pincodeChecked, setPincodeChecked] = useState(false);
   const [pincodeValid, setPincodeValid] = useState<boolean | null>(null);
   const [showOffers, setShowOffers] = useState(false);
+  const [activeSection, setActiveSection] = useState('overview');
+  const [showTOC, setShowTOC] = useState(false);
+  const detailsRef = useRef<HTMLDivElement>(null);
+  const reviewsRef = useRef<HTMLDivElement>(null);
 
-  // Tell the Header which category to highlight when on this product detail page
   useEffect(() => {
     setCategorySlug(product.category.slug);
     return () => setCategorySlug(null);
@@ -106,10 +116,8 @@ export default function ProductDetailPage() {
   const inStock = product.availableStock > 0;
   const lowStock = product.availableStock > 0 && product.availableStock <= 10;
 
-  // Social proof: random viewer count
   const [viewerCount] = useState(() => Math.floor(Math.random() * 40) + 12);
 
-  // Estimate delivery date
   const getDeliveryDate = useCallback(() => {
     const today = new Date();
     const est = new Date(today);
@@ -118,12 +126,40 @@ export default function ProductDetailPage() {
   }, []);
   const [deliveryDate] = useState(getDeliveryDate);
 
-  // Sticky mobile bar on scroll
   useEffect(() => {
     const handleScroll = () => setShowMobileSticky(window.scrollY > 400);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Intersection observer for active section
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (entry.target === detailsRef.current) setActiveSection('details');
+            else if (entry.target === reviewsRef.current) setActiveSection('reviews');
+            else setActiveSection('overview');
+          }
+        });
+      },
+      { rootMargin: '-200px 0px -50% 0px', threshold: 0 }
+    );
+
+    if (detailsRef.current) observer.observe(detailsRef.current);
+    if (reviewsRef.current) observer.observe(reviewsRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const scrollToSection = (sectionId: string) => {
+    setActiveSection(sectionId);
+    setShowTOC(false);
+    const el = sectionId === 'overview'
+      ? document.getElementById('product-main')
+      : sectionId === 'details' ? detailsRef.current : reviewsRef.current;
+    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   const handleAddToCart = useCallback(() => {
     dispatch(addItem({
@@ -153,9 +189,8 @@ export default function ProductDetailPage() {
   }, [isInWishlist]);
 
   const handleShare = useCallback(async () => {
-    const url = window.location.href;
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(window.location.href);
       toast.success('Link copied to clipboard!', { icon: '📋', duration: 2000 });
     } catch {
       toast.error('Could not copy link', { duration: 2000 });
@@ -165,13 +200,12 @@ export default function ProductDetailPage() {
   const handlePincodeCheck = useCallback(() => {
     setPincodeChecked(true);
     if (pincode.length === 6 && /^[1-9]\d{5}$/.test(pincode)) {
-      setPincodeValid(Math.random() > 0.2); // 80% chance of availability
+      setPincodeValid(Math.random() > 0.2);
     } else {
       setPincodeValid(false);
     }
   }, [pincode]);
 
-  // JSON-LD structured data for SEO
   const jsonLd = {
     '@context': 'https://schema.org/',
     '@type': 'Product',
@@ -203,390 +237,586 @@ export default function ProductDetailPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="min-h-screen bg-white pb-28 lg:pb-12">
-        <div className="container-custom py-4 md:py-6">
-          {/* ===== BREADCRUMB ===== */}
-          <nav className="flex items-center gap-2 text-xs md:text-sm text-gray-500 mb-4 md:mb-6 overflow-x-auto scrollbar-hide" aria-label="Breadcrumb">
-            <a href="/" className="hover:text-primary-600 whitespace-nowrap transition-colors">Home</a>
-            <ChevronDown aria-hidden="true" className="h-3 w-3 -rotate-90 text-gray-300 shrink-0" />
-            <a href="/products" className="hover:text-primary-600 whitespace-nowrap transition-colors">Products</a>
-            <ChevronDown aria-hidden="true" className="h-3 w-3 -rotate-90 text-gray-300 shrink-0" />
-            <a href={`/products?category=${product.category.slug}`} className="hover:text-primary-600 whitespace-nowrap transition-colors">{product.category.name}</a>
-            <ChevronDown aria-hidden="true" className="h-3 w-3 -rotate-90 text-gray-300 shrink-0" />
-            <span className="text-gray-900 font-medium whitespace-nowrap truncate max-w-[150px] md:max-w-[300px]">{product.name}</span>
-          </nav>
-
-          {/* ===== SOCIAL PROOF TOAST ===== */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2, duration: 0.5 }}
-            className="mb-4 inline-flex items-center gap-2 rounded-full bg-green-50 border border-green-200 px-3.5 py-1.5 text-xs text-green-700"
-          >
-            <Users className="h-3.5 w-3.5 text-green-500" />
-            <span><strong>{viewerCount}</strong> people are viewing this right now</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse ml-1" />
-          </motion.div>
-
-          {/* ===== PRODUCT MAIN SECTION ===== */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
-            {/* Gallery */}
-            <ProductGallery images={product.images} productName={product.name} />
-
-            {/* Product Info */}
-            <div className="space-y-5 lg:space-y-6">
-              {/* Brand & Title */}
-              <div>
-                {product.brand && (
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-semibold text-primary-600 uppercase tracking-widest bg-primary-50 px-2.5 py-1 rounded-full">
-                      {product.brand.name}
-                    </span>
-                    {product.isBestSeller && (
-                      <Badge className="bg-amber-500 text-white border-0 text-[10px] px-2 py-0.5">
-                        <Zap className="h-3 w-3 mr-0.5 inline" /> Best Seller
-                      </Badge>
-                    )}
-                  </div>
+      {/* ===== STICKY SECTION TOC ===== */}
+      <motion.div
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-noble-200 hidden lg:block"
+      >
+        <div className="container-luxury flex items-center gap-1">
+          {sectionTabs.map((tab) => {
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => scrollToSection(tab.id)}
+                className={cn(
+                  'flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all duration-200',
+                  activeSection === tab.id
+                    ? 'border-primary-500 text-primary-700'
+                    : 'border-transparent text-noble-500 hover:text-noble-700 hover:border-noble-300'
                 )}
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 leading-tight">
-                  {product.name}
-                </h1>
+              >
+                <Icon className="h-4 w-4" />
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+      </motion.div>
 
-                {/* Rating & Sold */}
-                <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
-                  <div className="flex items-center gap-0.5">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star key={star} className={cn('h-4 w-4', star <= Math.round(product.averageRating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200')} />
+      <div className="min-h-screen bg-white pb-28 lg:pb-12">
+        {/* ===== LUXURY TOP BAR ===== */}
+        <div className="relative overflow-hidden">
+          {/* Subtle background decoration */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-primary-50/30 to-transparent pointer-events-none" />
+
+          <div className="container-luxury py-4 md:py-6 relative">
+            {/* ===== PREMIUM BREADCRUMB ===== */}
+            <motion.nav
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-2 text-xs md:text-sm text-noble-400 mb-4 md:mb-6 overflow-x-auto scrollbar-hide"
+              aria-label="Breadcrumb"
+            >
+              <a href="/" className="hover:text-primary-600 whitespace-nowrap transition-colors font-medium">Home</a>
+              <ChevronRight aria-hidden="true" className="h-3 w-3 text-noble-300 shrink-0" />
+              <a href="/products" className="hover:text-primary-600 whitespace-nowrap transition-colors font-medium">Products</a>
+              <ChevronRight aria-hidden="true" className="h-3 w-3 text-noble-300 shrink-0" />
+              <a href={`/products?category=${product.category.slug}`} className="hover:text-primary-600 whitespace-nowrap transition-colors font-medium">{product.category.name}</a>
+              <ChevronRight aria-hidden="true" className="h-3 w-3 text-noble-300 shrink-0" />
+              <span className="text-noble-800 font-semibold whitespace-nowrap truncate max-w-[150px] md:max-w-[300px]">{product.name}</span>
+            </motion.nav>
+
+            {/* ===== SOCIAL PROOF TOAST ===== */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.5, duration: 0.5 }}
+              className="mb-4 inline-flex items-center gap-2.5 rounded-2xl glass-strong px-4 py-2 text-xs text-noble-600 border border-primary-100/50"
+            >
+              <span className="flex h-2 w-2 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+              </span>
+              <Users className="h-3.5 w-3.5 text-primary-500" />
+              <span><strong className="text-noble-800">{viewerCount}</strong> people are viewing this right now</span>
+            </motion.div>
+
+            {/* ===== PRODUCT MAIN SECTION ===== */}
+            <div id="product-main" className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
+              {/* Gallery */}
+              <ProductGallery images={product.images} productName={product.name} />
+
+              {/* Product Info */}
+              <div className="space-y-5 lg:space-y-6">
+                {/* Brand & Title */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                >
+                  {product.brand && (
+                    <div className="flex items-center gap-2 mb-2">
+                      <motion.span
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ delay: 0.3, duration: 0.4 }}
+                        className="inline-flex items-center gap-1.5 text-[11px] font-bold text-primary-700 uppercase tracking-widest bg-primary-50/80 border border-primary-200/50 px-3 py-1.5 rounded-full"
+                      >
+                        <Store className="h-3 w-3" />
+                        {product.brand.name}
+                      </motion.span>
+                      {product.isBestSeller && (
+                        <Badge className="bg-gradient-to-r from-amber-500 to-amber-600 text-white border-0 text-[10px] px-2.5 py-1 rounded-full shadow-sm">
+                          <Award className="h-3 w-3 mr-0.5 inline" /> Best Seller
+                        </Badge>
+                      )}
+                      {product.isNewArrival && (
+                        <Badge className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white border-0 text-[10px] px-2.5 py-1 rounded-full shadow-sm">
+                          <Sparkles className="h-3 w-3 mr-0.5 inline" /> New
+                        </Badge>
+                      )}
+                    </div>
+                  )}
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-noble-900 leading-tight heading-lg">
+                    {product.name}
+                  </h1>
+
+                  {/* Rating & Sold */}
+                  <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1">
+                    <div className="flex items-center gap-0.5">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star key={star} className={cn('h-4 w-4', star <= Math.round(product.averageRating) ? 'fill-amber-400 text-amber-400' : 'text-noble-200')} />
+                      ))}
+                    </div>
+                    <span className="text-sm font-bold text-noble-800">{product.averageRating.toFixed(1)}</span>
+                    <button className="text-sm text-primary-600 hover:text-primary-700 font-medium transition-colors" onClick={() => scrollToSection('reviews')}>
+                      {product.ratingCount} reviews
+                    </button>
+                    <span className="text-xs text-noble-300">|</span>
+                    <span className="text-sm text-noble-500 flex items-center gap-1">
+                      <Package className="h-3.5 w-3.5" />
+                      {product.totalSold.toLocaleString()} sold
+                    </span>
+                  </div>
+                </motion.div>
+
+                {/* ===== PRICE SECTION ===== */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 }}
+                  className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary-50/80 via-white to-primary-50/30 border border-primary-100/60 p-5 md:p-6"
+                >
+                  {/* Decorative elements */}
+                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary-100/30 rounded-full blur-2xl pointer-events-none" />
+                  <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-emerald-100/20 rounded-full blur-2xl pointer-events-none" />
+
+                  <div className="relative">
+                    <div className="flex items-baseline gap-3">
+                      <motion.span
+                        key={product.sellingPrice}
+                        initial={{ scale: 1.2, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="text-3xl md:text-4xl font-bold text-noble-900"
+                      >
+                        {formatPrice(product.sellingPrice)}
+                      </motion.span>
+                      {product.basePrice > product.sellingPrice && (
+                        <>
+                          <span className="text-lg md:text-xl text-noble-400 line-through">{formatPrice(product.basePrice)}</span>
+                          <Badge className="bg-gradient-to-r from-red-500 to-rose-500 text-white text-xs md:text-sm px-2.5 py-0.5 font-bold rounded-full shadow-sm">
+                            -{Math.abs(discount)}% OFF
+                          </Badge>
+                        </>
+                      )}
+                    </div>
+                    <div className="mt-2 flex items-center gap-3 text-xs md:text-sm">
+                      <span className="text-green-700 font-medium flex items-center gap-1.5 bg-green-50 border border-green-200/50 rounded-lg px-2.5 py-1">
+                        <Check className="h-3 w-3" />
+                        Inclusive of all taxes
+                      </span>
+                      <span className="text-noble-400">Free shipping above ₹499</span>
+                    </div>
+
+                    {/* Stock Status */}
+                    <div className="mt-3 flex items-center gap-2.5">
+                      {inStock ? (
+                        <div className="flex items-center gap-2">
+                          <span className="flex h-2.5 w-2.5 relative">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
+                          </span>
+                          <span className="text-sm font-medium text-green-700">
+                            {lowStock
+                              ? `Only ${product.availableStock} left in stock — order soon!`
+                              : 'In Stock'
+                            }
+                          </span>
+                          <span className="text-xs text-noble-400">·</span>
+                          <span className="text-xs text-noble-500">SKU: {product.sku}</span>
+                        </div>
+                      ) : (
+                        <span className="text-sm font-medium text-red-600">Currently out of stock</span>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* ===== OFFERS SECTION ===== */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="rounded-2xl border border-dashed border-amber-200/70 bg-amber-50/40 overflow-hidden"
+                >
+                  <button
+                    onClick={() => setShowOffers(!showOffers)}
+                    className="w-full flex items-center justify-between px-5 py-3.5 text-sm font-bold text-amber-800 hover:bg-amber-50/60 transition-colors"
+                  >
+                    <span className="flex items-center gap-2.5">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-amber-500 shadow-sm">
+                        <BadgePercent className="h-4 w-4 text-white" />
+                      </span>
+                      Available Offers
+                    </span>
+                    <ChevronDown className={cn('h-4 w-4 text-amber-500 transition-transform duration-300', showOffers && 'rotate-180')} />
+                  </button>
+                  <AnimatePresence>
+                    {showOffers && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-5 pb-4 space-y-2.5">
+                          {offers.map((offer, i) => {
+                            const Icon = offer.icon;
+                            return (
+                              <motion.div
+                                key={i}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: i * 0.05 }}
+                                className="flex items-start gap-3 p-3 rounded-xl bg-white border border-amber-100/80 hover:border-amber-200 transition-colors"
+                              >
+                                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-amber-100 to-amber-50 border border-amber-200/50">
+                                  <Icon className="h-4 w-4 text-amber-700" />
+                                </div>
+                                <div>
+                                  <p className="text-xs font-bold text-noble-800">{offer.label}</p>
+                                  <p className="text-xs text-noble-500 mt-0.5">{offer.desc}</p>
+                                </div>
+                              </motion.div>
+                            );
+                          })}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+
+                <Separator className="bg-noble-100" />
+
+                {/* ===== SHORT DESCRIPTION ===== */}
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.25 }}
+                  className="text-sm text-noble-600 leading-relaxed"
+                >
+                  {product.shortDescription}
+                </motion.p>
+
+                {/* ===== SIZE VARIANTS ===== */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <VariantSelector
+                    label="Size"
+                    type="default"
+                    options={product.variants.map(v => ({
+                      type: 'default',
+                      value: v.variantValue,
+                      color: v.colorCode || v.color || '#8B6914',
+                      inStock: v.stock > 0,
+                      label: `${v.variantValue}${v.additionalPrice > 0 ? ` (+${formatPrice(v.additionalPrice)})` : ''}`,
+                    }))}
+                    selectedValue={selectedSize}
+                    onChange={setSelectedSize}
+                  />
+                </motion.div>
+
+                {/* ===== QUANTITY SELECTOR ===== */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35 }}
+                >
+                  <p className="text-sm font-semibold text-noble-800 mb-2.5">Quantity</p>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center rounded-xl border-2 border-noble-200 overflow-hidden bg-white shadow-sm hover:border-noble-300 transition-colors">
+                      <button
+                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                        disabled={quantity <= 1}
+                        className="flex h-12 w-12 items-center justify-center text-noble-500 hover:bg-noble-50 hover:text-noble-800 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                        aria-label="Decrease quantity"
+                      >
+                        <Minus className="h-4 w-4" />
+                      </button>
+                      <motion.span
+                        key={quantity}
+                        initial={{ scale: 1.2, opacity: 0.5 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="flex h-12 w-16 items-center justify-center border-x-2 border-noble-200 text-sm font-bold text-noble-900 select-none tabular-nums"
+                      >
+                        {quantity}
+                      </motion.span>
+                      <button
+                        onClick={() => setQuantity(Math.min(product.maxQuantity || 10, quantity + 1))}
+                        disabled={quantity >= (product.maxQuantity || 10)}
+                        className="flex h-12 w-12 items-center justify-center text-noble-500 hover:bg-noble-50 hover:text-noble-800 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                        aria-label="Increase quantity"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <div className="text-sm">
+                      <p className="text-noble-500">
+                        <span className="font-bold text-noble-800 text-lg">{formatPrice(product.sellingPrice * quantity)}</span>
+                        {' '}total
+                      </p>
+                      {quantity > 1 && (
+                        <p className="text-xs text-noble-400">{formatPrice(product.sellingPrice)} each</p>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* ===== PINCODE CHECKER ===== */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="rounded-2xl border border-noble-200 bg-gradient-to-br from-noble-50/50 to-white p-4"
+                >
+                  <p className="text-xs font-semibold text-noble-700 mb-2.5 flex items-center gap-1.5">
+                    <MapPin className="h-3.5 w-3.5 text-primary-600" />
+                    Check Delivery Availability
+                  </p>
+                  <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <Input
+                        placeholder="Enter pincode"
+                        value={pincode}
+                        onChange={(e) => {
+                          setPincode(e.target.value.replace(/\D/g, '').slice(0, 6));
+                          setPincodeChecked(false);
+                          setPincodeValid(null);
+                        }}
+                        maxLength={6}
+                        className={cn(
+                          'h-11 pl-4 pr-10 border-noble-200 text-sm rounded-xl bg-white',
+                          'focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500',
+                          'placeholder:text-noble-400',
+                          pincodeValid === true && 'border-green-500 bg-green-50/50',
+                          pincodeValid === false && 'border-red-500 bg-red-50/50'
+                        )}
+                        aria-label="Enter delivery pincode"
+                      />
+                      {pincodeValid === true && (
+                        <Check className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-green-500" />
+                      )}
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-11 text-xs font-semibold border-primary-300 text-primary-700 hover:bg-primary-50 hover:border-primary-400 rounded-xl px-5"
+                      onClick={handlePincodeCheck}
+                      disabled={pincode.length !== 6}
+                    >
+                      Check
+                    </Button>
+                  </div>
+                  <AnimatePresence>
+                    {pincodeChecked && pincodeValid === true && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="mt-2.5 flex items-center gap-2 text-xs font-medium text-green-700 bg-green-50 border border-green-200/50 rounded-xl px-3.5 py-2.5">
+                          <Truck className="h-4 w-4 shrink-0 text-green-600" />
+                          <span>Delivery by <strong>{deliveryDate}</strong> — <strong className="text-green-600">FREE</strong></span>
+                        </div>
+                      </motion.div>
+                    )}
+                    {pincodeChecked && pincodeValid === false && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="mt-2.5 text-xs font-medium text-red-600 bg-red-50 border border-red-200/50 rounded-xl px-3.5 py-2.5">
+                          {pincode.length === 6 && /^[1-9]\d{5}$/.test(pincode)
+                            ? 'Sorry, we do not deliver to this pincode yet.'
+                            : 'Please enter a valid 6-digit pincode.'}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+
+                {/* ===== ACTION BUTTONS ===== */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.45 }}
+                  className="flex flex-col sm:flex-row gap-3"
+                >
+                  <Button
+                    size="lg"
+                    className="flex-1 gap-2 gradient-primary text-white text-base font-bold h-14 shadow-xl shadow-primary-200/50 hover:shadow-2xl hover:shadow-primary-300/50 transition-all duration-300 rounded-2xl"
+                    onClick={handleAddToCart}
+                  >
+                    <ShoppingCart className="h-5 w-5" />
+                    Add to Cart — {formatPrice(product.sellingPrice * quantity)}
+                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className={cn(
+                        'h-14 w-14 p-0 rounded-2xl border-2 transition-all duration-300',
+                        isInWishlist
+                          ? 'border-red-200 bg-red-50 text-red-500 hover:bg-red-100 hover:border-red-300'
+                          : 'border-noble-200 text-noble-500 hover:border-noble-300 hover:bg-noble-50'
+                      )}
+                      onClick={handleToggleWishlist}
+                      aria-label={isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+                    >
+                      <motion.div
+                        animate={isInWishlist ? { scale: [1, 1.2, 1] } : {}}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <Heart className={cn('h-5 w-5 transition-transform', isInWishlist && 'fill-red-500')} />
+                      </motion.div>
+                    </Button>
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="h-14 w-14 p-0 rounded-2xl border-2 border-noble-200 text-noble-500 hover:border-noble-300 hover:bg-noble-50"
+                      onClick={handleShare}
+                      aria-label="Share product"
+                    >
+                      <Share2 className="h-5 w-5" />
+                    </Button>
+                  </div>
+                </motion.div>
+
+                {/* ===== TRUST BADGES ===== */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className="grid grid-cols-3 gap-3"
+                >
+                  {[
+                    { icon: Truck, label: 'Free Delivery', sub: 'Above ₹499' },
+                    { icon: RotateCcw, label: 'Easy Returns', sub: '30-day policy' },
+                    { icon: Shield, label: 'Secure', sub: '100% protected' },
+                  ].map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <motion.div
+                        key={item.label}
+                        whileHover={{ y: -2 }}
+                        className="rounded-xl border border-noble-200 bg-white p-3.5 text-center hover:shadow-md hover:border-noble-300 transition-all duration-200 group"
+                      >
+                        <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary-50 to-primary-100 group-hover:from-primary-100 group-hover:to-primary-200 transition-all duration-200">
+                          <Icon className="h-4 w-4 text-primary-600" />
+                        </div>
+                        <p className="mt-1.5 text-xs font-bold text-noble-700">{item.label}</p>
+                        <p className="text-[10px] text-noble-400">{item.sub}</p>
+                      </motion.div>
+                    );
+                  })}
+                </motion.div>
+
+                {/* ===== KEY FEATURES BULLETS ===== */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.55 }}
+                  className="rounded-2xl border border-noble-200 bg-noble-50/30 p-4"
+                >
+                  <p className="text-xs font-bold text-noble-700 mb-3 flex items-center gap-1.5">
+                    <Leaf className="h-3.5 w-3.5 text-primary-500" />
+                    Key Features
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {[
+                      '100% Pure & Natural',
+                      'No Added Sugar or Preservatives',
+                      'Ethically Sourced from Tribal Communities',
+                      'Rich in Antioxidants & Enzymes',
+                      'Unprocessed & Unfiltered',
+                      'Traditional Harvest Methods',
+                    ].map((feature, i) => (
+                      <div key={i} className="flex items-center gap-2 text-xs text-noble-600">
+                        <Check className="h-3 w-3 text-green-500 shrink-0" strokeWidth={3} />
+                        {feature}
+                      </div>
                     ))}
                   </div>
-                  <span className="text-sm font-semibold text-gray-900">{product.averageRating.toFixed(1)}</span>
-                  <button className="text-sm text-primary-600 hover:text-primary-700 font-medium transition-colors">
-                    {product.ratingCount} reviews
-                  </button>
-                  <span className="text-sm text-gray-300">|</span>
-                  <span className="text-sm text-gray-500">{product.totalSold.toLocaleString()} sold</span>
-                </div>
-              </div>
-
-              {/* ===== PRICE SECTION ===== */}
-              <div className="rounded-xl bg-gradient-to-r from-primary-50 to-white border border-primary-100 p-4 md:p-5">
-                <div className="flex items-baseline gap-3">
-                  <span className="text-2xl md:text-3xl font-bold text-gray-900">{formatPrice(product.sellingPrice)}</span>
-                  {product.basePrice > product.sellingPrice && (
-                    <>
-                      <span className="text-base md:text-lg text-gray-400 line-through">{formatPrice(product.basePrice)}</span>
-                      <Badge className="bg-red-500 text-white text-xs md:text-sm px-2 py-0.5 font-semibold">
-                        -{Math.abs(discount)}% OFF
-                      </Badge>
-                    </>
-                  )}
-                </div>
-                <p className="mt-1.5 text-xs md:text-sm text-green-700 font-medium flex items-center gap-1">
-                  <Check className="h-3.5 w-3.5" />
-                  Inclusive of all taxes. Free shipping above ₹499.
-                </p>
-
-                {/* Stock Status */}
-                <div className="mt-3 flex items-center gap-2">
-                  {inStock ? (
-                    <>
-                      <span className="flex h-2.5 w-2.5 relative">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
-                      </span>
-                      <span className="text-sm font-medium text-green-700">
-                        {lowStock
-                          ? `Only ${product.availableStock} left in stock — order soon!`
-                          : 'In Stock'
-                        }
-                      </span>
-                    </>
-                  ) : (
-                    <span className="text-sm font-medium text-red-600">Currently out of stock</span>
-                  )}
-                </div>
-              </div>
-
-              {/* ===== OFFERS SECTION ===== */}
-              <div className="rounded-xl border border-dashed border-amber-200 bg-amber-50/50 overflow-hidden">
-                <button
-                  onClick={() => setShowOffers(!showOffers)}
-                  className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-amber-800 hover:bg-amber-50 transition-colors"
-                >
-                  <span className="flex items-center gap-2">
-                    <Gift className="h-4 w-4 text-amber-500" />
-                    Available Offers
-                  </span>
-                  <ChevronDown className={cn('h-4 w-4 transition-transform duration-300', showOffers && 'rotate-180')} />
-                </button>
-                <AnimatePresence>
-                  {showOffers && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="px-4 pb-3 space-y-2.5">
-                        {offers.map((offer, i) => {
-                          const Icon = offer.icon;
-                          return (
-                            <div key={i} className="flex items-start gap-3 p-2.5 rounded-lg bg-white border border-amber-100">
-                              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100">
-                                <Icon className="h-4 w-4 text-amber-700" />
-                              </div>
-                              <div>
-                                <p className="text-xs font-semibold text-gray-900">{offer.label}</p>
-                                <p className="text-xs text-gray-600">{offer.desc}</p>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              <Separator />
-
-              {/* ===== SHORT DESCRIPTION ===== */}
-              <p className="text-sm text-gray-600 leading-relaxed">{product.shortDescription}</p>
-
-              {/* ===== SIZE VARIANTS ===== */}
-              <VariantSelector
-                label="Size"
-                type="color"
-                options={product.variants.map(v => ({
-                  type: 'color', value: v.variantValue,
-                  color: v.colorCode || v.color || '#8B6914',
-                  inStock: v.stock > 0,
-                }))}
-                selectedValue={selectedSize}
-                onChange={setSelectedSize}
-              />
-
-              {/* ===== QUANTITY SELECTOR ===== */}
-              <div>
-                <p className="text-sm font-medium text-gray-900 mb-2.5">Quantity</p>
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center rounded-xl border-2 border-gray-200 overflow-hidden bg-white shadow-sm">
-                    <button
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      disabled={quantity <= 1}
-                      className="flex h-11 w-11 items-center justify-center text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-                      aria-label="Decrease quantity"
-                    >
-                      <Minus className="h-4 w-4" />
-                    </button>
-                    <motion.span
-                      key={quantity}
-                      initial={{ scale: 1.2, opacity: 0.5 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      className="flex h-11 w-16 items-center justify-center border-x-2 border-gray-200 text-sm font-bold text-gray-900 select-none"
-                    >
-                      {quantity}
-                    </motion.span>
-                    <button
-                      onClick={() => setQuantity(Math.min(product.maxQuantity || 10, quantity + 1))}
-                      disabled={quantity >= (product.maxQuantity || 10)}
-                      className="flex h-11 w-11 items-center justify-center text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-                      aria-label="Increase quantity"
-                    >
-                      <Plus className="h-4 w-4" />
-                    </button>
-                  </div>
-                  <div className="text-sm">
-                    <p className="text-gray-500">
-                      <span className="font-semibold text-gray-900">{formatPrice(product.sellingPrice * quantity)}</span>
-                      {' '}total
-                    </p>
-                    {quantity > 1 && (
-                      <p className="text-xs text-gray-400">{formatPrice(product.sellingPrice)} each</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* ===== PINCODE CHECKER ===== */}
-              <div className="rounded-xl border border-gray-200 bg-gray-50/50 p-4">
-                <p className="text-xs font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-                  <MapPin className="h-3.5 w-3.5 text-primary-600" />
-                  Check Delivery Availability
-                </p>
-                <div className="flex gap-2">
-                  <div className="relative flex-1">
-                    <Input
-                      placeholder="Enter pincode"
-                      value={pincode}
-                      onChange={(e) => {
-                        setPincode(e.target.value.replace(/\D/g, '').slice(0, 6));
-                        setPincodeChecked(false);
-                        setPincodeValid(null);
-                      }}
-                      maxLength={6}
-                      className={cn(
-                        'h-10 pl-3 pr-8 border-gray-300 text-sm',
-                        pincodeValid === true && 'border-green-500 bg-green-50',
-                        pincodeValid === false && 'border-red-500 bg-red-50'
-                      )}
-                      aria-label="Enter delivery pincode"
-                    />
-                    {pincodeValid === true && (
-                      <Check className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-green-500" />
-                    )}
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-10 text-xs font-semibold border-primary-300 text-primary-700 hover:bg-primary-50"
-                    onClick={handlePincodeCheck}
-                    disabled={pincode.length !== 6}
-                  >
-                    Check
-                  </Button>
-                </div>
-                <AnimatePresence>
-                  {pincodeChecked && pincodeValid === true && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="mt-2 flex items-center gap-2 text-xs text-green-700 bg-green-50 rounded-lg px-3 py-2">
-                        <Truck className="h-3.5 w-3.5 shrink-0" />
-                        <span>Delivery by <strong>{deliveryDate}</strong> — <strong>FREE</strong></span>
-                      </div>
-                    </motion.div>
-                  )}
-                  {pincodeChecked && pincodeValid === false && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="mt-2 text-xs text-red-600 bg-red-50 rounded-lg px-3 py-2">
-                        {pincode.length === 6 && /^[1-9]\d{5}$/.test(pincode)
-                          ? 'Sorry, we do not deliver to this pincode yet.'
-                          : 'Please enter a valid 6-digit pincode.'}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* ===== ACTION BUTTONS ===== */}
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Button
-                  size="lg"
-                  className="flex-1 gap-2 gradient-primary text-white text-base font-semibold h-12 shadow-lg shadow-primary-200 hover:shadow-xl hover:shadow-primary-300 transition-all duration-300"
-                  onClick={handleAddToCart}
-                >
-                  <ShoppingCart className={cn('h-5 w-5 transition-transform', quantity > 0 && 'group-hover:scale-110')} />
-                  Add to Cart
-                </Button>
-                <div className="flex gap-2">
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className={cn(
-                      'h-12 w-12 p-0 transition-all duration-300',
-                      isInWishlist && 'border-red-300 bg-red-50 text-red-500 hover:bg-red-100'
-                    )}
-                    onClick={handleToggleWishlist}
-                    aria-label={isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
-                  >
-                    <Heart className={cn('h-5 w-5 transition-transform', isInWishlist && 'fill-red-500 scale-110')} />
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="h-12 w-12 p-0"
-                    onClick={handleShare}
-                    aria-label="Share product"
-                  >
-                    <Share2 className="h-5 w-5" />
-                  </Button>
-                </div>
-              </div>
-
-              {/* ===== TRUST BADGES ===== */}
-              <div className="grid grid-cols-3 gap-3 rounded-xl border border-gray-200 p-3.5 bg-gray-50/30">
-                {[
-                  { icon: Truck, label: 'Free Delivery', sub: 'Above ₹499' },
-                  { icon: RotateCcw, label: 'Easy Returns', sub: '30-day policy' },
-                  { icon: Shield, label: 'Secure', sub: '100% protected' },
-                ].map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <div key={item.label} className="text-center">
-                      <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-lg bg-primary-50">
-                        <Icon className="h-4 w-4 text-primary-600" />
-                      </div>
-                      <p className="mt-1 text-[11px] font-semibold text-gray-700">{item.label}</p>
-                      <p className="text-[10px] text-gray-400">{item.sub}</p>
-                    </div>
-                  );
-                })}
+                </motion.div>
               </div>
             </div>
-          </div>
 
-          <Separator className="my-8 md:my-12" />
+            <Separator className="my-10 md:my-14 bg-noble-100" />
 
-          {/* ===== TABS ===== */}
-          <Tabs defaultValue="description" className="w-full">
-            <TabsList className="w-full justify-start border-b border-gray-200 rounded-none bg-transparent p-0 h-auto overflow-x-auto scrollbar-hide">
-              <TabsTrigger value="description" className="data-[state=active]:border-b-2 data-[state=active]:border-primary-600 rounded-none px-4 md:px-6 py-3 text-xs md:text-sm font-medium whitespace-nowrap">
-                Description
-              </TabsTrigger>
-              <TabsTrigger value="specifications" className="data-[state=active]:border-b-2 data-[state=active]:border-primary-600 rounded-none px-4 md:px-6 py-3 text-xs md:text-sm font-medium whitespace-nowrap">
-                Specifications
-              </TabsTrigger>
-              <TabsTrigger value="reviews" className="data-[state=active]:border-b-2 data-[state=active]:border-primary-600 rounded-none px-4 md:px-6 py-3 text-xs md:text-sm font-medium whitespace-nowrap">
-                Reviews ({product.ratingCount})
-              </TabsTrigger>
-            </TabsList>
+            {/* ===== TABS (Details & Reviews) ===== */}
+            <div ref={detailsRef}>
+              <Tabs defaultValue="description" className="w-full">
+                <TabsList className="w-full justify-start border-b border-noble-200 rounded-none bg-transparent p-0 h-auto overflow-x-auto scrollbar-hide gap-0">
+                  <TabsTrigger
+                    value="description"
+                    className="data-[state=active]:border-b-2 data-[state=active]:border-primary-600 data-[state=active]:text-primary-700 rounded-none px-5 md:px-8 py-3.5 text-xs md:text-sm font-semibold whitespace-nowrap text-noble-500 hover:text-noble-700 transition-colors"
+                  >
+                    Description
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="specifications"
+                    className="data-[state=active]:border-b-2 data-[state=active]:border-primary-600 data-[state=active]:text-primary-700 rounded-none px-5 md:px-8 py-3.5 text-xs md:text-sm font-semibold whitespace-nowrap text-noble-500 hover:text-noble-700 transition-colors"
+                  >
+                    Specifications
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="reviews"
+                    className="data-[state=active]:border-b-2 data-[state=active]:border-primary-600 data-[state=active]:text-primary-700 rounded-none px-5 md:px-8 py-3.5 text-xs md:text-sm font-semibold whitespace-nowrap text-noble-500 hover:text-noble-700 transition-colors"
+                  >
+                    Reviews ({product.ratingCount})
+                  </TabsTrigger>
+                </TabsList>
 
-            <TabsContent value="description" className="pt-6">
-              <div className="max-w-3xl">
-                <p className="text-sm text-gray-600 leading-relaxed">{product.description}</p>
-                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {product.specifications.slice(0, 4).map((spec) => (
-                    <div key={spec.id} className="flex items-start gap-3 rounded-xl bg-gray-50 border border-gray-100 p-3.5">
-                      <Info className="h-4 w-4 text-primary-500 mt-0.5 shrink-0" />
-                      <div>
-                        <p className="text-xs text-gray-500">{spec.specKey}</p>
-                        <p className="text-sm font-medium text-gray-900">{spec.specValue}</p>
-                      </div>
+                <TabsContent value="description" className="pt-6 md:pt-8">
+                  <div className="max-w-3xl">
+                    <motion.p
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-sm md:text-base text-noble-600 leading-relaxed"
+                    >
+                      {product.description}
+                    </motion.p>
+                    <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {product.specifications.slice(0, 4).map((spec, i) => (
+                        <motion.div
+                          key={spec.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.05 }}
+                          className="flex items-start gap-3 rounded-xl bg-noble-50 border border-noble-100 p-3.5 hover:bg-noble-100/50 transition-colors"
+                        >
+                          <Info className="h-4 w-4 text-primary-500 mt-0.5 shrink-0" />
+                          <div>
+                            <p className="text-xs text-noble-400 font-medium">{spec.specKey}</p>
+                            <p className="text-sm font-semibold text-noble-800">{spec.specValue}</p>
+                          </div>
+                        </motion.div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </div>
-            </TabsContent>
+                  </div>
+                </TabsContent>
 
-            <TabsContent value="specifications" className="pt-6">
-              <ProductSpecs specifications={product.specifications.map(s => ({ key: s.specKey, value: s.specValue }))} />
-            </TabsContent>
+                <TabsContent value="specifications" className="pt-6 md:pt-8">
+                  <ProductSpecs specifications={product.specifications.map(s => ({ key: s.specKey, value: s.specValue }))} />
+                </TabsContent>
 
-            <TabsContent value="reviews" className="pt-6">
-              <ProductReviews
-                reviews={mockReviews}
-                averageRating={product.averageRating}
-                ratingCount={product.ratingCount}
-                ratingDistribution={ratingDistribution}
-              />
-            </TabsContent>
-          </Tabs>
+                <TabsContent value="reviews" className="pt-6 md:pt-8">
+                  <div ref={reviewsRef}>
+                    <ProductReviews
+                      reviews={mockReviews}
+                      averageRating={product.averageRating}
+                      ratingCount={product.ratingCount}
+                      ratingDistribution={ratingDistribution}
+                    />
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
 
-          <Separator className="my-8 md:my-12" />
+            <Separator className="my-10 md:my-14 bg-noble-100" />
 
-          {/* ===== RELATED PRODUCTS ===== */}
-          <RelatedProducts title="You May Also Like" products={relatedProducts} viewAllHref="/products?category=honey" />
-          <RelatedProducts title="Frequently Bought Together" products={relatedProducts.slice(1, 4)} />
+            {/* ===== RELATED PRODUCTS ===== */}
+            <RelatedProducts title="You May Also Like" products={relatedProducts} viewAllHref="/products?category=honey" />
+            <RelatedProducts title="Frequently Bought Together" products={relatedProducts.slice(1, 4)} showScrollButtons={false} />
+          </div>
         </div>
       </div>
 
@@ -598,21 +828,21 @@ export default function ProductDetailPage() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 bg-white shadow-2xl shadow-black/10 lg:hidden safe-area-bottom"
+            className="fixed bottom-0 left-0 right-0 z-40 border-t border-noble-200 bg-white/95 backdrop-blur-xl shadow-2xl shadow-black/10 lg:hidden safe-area-bottom"
           >
             <div className="flex items-center gap-3 px-4 py-3">
               <div className="flex-1 min-w-0">
-                <p className="text-lg font-bold text-gray-900">{formatPrice(product.sellingPrice)}</p>
+                <p className="text-lg font-bold text-noble-900">{formatPrice(product.sellingPrice * quantity)}</p>
                 {product.basePrice > product.sellingPrice && (
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-400 line-through">{formatPrice(product.basePrice)}</span>
-                    <Badge className="bg-red-500 text-white text-[10px] px-1.5 py-0">-{Math.abs(discount)}%</Badge>
+                    <span className="text-xs text-noble-400 line-through">{formatPrice(product.basePrice)}</span>
+                    <Badge className="bg-gradient-to-r from-red-500 to-rose-500 text-white text-[10px] px-1.5 py-0 rounded-full">-{Math.abs(discount)}%</Badge>
                   </div>
                 )}
               </div>
               <Button
                 size="sm"
-                className="gap-2 gradient-primary text-white font-semibold h-11 px-6 text-sm shadow-lg flex-shrink-0"
+                className="gap-2 gradient-primary text-white font-bold h-12 px-6 text-sm shadow-xl shadow-primary-200/50 rounded-2xl flex-shrink-0"
                 onClick={handleAddToCart}
               >
                 <ShoppingCart className="h-4 w-4" />
@@ -621,11 +851,14 @@ export default function ProductDetailPage() {
               <Button
                 variant="outline"
                 size="sm"
-                className={cn('h-11 w-11 p-0 shrink-0', isInWishlist && 'border-red-300 bg-red-50')}
+                className={cn(
+                  'h-12 w-12 p-0 shrink-0 rounded-2xl border-2',
+                  isInWishlist ? 'border-red-200 bg-red-50' : 'border-noble-200'
+                )}
                 onClick={handleToggleWishlist}
                 aria-label="Toggle wishlist"
               >
-                <Heart className={cn('h-4 w-4', isInWishlist && 'fill-red-500')} />
+                <Heart className={cn('h-4 w-4', isInWishlist && 'fill-red-500 text-red-500')} />
               </Button>
             </div>
           </motion.div>

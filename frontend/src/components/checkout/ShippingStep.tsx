@@ -30,74 +30,119 @@ interface ShippingStepProps {
 
 export function ShippingStep({ selectedShipping, onSelect, onNext, onBack }: ShippingStepProps) {
   return (
-    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      className="space-y-6"
+    >
+      {/* Header */}
       <div className="flex items-center gap-3 mb-2">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-50">
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 shadow-sm">
           <Truck className="h-5 w-5 text-primary-600" />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Choose Shipping Method</h2>
-          <p className="text-sm text-gray-500">Select your preferred delivery option</p>
+          <h2 className="text-xl font-bold text-noble-800">Choose Shipping Method</h2>
+          <p className="text-sm text-noble-400">Select your preferred delivery option</p>
         </div>
       </div>
 
+      {/* Shipping Options */}
       <div className="space-y-3">
-        {shippingOptions.map((option) => {
+        {shippingOptions.map((option, index) => {
           const Icon = option.icon;
           const isSelected = selectedShipping === option.id;
           return (
             <motion.div
               key={option.id}
-              whileHover={{ scale: 1.005 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.06 }}
+              whileHover={{ y: -1 }}
               onClick={() => onSelect(option.id)}
               className={cn(
-                'relative flex cursor-pointer items-center gap-4 rounded-2xl border-2 p-5 transition-all',
+                'relative flex cursor-pointer items-center gap-4 rounded-2xl border-2 p-5 transition-all duration-200',
                 isSelected
-                  ? 'border-primary-500 bg-primary-50 shadow-md shadow-primary-100'
-                  : 'border-primary-100 hover:border-primary-300 bg-white hover:shadow-sm'
+                  ? 'border-primary-500 bg-gradient-to-br from-primary-50 to-white shadow-lg shadow-primary-100'
+                  : 'border-noble-200 bg-white hover:border-noble-300 hover:shadow-md'
               )}
             >
+              {/* Check indicator */}
               {isSelected && (
-                <div className="absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-full bg-primary-600 shadow-sm">
-                  <Check className="h-4 w-4 text-white" />
-                </div>
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  className="absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-primary-600 to-emerald-500 shadow-sm"
+                >
+                  <Check className="h-4 w-4 text-white" strokeWidth={3} />
+                </motion.div>
               )}
-              <div className={cn('flex h-14 w-14 items-center justify-center rounded-2xl', isSelected ? 'bg-primary-100' : 'bg-primary-50')}>
-                <Icon className={cn('h-7 w-7', isSelected ? 'text-primary-600' : 'text-primary-400')} />
+
+              {/* Icon */}
+              <div className={cn(
+                'flex h-14 w-14 items-center justify-center rounded-2xl transition-all',
+                isSelected ? 'bg-gradient-to-br from-primary-100 to-primary-50 shadow-sm' : 'bg-noble-50'
+              )}>
+                <Icon className={cn('h-7 w-7', isSelected ? 'text-primary-600' : 'text-noble-400')} />
               </div>
+
+              {/* Details */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <p className="font-semibold text-gray-900">{option.name}</p>
+                  <p className="font-bold text-noble-800">{option.name}</p>
                   {option.badge && (
                     <span className={cn(
-                      'text-[10px] font-bold px-2 py-0.5 rounded-full',
-                      option.badge === 'Popular' ? 'bg-accent-100 text-accent-700' :
-                      option.badge === 'Fastest' ? 'bg-blue-100 text-blue-700' :
-                      'bg-primary-100 text-primary-700'
+                      'text-[10px] font-bold px-2 py-0.5 rounded-full border',
+                      option.badge === 'Popular'
+                        ? 'bg-accent-50 text-accent-700 border-accent-200'
+                        : option.badge === 'Fastest'
+                        ? 'bg-blue-50 text-blue-700 border-blue-200'
+                        : 'bg-primary-50 text-primary-700 border-primary-200'
                     )}>
                       {option.badge}
                     </span>
                   )}
                 </div>
-                <p className="text-sm text-gray-500 mt-0.5">{option.description}</p>
-                <p className="mt-1 text-xs font-semibold text-primary-600">{option.estimatedDays}</p>
+                <p className="text-sm text-noble-400 mt-0.5">{option.description}</p>
+                <p className="mt-1 text-xs font-semibold text-primary-600 flex items-center gap-1">
+                  <Zap className="h-3 w-3" /> {option.estimatedDays}
+                </p>
               </div>
+
+              {/* Price */}
               <div className="text-right shrink-0">
-                <p className={cn('text-xl font-bold', isSelected ? 'text-primary-700' : 'text-gray-900')}>
+                <p className={cn('text-xl font-bold', isSelected ? 'text-primary-600' : 'text-noble-800')}>
                   {option.price === 0 ? 'FREE' : formatPrice(option.price)}
                 </p>
-                {option.price > 0 && <p className="text-xs text-gray-400">delivery fee</p>}
+                {option.price > 0 && <p className="text-xs text-noble-400">delivery fee</p>}
               </div>
             </motion.div>
           );
         })}
       </div>
 
-      <div className="flex items-center justify-between pt-4 border-t border-primary-100">
-        <Button variant="ghost" onClick={onBack} className="text-gray-500 hover:text-primary-600 hover:bg-primary-50 gap-2">
+      {/* Eco note */}
+      <div className="rounded-xl bg-gradient-to-r from-green-50/50 to-primary-50/50 border border-noble-200 p-3.5 flex items-center gap-2.5">
+        <Leaf className="h-4 w-4 text-green-500 shrink-0" />
+        <p className="text-xs text-noble-500">
+          <span className="font-semibold text-green-700">Eco-friendly packaging</span> — All our shipments use recyclable materials
+        </p>
+      </div>
+
+      {/* Navigation */}
+      <div className="flex items-center justify-between pt-4 border-t border-noble-100">
+        <Button
+          variant="ghost"
+          onClick={onBack}
+          className="text-noble-500 hover:text-primary-600 hover:bg-primary-50 gap-2 rounded-xl"
+        >
           ← Back
         </Button>
-        <Button onClick={onNext} disabled={!selectedShipping} className="gap-2 gradient-primary text-white px-8 h-11 text-sm font-semibold shadow-lg shadow-primary-200 disabled:opacity-50">
+        <Button
+          onClick={onNext}
+          disabled={!selectedShipping}
+          className="gap-2 gradient-primary text-white px-8 h-12 text-sm font-bold shadow-lg shadow-primary-200/50 hover:shadow-xl hover:shadow-primary-300/50 transition-all disabled:opacity-50 rounded-xl"
+        >
           Continue to Payment →
         </Button>
       </div>

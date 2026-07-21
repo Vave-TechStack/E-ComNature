@@ -3,6 +3,7 @@
 import { ChevronLeft, ChevronRight, Leaf } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 interface ProductPaginationProps {
   currentPage: number;
@@ -29,59 +30,82 @@ export function ProductPagination({ currentPage, totalPages, onPageChange }: Pro
   };
 
   return (
-    <nav className="flex flex-col items-center gap-3" aria-label="Pagination">
+    <motion.nav
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex flex-col items-center gap-3"
+      aria-label="Pagination"
+    >
       <div className="flex items-center gap-1.5">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-10 w-10 rounded-xl border border-primary-100 text-gray-500 hover:text-primary-600 hover:bg-primary-50 hover:border-primary-200"
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-noble-200 text-noble-500 hover:text-primary-600 hover:bg-primary-50 hover:border-primary-200 transition-all disabled:opacity-30 disabled:cursor-not-allowed bg-white shadow-sm"
           disabled={currentPage === 1}
           onClick={() => onPageChange(currentPage - 1)}
           aria-label="Previous page"
         >
           <ChevronLeft className="h-4 w-4" />
-        </Button>
+        </motion.button>
 
         {getPageNumbers().map((page, index) =>
           page === '...' ? (
-            <span key={`ellipsis-${index}`} className="flex h-10 w-10 items-center justify-center text-sm text-gray-400">
+            <span
+              key={`ellipsis-${index}`}
+              className="flex h-10 w-10 items-center justify-center text-sm text-noble-400"
+            >
               ...
             </span>
           ) : (
-            <Button
+            <motion.button
               key={page}
-              variant={currentPage === page ? 'default' : 'ghost'}
-              size="icon"
+              whileHover={currentPage !== page ? { scale: 1.05 } : {}}
+              whileTap={{ scale: 0.95 }}
               className={cn(
-                'h-10 w-10 text-sm font-semibold rounded-xl transition-all',
+                'h-10 w-10 text-sm font-semibold rounded-xl transition-all duration-200 relative',
                 currentPage === page
-                  ? 'gradient-primary text-white shadow-lg shadow-primary-200'
-                  : 'border border-primary-100 text-gray-600 hover:bg-primary-50 hover:text-primary-600 hover:border-primary-200'
+                  ? 'text-white shadow-lg shadow-primary-200'
+                  : 'border border-noble-200 text-noble-600 hover:bg-primary-50 hover:text-primary-600 hover:border-primary-200 bg-white shadow-sm'
               )}
               onClick={() => onPageChange(page)}
               aria-label={`Page ${page}`}
               aria-current={currentPage === page ? 'page' : undefined}
             >
-              {page}
-            </Button>
+              {currentPage === page && (
+                <motion.span
+                  layoutId="activePage"
+                  className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary-600 to-emerald-500"
+                  transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                />
+              )}
+              <span className="relative z-10">{page}</span>
+            </motion.button>
           )
         )}
 
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-10 w-10 rounded-xl border border-primary-100 text-gray-500 hover:text-primary-600 hover:bg-primary-50 hover:border-primary-200"
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-noble-200 text-noble-500 hover:text-primary-600 hover:bg-primary-50 hover:border-primary-200 transition-all disabled:opacity-30 disabled:cursor-not-allowed bg-white shadow-sm"
           disabled={currentPage === totalPages}
           onClick={() => onPageChange(currentPage + 1)}
           aria-label="Next page"
         >
           <ChevronRight className="h-4 w-4" />
-        </Button>
+        </motion.button>
       </div>
-      <div className="flex items-center gap-1.5 text-xs text-gray-400">
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+        className="flex items-center gap-1.5 text-xs text-noble-400"
+      >
+        <div className="h-px w-6 bg-gradient-to-r from-transparent via-noble-300 to-transparent" />
         <Leaf className="h-3 w-3 text-primary-300" />
-        Page {currentPage} of {totalPages}
-      </div>
-    </nav>
+        <span>Page {currentPage} of {totalPages}</span>
+        <div className="h-px w-6 bg-gradient-to-r from-transparent via-noble-300 to-transparent" />
+      </motion.div>
+    </motion.nav>
   );
 }

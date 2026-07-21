@@ -9,8 +9,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { formatPrice } from '@/lib/utils';  const [wishlistEmpty, setWishlistEmpty] = useState(false);
-  const wishlistProducts = wishlistEmpty ? [] : [
+import { formatPrice } from '@/lib/utils';
+
+const initialWishlistProducts = [
     {
       id: 1, name: 'Pure Forest Honey – Tribal Harvest', slug: 'pure-forest-honey',
       image: 'https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=400&q=80',
@@ -29,6 +30,9 @@ import { formatPrice } from '@/lib/utils';  const [wishlistEmpty, setWishlistEmp
   ];
 
 export default function WishlistPage() {
+  const [wishlistEmpty, setWishlistEmpty] = useState(false);
+  const wishlistProducts = wishlistEmpty ? [] : initialWishlistProducts;
+
   return (
     <div className="min-h-screen bg-natural">
       {/* Breadcrumb */}

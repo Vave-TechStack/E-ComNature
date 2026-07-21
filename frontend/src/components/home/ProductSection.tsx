@@ -91,7 +91,7 @@ export function ProductSection({
               className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory -mx-4 px-4"
             >
               {products.map((product) => (
-                <div key={product.id} className="min-w-[260px] sm:min-w-[280px] snap-start">
+                <div key={product.id} className="min-w-[260px] sm:min-w-[280px] snap-start h-full">
                   <ProductCard product={product} variant="default" />
                 </div>
               ))}

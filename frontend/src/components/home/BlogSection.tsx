@@ -3,9 +3,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, Calendar, Clock, User } from 'lucide-react';
+import { ArrowRight, Calendar, Clock, User, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 interface BlogPost {
   id: number;
@@ -33,7 +34,7 @@ const blogPosts: BlogPost[] = [
   },
   {
     id: 2,
-    title: 'Forest Honey: Nature\'s Liquid Gold and Its Medicinal Properties',
+    title: "Forest Honey: Nature's Liquid Gold and Its Medicinal Properties",
     excerpt: 'Explore the journey of forest honey from tribal harvesters to your table. Learn about its antibacterial properties, antioxidant content, and how to identify pure raw honey.',
     image: 'https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=800&q=80',
     category: 'Wellness',
@@ -55,24 +56,30 @@ const blogPosts: BlogPost[] = [
   },
 ];
 
+const categoryColors: Record<string, string> = {
+  Nutrition: 'bg-emerald-500',
+  Wellness: 'bg-teal-500',
+  'Healthy Living': 'bg-primary-500',
+};
+
 export function BlogSection() {
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-white to-primary-50/30 overflow-hidden">
-      <div className="container-custom">
+    <section className="section-padding bg-white dark:bg-noble-900 overflow-hidden">
+      <div className="container-luxury">
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 md:mb-14">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 md:mb-16">
           <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="h-1 w-6 rounded-full bg-primary-600" />
-              <span className="text-xs font-semibold text-primary-600 uppercase tracking-widest">Our Blog</span>
+            <div className="flex items-center gap-2.5 mb-2">
+              <span className="divider-accent" />
+              <span className="text-xs font-semibold text-primary-500 dark:text-primary-400 uppercase tracking-[0.15em]">Our Blog</span>
             </div>
-            <h2 className="section-title">Stories from Nature&apos;s Kitchen</h2>
-            <p className="mt-1.5 text-gray-500 max-w-2xl">
+            <h2 className="heading-md text-noble-800 dark:text-noble-100">Stories from Nature&apos;s Kitchen</h2>
+            <p className="mt-2 text-noble-400 max-w-2xl text-sm">
               Tips, recipes, and insights about natural foods, healthy living, and traditional wisdom
             </p>
           </div>
           <Link href="/blog" className="hidden sm:block mt-4 sm:mt-0">
-            <Button variant="outline" className="gap-2 border-primary-200 text-primary-700 hover:bg-primary-50 group">
+            <Button variant="outline" className="gap-2 border-primary-200 dark:border-primary-800 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-950/30 group rounded-xl">
               View All Articles
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
@@ -84,60 +91,76 @@ export function BlogSection() {
           {blogPosts.map((post, index) => (
             <motion.div
               key={post.id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+              transition={{ delay: index * 0.12, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="h-full"
             >
-              <Link href={`/blog/${post.slug}`} className="group block">
-                <div className="rounded-2xl overflow-hidden bg-white border border-primary-100 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1">
+              <Link href={`/blog/${post.slug}`} className="group block h-full">
+                <div className="card-premium overflow-hidden flex flex-col h-full">
                   {/* Image */}
-                  <div className="relative h-52 md:h-56 overflow-hidden">
+                  <div className="relative h-52 md:h-56 overflow-hidden rounded-[5px] shrink-0">
                     <Image
                       src={post.image}
                       alt={post.title}
                       fill
                       className="object-cover transition-all duration-700 group-hover:scale-105"
                       sizes="(max-width: 768px) 100vw, 33vw"
-                      loading="lazy"
+                      loading={index < 2 ? 'eager' : 'lazy'}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                    
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+
                     {/* Category Badge */}
-                    <div className="absolute top-3 left-3">
-                      <Badge className="bg-white/90 backdrop-blur-sm text-primary-700 border-0 text-xs font-semibold">
+                    <div className="absolute top-4 left-4">
+                      <Badge className={cn(
+                        'text-white border-0 text-xs font-semibold px-3 py-1 shadow-lg',
+                        categoryColors[post.category] || 'bg-primary-500'
+                      )}>
                         {post.category}
                       </Badge>
                     </div>
                   </div>
 
                   {/* Content */}
-                  <div className="p-5 md:p-6">
-                    <div className="flex items-center gap-3 text-xs text-gray-400 mb-3">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
+                  <div className="p-5 md:p-6 flex flex-col flex-1">
+                    {/* Meta */}
+                    <div className="flex items-center gap-3 text-xs text-noble-400 dark:text-noble-500 mb-3">
+                      <span className="flex items-center gap-1.5">
+                        <Calendar className="h-3 w-3 text-primary-400" />
                         {post.date}
                       </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
+                      <span className="text-noble-200">·</span>
+                      <span className="flex items-center gap-1.5">
+                        <Clock className="h-3 w-3 text-primary-400" />
                         {post.readTime}
                       </span>
                     </div>
 
-                    <h3 className="text-base md:text-lg font-bold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2 mb-2">
+                    {/* Title */}
+                    <h3 className="text-base md:text-lg font-bold text-noble-800 dark:text-noble-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2 mb-2 leading-snug">
                       {post.title}
                     </h3>
 
-                    <p className="text-sm text-gray-500 leading-relaxed line-clamp-2 mb-4">
+                    {/* Excerpt */}
+                    <p className="text-sm text-noble-400 dark:text-noble-500 leading-relaxed line-clamp-2 mb-4">
                       {post.excerpt}
                     </p>
 
-                    <div className="flex items-center gap-2 text-xs text-gray-400 pt-3 border-t border-primary-100">
-                      <User className="h-3 w-3" />
-                      <span>{post.author}</span>
-                      <ArrowRight className="h-3 w-3 ml-auto text-primary-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                    {/* Spacer */}
+                    <div className="flex-1" />
+
+                    {/* Footer */}
+                    <div className="flex items-center gap-2 text-xs text-noble-400 pt-3 border-t border-primary-100/50 dark:border-noble-700">
+                      <User className="h-3 w-3 text-primary-400" />
+                      <span className="text-noble-500">{post.author}</span>
+                      <BookOpen className="h-3 w-3 text-primary-400 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <ArrowRight className="h-3 w-3 text-primary-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                     </div>
                   </div>
+
+                  {/* Accent line */}
+                  <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-400 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
                 </div>
               </Link>
             </motion.div>
@@ -147,7 +170,7 @@ export function BlogSection() {
         {/* Mobile View All */}
         <div className="mt-8 text-center sm:hidden">
           <Link href="/blog">
-            <Button variant="outline" className="gap-2 border-primary-200 text-primary-700">
+            <Button variant="outline" className="gap-2 border-primary-200 text-primary-600 rounded-xl">
               View All Articles
               <ArrowRight className="h-4 w-4" />
             </Button>

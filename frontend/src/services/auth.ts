@@ -3,6 +3,7 @@ import type { ApiResponse, AuthResponse, LoginRequest, RegisterRequest, User } f
 
 // ==================== Mock Auth for Development ====================
 const MOCK_USERS: Record<string, { password: string; user: User }> = {
+  // Email based mock users
   'admin@naturekart.in': {
     password: 'Admin@123',
     user: {
@@ -22,6 +23,43 @@ const MOCK_USERS: Record<string, { password: string; user: User }> = {
     },
   },
   'user@naturekart.in': {
+    password: 'User@123',
+    user: {
+      id: 2,
+      firstName: 'Demo',
+      lastName: 'User',
+      email: 'user@naturekart.in',
+      phone: '+919900000002',
+      displayName: 'Demo User',
+      profileImage: '',
+      role: 'ROLE_CUSTOMER',
+      emailVerified: true,
+      phoneVerified: true,
+      rewardPoints: 250,
+      walletBalance: 500,
+      createdAt: '2026-01-15T00:00:00.000Z',
+    },
+  },
+  // Phone number based mock entries for development login via phone
+  '+919900000001': {
+    password: 'Admin@123',
+    user: {
+      id: 1,
+      firstName: 'Admin',
+      lastName: 'User',
+      email: 'admin@naturekart.in',
+      phone: '+919900000001',
+      displayName: 'Admin User',
+      profileImage: '',
+      role: 'ROLE_ADMIN',
+      emailVerified: true,
+      phoneVerified: true,
+      rewardPoints: 5000,
+      walletBalance: 25000,
+      createdAt: '2026-01-01T00:00:00.000Z',
+    },
+  },
+  '+919900000002': {
     password: 'User@123',
     user: {
       id: 2,

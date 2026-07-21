@@ -247,6 +247,7 @@ function getMockProducts(filters: ProductFilter): PaginatedResponse<Product> {
     content: pageContent,
     totalElements: filtered.length,
     totalPages: Math.ceil(filtered.length / size),
+    page: page - 1,
     currentPage: page,
     size,
     first: page === 1,

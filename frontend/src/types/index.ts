@@ -11,7 +11,8 @@ export interface PaginatedResponse<T> {
   content: T[];
   totalElements: number;
   totalPages: number;
-  currentPage: number;
+  page: number;        // 0-indexed page from backend
+  currentPage: number; // 1-indexed page for frontend
   size: number;
   first: boolean;
   last: boolean;

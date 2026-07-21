@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, Geist } from 'next/font/google';
+import { Suspense } from 'react';
 import './globals.css';
 import Providers from './providers';
 import { Header } from '@/components/layout/Header';
@@ -7,6 +8,7 @@ import { MobileNav } from '@/components/layout/MobileNav';
 import { Footer } from '@/components/layout/Footer';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { ScrollToTop } from '@/components/layout/ScrollToTop';
+import { PageTransition } from '@/components/layout/PageTransition';
 import { OfflineBanner } from '@/components/layout/OfflineBanner';
 import { NetworkErrorToast } from '@/components/layout/NetworkErrorToast';
 import { PwaRegister } from '@/components/layout/PwaRegister';
@@ -82,7 +84,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className={cn("font-sans", geist.variable)}>
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body suppressHydrationWarning className={`${inter.variable} font-sans antialiased`}>
         <Providers>            <TooltipProvider>
             <ScrollToTop />
             <OfflineBanner />
@@ -90,11 +92,17 @@ export default function RootLayout({
             <PwaRegister />
             <div className="flex min-h-screen flex-col">
               <Header />
-              <main className="flex-1">{children}</main>
+              <main className="flex-1">
+                <PageTransition>
+                  {children}
+                </PageTransition>
+              </main>
               <Footer />
             </div>
-            {/* MobileNav rendered at root level to avoid parent stacking context issues */}
-            <MobileNav />
+            {/* MobileNav rendered at root level — wrapped in Suspense for useSearchParams */}
+            <Suspense fallback={null}>
+              <MobileNav />
+            </Suspense>
           </TooltipProvider>
         </Providers>
       </body>
