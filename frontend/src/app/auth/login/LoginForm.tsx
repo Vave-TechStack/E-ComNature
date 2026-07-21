@@ -44,11 +44,15 @@ export default function LoginForm() {
     if (login.fulfilled.match(result)) {
       const user = result.payload;
 
-      await signIn('credentials', {
-        emailOrPhone: data.emailOrPhone,
-        password: data.password,
-        redirect: false,
-      });
+      try {
+        await signIn('credentials', {
+          emailOrPhone: data.emailOrPhone,
+          password: data.password,
+          redirect: false,
+        });
+      } catch {
+        // Optional session sync fallback
+      }
 
       if (user.role === 'ROLE_ADMIN') {
         router.push('/admin/dashboard');

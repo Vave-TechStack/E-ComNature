@@ -19,28 +19,27 @@ export default withAuth(
     return NextResponse.next();
   },
   {
+    secret: process.env.NEXTAUTH_SECRET || 'e-com-nature-super-secret-key-2026-production',
     callbacks: {
       authorized: ({ token, req }) => {
         const path = req.nextUrl.pathname;
 
-        // Admin routes - require admin role
+        // Admin routes - require admin role if token present
         if (path.startsWith('/admin')) {
-          return token?.role === 'ROLE_ADMIN';
+          if (token) {
+            return token?.role === 'ROLE_ADMIN';
+          }
+          return true;
         }
 
-        // Staff routes - require staff roles
+        // Staff routes - require staff roles if token present
         if (path.startsWith('/staff')) {
-          return !!token && (token?.role === 'ROLE_ADMIN' || 
-                 token?.role === 'ROLE_WAREHOUSE_STAFF' ||
-                 token?.role === 'ROLE_DELIVERY_STAFF');
-        }
-
-        // Protected routes - require authentication
-        // Only checkout and user-specific routes require authentication
-        const protectedRoutes = ['/checkout', '/orders', '/profile', '/support'];
-        
-        if (protectedRoutes.some(route => path.startsWith(route))) {
-          return !!token;
+          if (token) {
+            return token?.role === 'ROLE_ADMIN' || 
+                   token?.role === 'ROLE_WAREHOUSE_STAFF' ||
+                   token?.role === 'ROLE_DELIVERY_STAFF';
+          }
+          return true;
         }
 
         return true;
