@@ -105,8 +105,10 @@ export function UserMenuMobile() {
     );
   }
 
+  const targetHref = user.role === 'ROLE_ADMIN' ? '/admin/dashboard' : '/profile';
+
   return (
-    <Link href="/profile" className="p-2.5 rounded-xl hover:bg-noble-100 dark:hover:bg-noble-800 transition-colors text-noble-500 hover:text-noble-700 sm:hidden">
+    <Link href={targetHref} className="p-2.5 rounded-xl hover:bg-noble-100 dark:hover:bg-noble-800 transition-colors text-noble-500 hover:text-noble-700 sm:hidden">
       <Avatar className="h-6 w-6">
         <AvatarImage src={user.profileImage || ''} />
         <AvatarFallback className="bg-gradient-to-br from-primary-100 to-emerald-100 text-primary-700 text-[10px] font-bold">
