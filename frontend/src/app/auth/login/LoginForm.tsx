@@ -54,11 +54,8 @@ export default function LoginForm() {
         // Optional session sync fallback
       }
 
-      if (user.role === 'ROLE_ADMIN') {
-        router.push('/admin/dashboard');
-      } else {
-        router.push('/');
-      }
+      const targetUrl = (user.role === 'ROLE_ADMIN' || user.role === 'ADMIN') ? '/admin/dashboard' : '/';
+      window.location.href = targetUrl;
     }
   };
 
