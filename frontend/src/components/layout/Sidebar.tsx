@@ -103,7 +103,7 @@ function SidebarPanel({
     <aside
       className={cn(
         'flex h-full flex-col',
-        'bg-gradient-to-b from-[#082619] via-[#0b3220] to-[#082619]',
+        'bg-gradient-to-b from-noble-900 via-[#28251e] to-noble-900',
         'border-r border-white/[0.06]',
         'transition-all duration-300',
         isCollapsed ? 'w-16' : 'w-64',
@@ -122,13 +122,13 @@ function SidebarPanel({
           onClick={handleNavClick}
           className={cn('flex items-center gap-2.5 min-w-0', isCollapsed && 'pointer-events-none')}
         >
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-green-600 shadow-lg shadow-black/30">
-            <Leaf className="h-4 w-4 text-white" />
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary-700 shadow-lg shadow-black/30">
+            <Leaf className="h-4 w-4 text-white" strokeWidth={2.5} />
           </div>
           {!isCollapsed && (
             <div className="min-w-0">
-              <p className="text-sm font-bold text-white leading-tight truncate">{APP_NAME}</p>
-              <p className="text-[10px] text-emerald-400/60 font-semibold tracking-widest uppercase">Admin Panel</p>
+              <p className="text-sm font-heading text-white leading-tight truncate">{APP_NAME}</p>
+              <p className="text-[10px] text-primary-400/60 font-semibold tracking-[0.15em] uppercase">Admin Panel</p>
             </div>
           )}
         </Link>
@@ -168,9 +168,9 @@ function SidebarPanel({
       {!isCollapsed && mounted && user && (
         <div className="mx-3 mt-3 mb-1 rounded-xl border border-white/[0.08] bg-white/[0.05] p-3">
           <div className="flex items-center gap-2.5">
-            <Avatar className="h-9 w-9 shrink-0 ring-1 ring-emerald-500/30">
+            <Avatar className="h-9 w-9 shrink-0 ring-1 ring-primary-500/30">
               <AvatarImage src={user.profileImage || ''} />
-              <AvatarFallback className="bg-emerald-700 text-white text-xs font-bold">
+              <AvatarFallback className="bg-primary-700 text-white text-xs font-bold">
                 {getInitials(user.displayName || `${user.firstName} ${user.lastName}`)}
               </AvatarFallback>
             </Avatar>
@@ -178,7 +178,7 @@ function SidebarPanel({
               <p className="text-sm font-semibold text-white truncate">
                 {user.displayName || `${user.firstName} ${user.lastName}`}
               </p>
-              <p className="text-[11px] text-emerald-400/70 truncate">{user.email}</p>
+              <p className="text-[11px] text-primary-400/70 truncate">{user.email}</p>
             </div>
           </div>
         </div>
@@ -187,9 +187,9 @@ function SidebarPanel({
       {/* Collapsed: just avatar */}
       {isCollapsed && mounted && user && (
         <div className="flex justify-center mt-3 mb-1">
-          <Avatar className="h-8 w-8 ring-1 ring-emerald-500/30">
+          <Avatar className="h-8 w-8 ring-1 ring-primary-500/30">
             <AvatarImage src={user.profileImage || ''} />
-            <AvatarFallback className="bg-emerald-700 text-white text-[10px] font-bold">
+            <AvatarFallback className="bg-primary-700 text-white text-[10px] font-bold">
               {getInitials(user.displayName || `${user.firstName} ${user.lastName}`)}
             </AvatarFallback>
           </Avatar>
@@ -223,21 +223,21 @@ function SidebarPanel({
                         'group flex items-center rounded-xl text-sm font-medium transition-all duration-150',
                         isCollapsed ? 'justify-center h-10 w-10 mx-auto px-0' : 'gap-3 px-3 py-2.5',
                         isActive
-                          ? 'bg-emerald-500/[0.18] text-emerald-300'
+                          ? 'bg-primary-600/20 text-primary-300'
                           : 'text-white/50 hover:bg-white/[0.07] hover:text-white/90',
                       )}
                     >
                       <Icon
                         className={cn(
                           'h-[18px] w-[18px] shrink-0 transition-colors',
-                          isActive ? 'text-emerald-400' : 'text-white/35 group-hover:text-white/70',
+                          isActive ? 'text-primary-400' : 'text-white/35 group-hover:text-white/70',
                         )}
                       />
                       {!isCollapsed && (
                         <>
                           <span className="flex-1 leading-none">{item.label}</span>
                           {isActive && (
-                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shrink-0" />
+                            <span className="h-1.5 w-1.5 rounded-full bg-primary-400 shrink-0" />
                           )}
                         </>
                       )}

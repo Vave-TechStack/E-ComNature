@@ -40,11 +40,11 @@ function ErrorContent() {
   const errorInfo = errorMessages[error] || errorMessages.Default;
 
   return (
-    <div className="min-h-screen bg-[#F8FFF5] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-natural flex items-center justify-center p-4">
       {/* Background Decoration */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-green-100 rounded-full blur-3xl opacity-40" />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-amber-100 rounded-full blur-3xl opacity-30" />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary-100/20 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-accent-100/20 rounded-full blur-3xl" />
       </div>
 
       <motion.div
@@ -54,7 +54,7 @@ function ErrorContent() {
         className="relative w-full max-w-md"
       >
         {/* Card */}
-        <div className="bg-white rounded-2xl shadow-xl shadow-green-100/50 border border-green-100 p-8 sm:p-10 text-center">
+        <div className="bg-white rounded-2xl shadow-xl border border-noble-100 p-8 sm:p-10 text-center">
           {/* Icon */}
           <motion.div
             initial={{ scale: 0 }}
@@ -72,9 +72,9 @@ function ErrorContent() {
             transition={{ delay: 0.4, duration: 0.5 }}
             className="flex items-center justify-center gap-2 mb-4"
           >
-            <Leaf className="w-4 h-4 text-[#2E7D32]" />
-            <span className="text-xs font-medium text-[#4CAF50] tracking-wider uppercase">Authentication</span>
-            <Leaf className="w-4 h-4 text-[#2E7D32]" />
+            <Leaf className="w-4 h-4 text-primary-600" />
+            <span className="text-xs font-semibold text-primary-600 tracking-[0.15em] uppercase">Authentication</span>
+            <Leaf className="w-4 h-4 text-primary-600" />
           </motion.div>
 
           {/* Error Title */}
@@ -82,7 +82,7 @@ function ErrorContent() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.4 }}
-            className="text-2xl font-bold text-gray-900 mb-3"
+            className="text-2xl font-heading text-noble-900 mb-3"
           >
             {errorInfo.title}
           </motion.h1>
@@ -92,7 +92,7 @@ function ErrorContent() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.4 }}
-            className="text-gray-600 text-sm leading-relaxed mb-2"
+            className="text-noble-500 text-sm leading-relaxed mb-2"
           >
             {errorInfo.message}
           </motion.p>
@@ -102,7 +102,7 @@ function ErrorContent() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 0.3 }}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-50 border border-gray-200 text-xs text-gray-500 font-mono mb-8"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-noble-50 border border-noble-200 text-xs text-noble-500 font-mono mb-8"
           >
             Error: <span className="text-red-500 font-semibold">{error}</span>
           </motion.div>
@@ -115,13 +115,13 @@ function ErrorContent() {
             className="flex flex-col sm:flex-row gap-3"
           >
             <Link href="/auth/login" className="flex-1">
-              <Button className="w-full gap-2 bg-[#2E7D32] hover:bg-[#1B5E20] text-white shadow-lg shadow-green-200 h-11 text-sm font-semibold">
+              <Button className="w-full gap-2 bg-primary-700 hover:bg-primary-800 text-white shadow-sm shadow-primary-200/50 h-11 text-sm font-semibold rounded-xl">
                 <ArrowLeft className="w-4 h-4" />
                 Back to Login
               </Button>
             </Link>
             <Link href="/" className="flex-1">
-              <Button variant="outline" className="w-full gap-2 border-[#2E7D32] text-[#2E7D32] hover:bg-green-50 h-11 text-sm font-semibold">
+              <Button variant="outline" className="w-full gap-2 border-noble-200 text-noble-600 hover:bg-noble-50 hover:border-noble-300 h-11 text-sm font-semibold rounded-xl">
                 <Home className="w-4 h-4" />
                 Go Home
               </Button>
@@ -137,7 +137,7 @@ function ErrorContent() {
           >
             <button
               onClick={() => window.location.reload()}
-              className="inline-flex items-center gap-1.5 text-sm text-[#4CAF50] hover:text-[#2E7D32] transition-colors font-medium"
+              className="inline-flex items-center gap-1.5 text-sm text-primary-600 hover:text-primary-700 transition-colors font-medium"
             >
               <RefreshCw className="w-3.5 h-3.5" />
               Try Again
@@ -150,10 +150,10 @@ function ErrorContent() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.4 }}
-          className="text-center mt-6 text-xs text-gray-400"
+          className="text-center mt-6 text-xs text-noble-400"
         >
           If the problem persists, please{' '}
-          <Link href="/support" className="text-[#4CAF50] hover:text-[#2E7D32] underline transition-colors">
+          <Link href="/support" className="text-primary-600 hover:text-primary-700 underline transition-colors font-medium">
             contact our support team
           </Link>
         </motion.p>
@@ -165,8 +165,8 @@ function ErrorContent() {
 export default function AuthErrorPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-[#F8FFF5] flex items-center justify-center">
-        <div className="animate-pulse text-gray-400">Loading...</div>
+      <div className="min-h-screen bg-natural flex items-center justify-center">
+        <div className="animate-pulse text-noble-400">Loading...</div>
       </div>
     }>
       <ErrorContent />

@@ -37,15 +37,15 @@ const orders = [
 const orderProducts: Record<string, { id: number; name: string; price: number; image: string }[]> = {
   'ORD-45689': [
     { id: 1, name: 'Forest Raw Honey (500g)', price: 649, image: 'https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=200&q=80' },
-    { id: 2, name: 'Organic Foxtail Millet (1kg)', price: 249, image: 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=200&q=80' },
-    { id: 3, name: 'Cold Pressed Coconut Oil (1L)', price: 499, image: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=200&q=80' },
+    { id: 2, name: 'Organic Foxtail Millet (1kg)', price: 249, image: 'https://images.pexels.com/photos/5486525/pexels-photo-5486525.jpeg?auto=compress&cs=tinysrgb&w=200' },
+    { id: 3, name: 'Cold Pressed Coconut Oil (1L)', price: 499, image: 'https://images.pexels.com/photos/4110003/pexels-photo-4110003.jpeg?auto=compress&cs=tinysrgb&w=200' },
   ],
   'ORD-45685': [
     { id: 4, name: 'A2 Gir Cow Ghee (500ml)', price: 899, image: 'https://images.unsplash.com/photo-1631451095765-2c91616fc9e6?w=200&q=80' },
     { id: 5, name: 'Lakadong Turmeric (250g)', price: 349, image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=200&q=80' },
   ],
   'ORD-45680': [
-    { id: 6, name: 'Traditional Mango Pickle (500g)', price: 199, image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=200&q=80' },
+    { id: 6, name: 'Traditional Mango Pickle (500g)', price: 199, image: 'https://images.pexels.com/photos/8477068/pexels-photo-8477068.jpeg?auto=compress&cs=tinysrgb&w=200' },
     { id: 7, name: 'Organic Palm Jaggery (500g)', price: 179, image: 'https://images.unsplash.com/photo-1587139223877-04cb899fa3e8?w=200&q=80' },
     { id: 8, name: 'Herbal Green Tea (100g)', price: 349, image: 'https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=200&q=80' },
   ],
@@ -162,8 +162,8 @@ function StepProgress({ current, total }: { current: number; total: number }) {
             <div className={cn(
               'flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all duration-300',
               isCompleted ? 'bg-primary-600 text-white' :
-              isCurrent ? 'gradient-primary text-white shadow-md shadow-primary-200' :
-              'bg-gray-100 text-gray-400'
+              isCurrent ? 'bg-primary-700 text-white shadow-md shadow-primary-200' :
+              'bg-noble-100 text-noble-400'
             )}>
               {isCompleted ? <CheckCircle className="h-4 w-4" /> : stepNum}
             </div>
@@ -171,7 +171,7 @@ function StepProgress({ current, total }: { current: number; total: number }) {
               <div className="flex-1 h-0.5 rounded-full bg-gray-100">
                 <div className={cn(
                   'h-full rounded-full transition-all duration-500',
-                  isCompleted ? 'bg-primary-500 w-full' : 'bg-gray-200 w-0'
+                  isCompleted ? 'bg-primary-500 w-full' : 'bg-noble-200 w-0'
                 )} />
               </div>
             )}
@@ -219,7 +219,7 @@ export default function ReturnsPage() {
   // ===== Submitted State =====
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-green-50/30 via-white to-white">
+      <div className="min-h-screen bg-gradient-to-b from-primary-50/30 via-white to-white">
         <div className="container-custom py-16 md:py-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -231,7 +231,7 @@ export default function ReturnsPage() {
               <svg className="absolute inset-0 h-full w-full" viewBox="0 0 120 120">
                 <motion.circle
                   cx="60" cy="60" r="55"
-                  fill="none" stroke="#22c55e" strokeWidth="4"
+                  fill="none" stroke="#3D7A3D" strokeWidth="4"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
                   transition={{ duration: 0.6, ease: 'easeInOut', delay: 0.2 }}
@@ -242,7 +242,7 @@ export default function ReturnsPage() {
                 animate={{ scale: 1 }}
                 transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.3 }}
               >
-                <CheckCircle className="h-14 w-14 text-green-500" />
+                <CheckCircle className="h-14 w-14 text-primary-600" />
               </motion.div>
             </div>
 
@@ -374,22 +374,22 @@ export default function ReturnsPage() {
   if (showStatus) {
     const status = returnStatusData;
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="border-b border-gray-200 bg-white">
+      <div className="min-h-screen bg-noble-50">
+        <div className="border-b border-noble-200 bg-white">
           <div className="container-custom py-6">
-            <button onClick={() => setShowStatus(false)} className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-2">
+            <button onClick={() => setShowStatus(false)} className="inline-flex items-center gap-2 text-sm text-noble-500 hover:text-noble-900 mb-2">
               <ArrowLeft className="h-4 w-4" /> Back to Returns
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">Return Status</h1>
-            <p className="mt-1 text-sm text-gray-500">Request #{status.id}</p>
+            <h1 className="text-2xl font-heading text-noble-900">Return Status</h1>
+            <p className="mt-1 text-sm text-noble-500">Request #{status.id}</p>
           </div>
         </div>
         <div className="container-custom py-6 max-w-2xl mx-auto space-y-6">
           {/* Status Card */}
-          <div className="rounded-2xl border border-green-200 bg-gradient-to-br from-green-50 to-white p-6">
+          <div className="rounded-2xl border border-primary-200 bg-gradient-to-br from-primary-50 to-white p-6">
             <div className="flex items-start justify-between">
               <div>
-                <Badge className="bg-green-100 text-green-700 border-green-200 mb-2">{status.status}</Badge>
+                <Badge className="bg-primary-100 text-primary-700 border-primary-200 mb-2">{status.status}</Badge>
                 <h2 className="text-lg font-bold text-gray-900">{status.type} Request</h2>
                 <p className="text-sm text-gray-500 mt-1">{status.items.join(', ')}</p>
               </div>
@@ -402,8 +402,8 @@ export default function ReturnsPage() {
           </div>
 
           {/* Timeline */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-6">
-            <h3 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="rounded-2xl border border-noble-200 bg-white p-6">
+            <h3 className="text-sm font-semibold text-noble-900 mb-4 flex items-center gap-2">
               <Clock className="h-4 w-4 text-primary-600" /> Tracking Timeline
             </h3>
             <div className="space-y-0">
@@ -412,18 +412,18 @@ export default function ReturnsPage() {
                   {i < status.timeline.length - 1 && (
                     <div className={cn(
                       'absolute left-[15px] top-8 w-0.5 h-full',
-                      t.completed ? 'bg-primary-300' : 'bg-gray-200'
+                      t.completed ? 'bg-primary-300' : 'bg-noble-200'
                     )} />
                   )}
                   <div className={cn(
                     'flex h-8 w-8 shrink-0 items-center justify-center rounded-full z-10',
-                    t.completed ? 'bg-primary-100 text-primary-600' : 'bg-gray-100 text-gray-400'
+                    t.completed ? 'bg-primary-100 text-primary-600' : 'bg-noble-100 text-noble-400'
                   )}>
-                    {t.completed ? <CheckCircle className="h-4 w-4" /> : <div className="h-3 w-3 rounded-full bg-gray-300" />}
+                    {t.completed ? <CheckCircle className="h-4 w-4" /> : <div className="h-3 w-3 rounded-full bg-noble-300" />}
                   </div>
                   <div className="flex-1 min-w-0 pt-0.5">
-                    <p className={cn('text-sm font-medium', t.completed ? 'text-gray-900' : 'text-gray-500')}>{t.label}</p>
-                    <p className={cn('text-xs', t.completed ? 'text-gray-500' : 'text-gray-400')}>{t.date}</p>
+                    <p className={cn('text-sm font-medium', t.completed ? 'text-noble-900' : 'text-noble-500')}>{t.label}</p>
+                    <p className={cn('text-xs', t.completed ? 'text-noble-500' : 'text-noble-400')}>{t.date}</p>
                   </div>
                 </div>
               ))}
@@ -452,17 +452,17 @@ export default function ReturnsPage() {
 
   // ===== Main Form =====
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-noble-50">
       {/* Header */}
-      <div className="border-b border-gray-200 bg-white">
+      <div className="border-b border-noble-200 bg-white">
         <div className="container-custom py-6">
           <div className="flex items-center justify-between">
             <div>
               <Link href="/support" className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-2">
                 <ArrowLeft className="h-4 w-4" /> Back to Support
               </Link>
-              <h1 className="text-2xl font-bold text-gray-900">Return / Replace Items</h1>
-              <p className="mt-1 text-sm text-gray-500">Step {step} of 5</p>
+            <h1 className="text-2xl font-heading text-noble-900">Return / Replace Items</h1>
+            <p className="mt-1 text-sm text-noble-500">Step {step} of 5</p>
             </div>
             <Button variant="ghost" size="sm" className="text-primary-600 gap-1.5" onClick={() => setShowStatus(true)}>
               <Package className="h-4 w-4" /> Track Existing
@@ -482,44 +482,44 @@ export default function ReturnsPage() {
           {step === 1 && (
             <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">What would you like to do?</h2>
-                <p className="text-sm text-gray-500 mt-1">Select the type of request you want to initiate</p>
+                <h2 className="text-lg font-heading text-noble-900">What would you like to do?</h2>
+                <p className="text-sm text-noble-500 mt-1">Select the type of request you want to initiate</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <button
                   onClick={() => { setRequestType('return'); setStep(2); }}
                   className={cn(
                     'group relative rounded-2xl border-2 p-6 text-center transition-all hover:shadow-lg',
-                    requestType === 'return' ? 'border-primary-500 bg-primary-50 shadow-md' : 'border-gray-200 bg-white hover:border-primary-300 hover:-translate-y-0.5'
+                    requestType === 'return' ? 'border-primary-500 bg-primary-50 shadow-md' : 'border-noble-200 bg-white hover:border-primary-300 hover:-translate-y-0.5'
                   )}
                 >
                   <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-400 to-primary-600 shadow-lg shadow-primary-200">
                     <RotateCcw className="h-7 w-7 text-white" />
                   </div>
-                  <p className="mt-4 text-lg font-bold text-gray-900">Return</p>
-                  <p className="mt-1 text-xs text-gray-500 leading-relaxed">Get a full refund for your purchase. Free pickup from your address.</p>
+                  <p className="mt-4 text-lg font-heading text-noble-900">Return</p>
+                  <p className="mt-1 text-xs text-noble-500 leading-relaxed">Get a full refund for your purchase. Free pickup from your address.</p>
                   <Badge className="mt-3 bg-green-50 text-green-700 border-green-200">30-Day Policy</Badge>
                 </button>
                 <button
                   onClick={() => { setRequestType('replacement'); setStep(2); }}
                   className={cn(
                     'group relative rounded-2xl border-2 p-6 text-center transition-all hover:shadow-lg',
-                    requestType === 'replacement' ? 'border-primary-500 bg-primary-50 shadow-md' : 'border-gray-200 bg-white hover:border-primary-300 hover:-translate-y-0.5'
+                    requestType === 'replacement' ? 'border-primary-500 bg-primary-50 shadow-md' : 'border-noble-200 bg-white hover:border-primary-300 hover:-translate-y-0.5'
                   )}
                 >
                   <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-accent-400 to-accent-600 shadow-lg shadow-accent-200">
                     <RefreshCw className="h-7 w-7 text-white" />
                   </div>
-                  <p className="mt-4 text-lg font-bold text-gray-900">Replacement</p>
-                  <p className="mt-1 text-xs text-gray-500 leading-relaxed">Exchange with a new identical item. Subject to stock availability.</p>
+                  <p className="mt-4 text-lg font-heading text-noble-900">Replacement</p>
+                  <p className="mt-1 text-xs text-noble-500 leading-relaxed">Exchange with a new identical item. Subject to stock availability.</p>
                   <Badge className="mt-3 bg-accent-50 text-accent-700 border-accent-200">Free Exchange</Badge>
                 </button>
               </div>
-              <div className="flex items-start gap-3 rounded-xl bg-blue-50 border border-blue-100 p-4">
+              <div className="flex items-start gap-3 rounded-xl bg-primary-50 border border-primary-100 p-4">
                 <Info className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm font-medium text-blue-900">Return Policy</p>
-                  <p className="text-xs text-blue-700 mt-0.5">Items can be returned within 30 days of delivery in original condition. Replacement is subject to stock availability. Refunds are processed within 5-7 business days after pickup.</p>
+                  <p className="text-sm font-medium text-primary-800">Return Policy</p>
+                  <p className="text-xs text-primary-600 mt-0.5">Items can be returned within 30 days of delivery in original condition. Replacement is subject to stock availability. Refunds are processed within 5-7 business days after pickup.</p>
                 </div>
               </div>
             </motion.div>
@@ -529,8 +529,8 @@ export default function ReturnsPage() {
           {step === 2 && (
             <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">Select Order</h2>
-                <p className="text-sm text-gray-500 mt-1">Choose the order containing items you want to {requestType}</p>
+              <h2 className="text-lg font-heading text-noble-900">Select Order</h2>
+              <p className="text-sm text-noble-500 mt-1">Choose the order containing items you want to {requestType}</p>
               </div>
               <div className="space-y-3">
                 {orders.filter(o => o.status === 'Delivered').map((order) => (
@@ -539,17 +539,17 @@ export default function ReturnsPage() {
                     onClick={() => { setSelectedOrder(order.id); setSelectedProducts([]); setStep(3); }}
                     className={cn(
                       'w-full text-left rounded-xl border-2 p-4 transition-all hover:shadow-md',
-                      selectedOrder === order.id ? 'border-primary-500 bg-primary-50' : 'border-gray-200 bg-white hover:border-gray-300'
+                      selectedOrder === order.id ? 'border-primary-500 bg-primary-50' : 'border-noble-200 bg-white hover:border-noble-300'
                     )}
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-semibold text-gray-900">{order.id}</p>
-                        <p className="text-xs text-gray-500">{order.date} · {order.items} items</p>
+                        <p className="text-sm font-semibold text-noble-900">{order.id}</p>
+                        <p className="text-xs text-noble-500">{order.date} · {order.items} items</p>
                       </div>
                       <div className="flex items-center gap-3">
-                        <p className="text-sm font-bold text-gray-900">₹{order.total.toLocaleString()}</p>
-                        <ChevronRight className="h-4 w-4 text-gray-400" />
+                        <p className="text-sm font-bold text-noble-900">₹{order.total.toLocaleString()}</p>
+                        <ChevronRight className="h-4 w-4 text-noble-400" />
                       </div>
                     </div>
                   </button>

@@ -44,16 +44,16 @@ function FlipUnit({ value, label }: { value: number; label: string }) {
             animate={{ rotateX: 0, opacity: 1 }}
             exit={{ rotateX: 90, opacity: 0 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-xl bg-gradient-to-b from-white to-emerald-50 shadow-lg shadow-emerald-900/10 border border-white/50"
+            className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-xl bg-white/15 backdrop-blur-sm border border-white/10"
             style={{ transformStyle: 'preserve-3d', perspective: '200px' }}
           >
-            <span className="text-xl sm:text-2xl font-bold text-emerald-900 tabular-nums">
+            <span className="text-xl sm:text-2xl font-bold text-white tabular-nums">
               {String(value).padStart(2, '0')}
             </span>
           </motion.div>
         </AnimatePresence>
       </div>
-      <span className="mt-1.5 text-[10px] sm:text-xs font-semibold text-emerald-200 uppercase tracking-[0.15em]">
+      <span className="mt-1.5 text-[10px] sm:text-xs font-semibold text-white/40 uppercase tracking-[0.15em]">
         {label}
       </span>
     </div>
@@ -78,11 +78,11 @@ export function FlashSale() {
   return (
     <section className="section-padding">
       <div className="container-luxury">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 shadow-2xl shadow-emerald-900/20">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-noble-800 via-noble-900 to-noble-900 shadow-2xl">
           {/* Animated Background Pattern */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full border-[25px] border-emerald-500/10" />
-            <div className="absolute -bottom-40 -left-40 h-[30rem] w-[30rem] rounded-full border-[35px] border-emerald-400/8" />
+            <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full border-[25px] border-white/5" />
+            <div className="absolute -bottom-40 -left-40 h-[30rem] w-[30rem] rounded-full border-[35px] border-white/[0.03]" />
             <div className="absolute right-1/3 top-1/3 h-40 w-40 rounded-full border-[12px] border-accent-400/10" />
             <motion.div
               className="absolute -top-10 -right-10 h-32 w-32 rounded-full bg-accent-500/5 blur-2xl"
@@ -98,26 +98,26 @@ export function FlashSale() {
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-md px-4 py-1.5 mb-4 border border-white/10"
+                className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm px-4 py-1.5 mb-4 border border-white/10"
               >
-                <Sparkles className="h-3.5 w-3.5 text-accent-300" />
-                <span className="text-xs font-semibold text-white/90 uppercase tracking-wider">
+                <Sparkles className="h-3.5 w-3.5 text-accent-400" />
+                <span className="text-xs font-semibold text-white/70 uppercase tracking-[0.15em]">
                   Limited Time Offer
                 </span>
               </motion.div>
 
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading text-white leading-tight">
                 {isExpired ? 'Sale Ended!' : "Today's Natural Deals"}
               </h2>
-              <p className="mt-3 text-emerald-100/70 max-w-md text-sm sm:text-base leading-relaxed">
+              <p className="mt-3 text-white/40 max-w-md text-sm sm:text-base leading-relaxed">
                 Exclusive discounts on pure honey, organic millets, cold-pressed oils, and more. Nature&apos;s best, at unbeatable prices!
               </p>
 
               <div className="mt-6 flex items-center gap-4">
                 {!isExpired && (
-                  <div className="flex items-center gap-2 text-emerald-200/60">
+                  <div className="flex items-center gap-2 text-white/30">
                     <Clock className="h-4 w-4" />
-                    <span className="text-xs font-medium uppercase tracking-wider">Ends in</span>
+                    <span className="text-xs font-medium uppercase tracking-[0.15em]">Ends in</span>
                   </div>
                 )}
               </div>
@@ -126,23 +126,23 @@ export function FlashSale() {
             {/* Right: Timer + CTA */}
             <div className="flex flex-col items-center gap-5 lg:items-end">
               {isExpired ? (
-                <Button size="lg" className="bg-white text-emerald-700 hover:bg-emerald-50 font-bold px-8 h-12 rounded-xl shadow-2xl">
+                <Button size="lg" className="bg-white text-noble-900 hover:bg-noble-50 font-bold px-8 h-12 rounded-xl shadow-2xl">
                   New Deals Coming Soon
                 </Button>
               ) : (
                 <>
                   <div className="flex items-start gap-3 sm:gap-4">
                     <FlipUnit value={timeLeft.hours} label="Hours" />
-                    <span className="text-2xl font-bold text-emerald-200/50 mt-3">:</span>
+                    <span className="text-2xl font-bold text-white/30 mt-3">:</span>
                     <FlipUnit value={timeLeft.minutes} label="Minutes" />
-                    <span className="text-2xl font-bold text-emerald-200/50 mt-3">:</span>
+                    <span className="text-2xl font-bold text-white/30 mt-3">:</span>
                     <FlipUnit value={timeLeft.seconds} label="Seconds" />
                   </div>
                   <Link href="/products?sort=discount">
                     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                       <Button
                         size="lg"
-                        className="bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 text-white font-bold px-8 h-12 rounded-xl shadow-2xl shadow-accent-500/30 gap-2 text-base"
+                        className="bg-accent-500 hover:bg-accent-600 text-noble-900 font-bold px-8 h-12 rounded-xl shadow-2xl shadow-accent-500/20 gap-2 text-base"
                       >
                         Grab the Deals
                         <ArrowRight className="h-4 w-4" />

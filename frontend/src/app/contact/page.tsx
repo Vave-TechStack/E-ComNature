@@ -121,9 +121,9 @@ export default function ContactPage() {
               <span className="text-xs font-semibold text-primary-700 uppercase tracking-wider">Get In Touch</span>
             </motion.div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-noble-900 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading text-noble-900 leading-tight">
               We'd Love to{" "}
-              <span className="bg-gradient-to-r from-primary-600 via-emerald-500 to-teal-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-primary-600 via-primary-500 to-secondary-500 bg-clip-text text-transparent">
                 Hear From You
               </span>
             </h1>
@@ -154,7 +154,7 @@ export default function ContactPage() {
                   className="relative overflow-hidden rounded-2xl border border-noble-200/60 bg-white/60 backdrop-blur-xl p-4 text-center shadow-sm hover:shadow-md transition-all group"
                 >
                   <div className="flex justify-center mb-2">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-emerald-50 group-hover:scale-110 transition-transform">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 group-hover:scale-110 transition-transform">
                       <Icon className="h-5 w-5 text-primary-600" />
                     </div>
                   </div>
@@ -193,9 +193,9 @@ export default function ContactPage() {
                     transition={{ delay: 0.3 + index * 0.1, duration: 0.4 }}
                     className="group relative overflow-hidden rounded-2xl border border-noble-200/60 bg-white/60 backdrop-blur-xl p-5 shadow-sm hover:shadow-md hover:border-noble-300/80 transition-all"
                   >
-                    <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary-500/50 via-emerald-400/50 to-primary-500/50 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary-500/50 via-primary-400/50 to-primary-500/50 opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="flex items-start gap-4">
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary-100 to-emerald-100 group-hover:scale-110 transition-transform">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 group-hover:scale-110 transition-transform">
                         <Icon className="h-5 w-5 text-primary-600" />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -239,7 +239,7 @@ export default function ContactPage() {
                         href={social.href}
                         whileHover={{ scale: 1.1, y: -2 }}
                         whileTap={{ scale: 0.95 }}
-                        className="flex h-10 w-10 items-center justify-center rounded-xl bg-noble-100/80 text-noble-500 hover:bg-gradient-to-br hover:from-primary-500 hover:to-emerald-500 hover:text-white transition-all duration-200"
+                        className="flex h-10 w-10 items-center justify-center rounded-xl bg-noble-100/80 text-noble-500 hover:bg-gradient-to-br hover:from-primary-600 hover:to-primary-500 hover:text-white transition-all duration-200"
                         aria-label={social.label}
                       >
                         <SocialIcon className="h-4 w-4" />
@@ -260,11 +260,11 @@ export default function ContactPage() {
               {/* Contact Form */}
               <div className="relative overflow-hidden rounded-2xl border border-noble-200/60 bg-white/60 backdrop-blur-xl p-6 md:p-8 shadow-sm">
                 {/* Decorative blob */}
-                <div className="absolute -top-20 -right-20 w-60 h-60 bg-gradient-to-br from-primary-100/30 to-emerald-100/30 rounded-full blur-3xl pointer-events-none" />
+                <div                            className="absolute -top-20 -right-20 w-60 h-60 bg-gradient-to-br from-primary-100/30 to-primary-50/30 rounded-full blur-3xl pointer-events-none" />
 
                 <div className="relative z-10">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary-100 to-emerald-100">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary-100 to-primary-50">
                       <Send className="h-5 w-5 text-primary-600" />
                     </div>
                     <div>
@@ -286,9 +286,9 @@ export default function ContactPage() {
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
                           transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-                          className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 mb-4"
+                          className="flex h-16 w-16 items-center justify-center rounded-full bg-primary-50 mb-4"
                         >
-                          <CheckCircle className="h-8 w-8 text-emerald-600" />
+                          <CheckCircle className="h-8 w-8 text-primary-600" />
                         </motion.div>
                         <h3 className="text-lg font-bold text-noble-800">Message Sent Successfully!</h3>
                         <p className="text-sm text-noble-500 mt-1">Thank you for reaching out. We'll get back to you shortly.</p>
@@ -390,7 +390,7 @@ export default function ContactPage() {
                             disabled={isSubmitting}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary-600 to-emerald-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary-200/50 transition-all hover:shadow-xl hover:shadow-primary-200/60 disabled:opacity-70 disabled:cursor-not-allowed"
+                            className="inline-flex items-center gap-2 rounded-xl bg-primary-700 hover:bg-primary-800 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary-200/50 transition-all hover:shadow-xl hover:shadow-primary-200/60 disabled:opacity-70 disabled:cursor-not-allowed"
                           >
                             {isSubmitting ? (
                               <>

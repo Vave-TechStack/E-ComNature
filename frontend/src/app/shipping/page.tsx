@@ -8,10 +8,9 @@ export default function ShippingPage() {
   return (
     <div className="min-h-screen bg-natural">
       <div className="bg-white border-b border-primary-100">
-        <div className="container-custom py-3">
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <Link href="/" className="hover:text-primary-600">Home</Link><span>/</span>
-            <span className="text-primary-600 font-medium">Shipping Information</span>
+        <div className="container-custom py-3">            <div className="flex items-center gap-2 text-sm text-noble-500">
+            <Link href="/" className="hover:text-primary-700">Home</Link><span className="text-noble-300">/</span>
+            <span className="text-primary-700 font-medium">Shipping Information</span>
           </div>
         </div>
       </div>
@@ -19,8 +18,8 @@ export default function ShippingPage() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl mx-auto">
           <div className="text-center mb-10">
             <Truck className="h-10 w-10 text-primary-600 mx-auto mb-3" />
-            <h1 className="text-3xl font-bold text-gray-900">Shipping Information</h1>
-            <p className="text-gray-500 mt-2">We deliver pure goodness to your doorstep</p>
+            <h1 className="text-3xl font-heading text-noble-900">Shipping Information</h1>
+            <p className="text-noble-500 mt-2">We deliver pure goodness to your doorstep</p>
           </div>
           <div className="space-y-6">
             {[
@@ -32,9 +31,11 @@ export default function ShippingPage() {
             ].map((item, i) => {
               const Icon = item.icon;
               return (
-                <div key={item.title} className="flex gap-4 p-5 rounded-xl bg-white border border-primary-100">
-                  <Icon className="h-6 w-6 text-primary-600 shrink-0 mt-0.5" />
-                  <div><h3 className="font-semibold text-gray-900">{item.title}</h3><p className="text-sm text-gray-600 mt-1">{item.desc}</p></div>
+                <div key={item.title} className="flex gap-4 p-5 rounded-xl bg-white border border-noble-200 hover:shadow-md hover:border-primary-200 transition-all">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-50">
+                    <Icon className="h-5 w-5 text-primary-600" />
+                  </div>
+                  <div><h3 className="font-heading text-noble-900">{item.title}</h3><p className="text-sm text-noble-600 mt-1">{item.desc}</p></div>
                 </div>
               );
             })}

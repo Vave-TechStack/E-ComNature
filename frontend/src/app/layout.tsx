@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Geist } from 'next/font/google';
+import { Inter, DM_Serif_Display } from 'next/font/google';
 import { Suspense } from 'react';
 import './globals.css';
 import Providers from './providers';
@@ -11,25 +11,31 @@ import { ScrollToTop } from '@/components/layout/ScrollToTop';
 import { PageTransition } from '@/components/layout/PageTransition';
 import { OfflineBanner } from '@/components/layout/OfflineBanner';
 import { NetworkErrorToast } from '@/components/layout/NetworkErrorToast';
-import { PwaRegister } from '@/components/layout/PwaRegister';
+import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { APP_NAME, APP_DESCRIPTION } from '@/lib/constants';
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const geist = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
-const inter = Inter({
+const dmSerif = DM_Serif_Display({
+  weight: '400',
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-dm-serif',
 });
 
 export const metadata: Metadata = {
   title: {
-    default: `${APP_NAME} - Pure & Natural Foods`,
+    default: `${APP_NAME} — Pure & Natural Foods`,
     template: `%s | ${APP_NAME}`,
   },
   description: APP_DESCRIPTION,
-  keywords: ['natural foods', 'organic', 'healthy eating', 'tribal honey', 'forest honey', 'millets', 'cold pressed oils', 'A2 ghee', 'natural spices', 'herbal products', 'chemical-free food', 'traditional rice', 'natural foods online', 'NatureKart'],
+  keywords: [
+    'natural foods', 'organic', 'healthy eating', 'tribal honey', 'forest honey',
+    'millets', 'cold pressed oils', 'A2 ghee', 'natural spices', 'herbal products',
+    'chemical-free food', 'traditional rice', 'natural foods online', 'NatureKart',
+    'organic shopping', 'ayurvedic', 'wellness', 'pure foods', 'farm fresh',
+  ],
   authors: [{ name: APP_NAME }],
   creator: APP_NAME,
   publisher: APP_NAME,
@@ -72,8 +78,8 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#0f172a' },
+    { media: '(prefers-color-scheme: light)', color: '#FAF9F6' },
+    { media: '(prefers-color-scheme: dark)', color: '#1F1C17' },
   ],
 };
 
@@ -83,22 +89,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={cn("font-sans", geist.variable)}>
-      <body suppressHydrationWarning className={`${inter.variable} font-sans antialiased`}>
-        <Providers>            <TooltipProvider>
+    <html lang="en" suppressHydrationWarning className={cn("font-sans", geist.variable, dmSerif.variable)}>
+      <body suppressHydrationWarning className={`${geist.variable} font-sans antialiased`}>
+        <Providers>
+          <TooltipProvider>
             <ScrollToTop />
             <OfflineBanner />
             <NetworkErrorToast />
-            <PwaRegister />
             <div className="flex min-h-screen flex-col">
               <Header />
-              <main className="flex-1">
+              <main className="flex-1 pb-16 lg:pb-0">
                 <PageTransition>
                   {children}
                 </PageTransition>
               </main>
               <Footer />
             </div>
+            {/* Mobile Bottom Navigation */}
+            <MobileBottomNav />
+
             {/* MobileNav rendered at root level — wrapped in Suspense for useSearchParams */}
             <Suspense fallback={null}>
               <MobileNav />

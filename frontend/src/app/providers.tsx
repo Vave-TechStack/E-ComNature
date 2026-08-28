@@ -51,20 +51,41 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                 toastOptions={{
                   duration: 4000,
                   style: {
-                    background: '#1f2937',
-                    color: '#fff',
-                    borderRadius: '12px',
+                    background: '#342F28',
+                    color: '#F3F1EB',
+                    borderRadius: '14px',
+                    border: '1px solid rgba(61, 122, 61, 0.15)',
+                    boxShadow: '0 10px 30px -8px rgba(31, 28, 23, 0.25), 0 4px 6px -4px rgba(31, 28, 23, 0.1)',
+                    fontSize: '14px',
+                    fontFamily: 'Inter, system-ui, sans-serif',
+                    padding: '12px 16px',
+                    maxWidth: '420px',
                   },
                   success: {
                     iconTheme: {
-                      primary: '#22c55e',
-                      secondary: '#fff',
+                      primary: '#2D5F2D',
+                      secondary: '#F0F5F0',
+                    },
+                    style: {
+                      borderLeft: '3px solid #3D7A3D',
                     },
                   },
                   error: {
                     iconTheme: {
-                      primary: '#ef4444',
-                      secondary: '#fff',
+                      primary: '#C53030',
+                      secondary: '#FFF5F5',
+                    },
+                    style: {
+                      borderLeft: '3px solid #E53E3E',
+                    },
+                  },
+                  loading: {
+                    iconTheme: {
+                      primary: '#C9990E',
+                      secondary: '#FDF8E8',
+                    },
+                    style: {
+                      borderLeft: '3px solid #E5B81F',
                     },
                   },
                 }}

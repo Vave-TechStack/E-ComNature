@@ -10,50 +10,50 @@ const reasons = [
   {
     title: 'Forest Collection',
     description: 'Sourced from pristine forests of Araku Valley, Meghalaya, and the Western Ghats — where nature grows freely without human intervention.',
-    image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=800&q=80',
     icon: MapPin,
-    gradient: 'from-emerald-900/80 via-emerald-800/50 to-transparent',
-    color: 'text-emerald-400',
+    gradient: 'from-noble-900/80 via-noble-800/50 to-transparent',
+    color: 'text-primary-400',
   },
   {
     title: 'Chemical Free',
     description: 'No pesticides, no chemical fertilizers, no preservatives, no artificial colors. Just pure, natural food as nature intended.',
     image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80',
     icon: Leaf,
-    gradient: 'from-green-900/80 via-green-800/50 to-transparent',
-    color: 'text-green-400',
+    gradient: 'from-noble-900/80 via-noble-800/50 to-transparent',
+    color: 'text-primary-300',
   },
   {
     title: '100% Organic',
     description: 'Certified organic products from farms practicing traditional, sustainable agriculture for generations.',
     image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80',
     icon: Sparkles,
-    gradient: 'from-teal-900/80 via-teal-800/50 to-transparent',
-    color: 'text-teal-400',
+    gradient: 'from-noble-900/80 via-noble-800/50 to-transparent',
+    color: 'text-accent-400',
   },
   {
     title: 'Direct From Farmers',
     description: 'We work directly with tribal cooperatives, organic farmer groups, and rural artisans — removing middlemen and ensuring fair prices.',
     image: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=800&q=80',
     icon: Users,
-    gradient: 'from-amber-900/80 via-amber-800/50 to-transparent',
-    color: 'text-amber-400',
+    gradient: 'from-noble-900/80 via-noble-800/50 to-transparent',
+    color: 'text-warm-400',
   },
   {
     title: 'Authenticity Guaranteed',
     description: 'Every product is verified for origin and quality. From GPS-tracked forest honey sources to lab-tested spice purity — we guarantee authenticity.',
     image: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&q=80',
     icon: Shield,
-    gradient: 'from-orange-900/80 via-orange-800/50 to-transparent',
-    color: 'text-orange-400',
+    gradient: 'from-noble-900/80 via-noble-800/50 to-transparent',
+    color: 'text-secondary-400',
   },
   {
     title: 'Fair Trade Pledged',
     description: 'We ensure farmers receive fair compensation, prompt payments, and long-term partnerships that help build sustainable rural livelihoods.',
     image: 'https://images.unsplash.com/photo-1495107334309-fcf20504a5ab?w=800&q=80',
     icon: HeartHandshake,
-    gradient: 'from-red-900/80 via-red-800/50 to-transparent',
-    color: 'text-red-400',
+    gradient: 'from-noble-900/80 via-noble-800/50 to-transparent',
+    color: 'text-rose-400',
   },
 ];
 
@@ -74,7 +74,7 @@ function ReasonCard({ reason, index }: { reason: typeof reasons[0]; index: numbe
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ delay: index * 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative overflow-hidden rounded-[5px] h-80 md:h-96 cursor-default bg-noble-900"
+      className="group relative overflow-hidden rounded-2xl h-80 md:h-96 cursor-default bg-noble-900"
     >
       {/* Parallax Background */}
       <motion.div style={{ scale: imageScale }} className="absolute inset-0">
@@ -102,16 +102,16 @@ function ReasonCard({ reason, index }: { reason: typeof reasons[0]; index: numbe
           transition={{ delay: 0.1 + index * 0.05 }}
           className="flex items-center gap-3 mb-3"
         >
-          <div className="p-2 rounded-xl bg-white/15 backdrop-blur-md border border-white/10">
+          <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10">
             <Icon className={cn('h-5 w-5', reason.color)} />
           </div>
-          <h3 className="text-xl md:text-2xl font-bold text-white drop-shadow-sm">{reason.title}</h3>
+          <h3 className="text-xl md:text-2xl font-heading text-white">{reason.title}</h3>
         </motion.div>
         <motion.p
           initial={{ y: 20, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 + index * 0.05 }}
-          className="text-sm md:text-base text-white/70 leading-relaxed max-w-md"
+          className="text-sm md:text-base text-white/60 leading-relaxed max-w-md"
         >
           {reason.description}
         </motion.p>
@@ -119,7 +119,7 @@ function ReasonCard({ reason, index }: { reason: typeof reasons[0]; index: numbe
 
       {/* Top accent line */}
       <div className={cn(
-        'absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent',
+        'absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white/30 to-transparent',
         'transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700'
       )} />
     </motion.div>
@@ -128,7 +128,7 @@ function ReasonCard({ reason, index }: { reason: typeof reasons[0]; index: numbe
 
 export function WhyChooseUs() {
   return (
-    <section className="section-padding bg-white dark:bg-noble-900 overflow-hidden">
+    <section className="section-padding bg-noble-50 overflow-hidden">
       <div className="container-luxury">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
@@ -139,10 +139,10 @@ export function WhyChooseUs() {
             className="flex items-center justify-center gap-3 mb-3"
           >
             <span className="divider-accent" />
-            <span className="text-xs font-semibold text-primary-500 dark:text-primary-400 uppercase tracking-[0.15em]">Why NatureKart</span>
+            <span className="text-xs font-semibold text-primary-600 uppercase tracking-[0.15em]">Why NatureKart</span>
             <span className="divider-accent" />
           </motion.div>
-          <h2 className="heading-md text-noble-800 dark:text-noble-100">Why Choose Us?</h2>
+          <h2 className="heading-md text-noble-900">Why Choose Us?</h2>
           <p className="mt-3 text-noble-400 max-w-2xl mx-auto text-sm md:text-base">
             We are more than a marketplace — we are a movement towards pure, authentic, and sustainable food.
           </p>

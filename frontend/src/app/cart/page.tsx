@@ -244,7 +244,7 @@ export default function CartPage() {
                 {[
                   { name: 'A2 Gir Cow Ghee', price: 899, img: 'https://images.unsplash.com/photo-1631451095765-2c91616fc9e6?w=200&q=80' },
                   { name: 'Lakadong Turmeric', price: 349, img: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=200&q=80' },
-                  { name: 'Cold Pressed Oil', price: 399, img: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=200&q=80' },
+                  { name: 'Cold Pressed Oil', price: 399, img: 'https://images.pexels.com/photos/4110003/pexels-photo-4110003.jpeg?auto=compress&cs=tinysrgb&w=200' },
                 ].map((item, i) => (
                   <motion.div
                     key={item.name}

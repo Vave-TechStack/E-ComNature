@@ -42,26 +42,26 @@ export function ProductSection({
     };
 
     return (
-      <section className="py-12">
+      <section className="section-padding bg-natural">
         <div className="container-custom">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-end justify-between mb-8 md:mb-10">
             <div>
               <h2 className="section-title">{title}</h2>
-              {subtitle && <p className="mt-1 text-gray-500">{subtitle}</p>}
+              {subtitle && <p className="mt-2 text-noble-400 text-sm">{subtitle}</p>}
             </div>
             <div className="flex items-center gap-2">
               {/* Scroll Arrows */}
               <div className="hidden sm:flex items-center gap-1.5 mr-2">
                 <button
                   onClick={() => scrollCarousel('left')}
-                  className="rounded-full border border-primary-200 p-2 text-primary-500 hover:bg-primary-50 hover:border-primary-300 transition-all"
+                  className="rounded-full border border-noble-200 p-2 text-noble-400 hover:bg-primary-50 hover:border-primary-200 hover:text-primary-600 transition-all"
                   aria-label="Scroll products left"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => scrollCarousel('right')}
-                  className="rounded-full border border-primary-200 p-2 text-primary-500 hover:bg-primary-50 hover:border-primary-300 transition-all"
+                  className="rounded-full border border-noble-200 p-2 text-noble-400 hover:bg-primary-50 hover:border-primary-200 hover:text-primary-600 transition-all"
                   aria-label="Scroll products right"
                 >
                   <ChevronRight className="h-4 w-4" />
@@ -69,7 +69,7 @@ export function ProductSection({
               </div>
               {viewAllHref && (
                 <Link href={viewAllHref}>
-                  <Button variant="outline" className="hidden sm:flex gap-2 border-primary-200 text-primary-700 hover:bg-primary-50 group">
+                  <Button variant="outline" className="hidden sm:flex gap-2 border-noble-200 text-noble-600 hover:border-primary-200 hover:text-primary-700 hover:bg-primary-50 group text-xs font-semibold">
                     View All <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </Link>
@@ -81,7 +81,7 @@ export function ProductSection({
             {/* Left Arrow overlay */}
             <button
               onClick={() => scrollCarousel('left')}
-              className="absolute -left-1 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white shadow-xl border border-primary-100 p-2.5 text-primary-600 opacity-0 group-hover:opacity-100 hover:bg-primary-50 hover:scale-105 transition-all duration-300 hidden sm:flex"
+              className="absolute -left-1 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white shadow-lg border border-noble-200 p-2.5 text-noble-500 opacity-0 group-hover:opacity-100 hover:bg-primary-50 hover:border-primary-200 hover:text-primary-600 hover:scale-105 transition-all duration-300 hidden sm:flex"
               aria-label="Scroll products left"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -99,7 +99,7 @@ export function ProductSection({
             {/* Right Arrow overlay */}
             <button
               onClick={() => scrollCarousel('right')}
-              className="absolute -right-1 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white shadow-xl border border-primary-100 p-2.5 text-primary-600 opacity-0 group-hover:opacity-100 hover:bg-primary-50 hover:scale-105 transition-all duration-300 hidden sm:flex"
+              className="absolute -right-1 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white shadow-lg border border-noble-200 p-2.5 text-noble-500 opacity-0 group-hover:opacity-100 hover:bg-primary-50 hover:border-primary-200 hover:text-primary-600 hover:scale-105 transition-all duration-300 hidden sm:flex"
               aria-label="Scroll products right"
             >
               <ChevronRight className="h-4 w-4" />
@@ -111,17 +111,17 @@ export function ProductSection({
   }
 
   return (
-    <section className="py-12">
+    <section className="section-padding bg-natural">
       <div className="container-custom">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-end justify-between mb-8 md:mb-10">
           <div>
             <h2 className="section-title">{title}</h2>
-            {subtitle && <p className="mt-1 text-gray-500">{subtitle}</p>}
+            {subtitle && <p className="mt-2 text-noble-400 text-sm">{subtitle}</p>}
           </div>
           {viewAllHref && (
             <Link href={viewAllHref}>
-              <Button variant="ghost" className="hidden sm:flex gap-2">
-                View All <ArrowRight className="h-4 w-4" />
+              <Button variant="ghost" className="hidden sm:flex gap-2 text-noble-500 hover:text-primary-700 group text-xs font-semibold">
+                View All <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
           )}
@@ -142,7 +142,7 @@ export function ProductSection({
         {viewAllHref && (
           <div className="mt-8 text-center sm:hidden">
             <Link href={viewAllHref}>
-              <Button variant="outline" className="gap-2">
+              <Button variant="outline" className="gap-2 border-noble-200 text-noble-600 text-xs font-semibold">
                 View All {title} <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>

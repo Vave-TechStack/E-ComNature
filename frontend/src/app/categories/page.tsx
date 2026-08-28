@@ -8,11 +8,11 @@ import { Button } from '@/components/ui/button';
 
 const allCategories = [
   { name: 'Natural Honey', slug: 'honey', image: 'https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=800&q=80', count: '25+ Products', desc: 'Pure forest honey from tribal harvesters. Raw, unfiltered, and 100% natural.' },
-  { name: 'Millets & Grains', slug: 'millets', image: 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=800&q=80', count: '45+ Products', desc: 'Organic millets, ancient grains, and traditional rice varieties.' },
-  { name: 'Cold Pressed Oils', slug: 'oils', image: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800&q=80', count: '30+ Products', desc: 'Wood-pressed, chemical-free cooking oils using traditional ghani method.' },
+  { name: 'Millets & Grains', slug: 'millets', image: 'https://images.pexels.com/photos/5486525/pexels-photo-5486525.jpeg?auto=compress&cs=tinysrgb&w=800', count: '45+ Products', desc: 'Organic millets, ancient grains, and traditional rice varieties.' },
+  { name: 'Cold Pressed Oils', slug: 'oils', image: 'https://images.pexels.com/photos/4110003/pexels-photo-4110003.jpeg?auto=compress&cs=tinysrgb&w=800', count: '30+ Products', desc: 'Wood-pressed, chemical-free cooking oils using traditional ghani method.' },
   { name: 'Natural Spices', slug: 'spices', image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=800&q=80', count: '40+ Products', desc: 'Premium spices from hill regions of Meghalaya, Kerala and Western Ghats.' },
   { name: 'A2 Ghee & Dairy', slug: 'ghee', image: 'https://images.unsplash.com/photo-1631451095765-2c91616fc9e6?w=800&q=80', count: '15+ Products', desc: 'Bilona method A2 desi cow ghee from indigenous Gir cows.' },
-  { name: 'Pickles & Snacks', slug: 'pickles', image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80', count: '35+ Products', desc: 'Homemade traditional pickles and healthy traditional snacks.' },
+  { name: 'Pickles & Snacks', slug: 'pickles', image: 'https://images.pexels.com/photos/8477068/pexels-photo-8477068.jpeg?auto=compress&cs=tinysrgb&w=800', count: '35+ Products', desc: 'Homemade traditional pickles and healthy traditional snacks.' },
   { name: 'Herbal Tea', slug: 'herbal', image: 'https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=800&q=80', count: '25+ Products', desc: 'Organic teas, herbal infusions, and wellness powders.' },
   { name: 'Dry Fruits & Nuts', slug: 'dryfruits', image: 'https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?w=800&q=80', count: '20+ Products', desc: 'Premium quality dry fruits and nuts sourced directly from farms.' },
   { name: 'Jaggery & Sweeteners', slug: 'jaggery', image: 'https://images.unsplash.com/photo-1587139223877-04cb899fa3e8?w=800&q=80', count: '12+ Products', desc: 'Natural palm jaggery, raw honey, and traditional sweeteners.' },

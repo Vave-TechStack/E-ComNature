@@ -32,7 +32,7 @@ const mockOrders: Order[] = [
     },
     items: [
       { id: 1, productId: 1, productName: 'Wild Forest Honey (500g)', productImage: 'https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=200&q=80', quantity: 1, unitPrice: 649, sellingPrice: 649, totalPrice: 649, isCancelled: false, isReturned: false },
-      { id: 2, productId: 2, productName: 'Organic Foxtail Millet (1kg)', productImage: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=200&q=80', quantity: 1, unitPrice: 249, sellingPrice: 249, totalPrice: 249, isCancelled: false, isReturned: false },
+      { id: 2, productId: 2, productName: 'Organic Foxtail Millet (1kg)', productImage: 'https://images.pexels.com/photos/5486525/pexels-photo-5486525.jpeg?auto=compress&cs=tinysrgb&w=200', quantity: 1, unitPrice: 249, sellingPrice: 249, totalPrice: 249, isCancelled: false, isReturned: false },
     ],
     statusHistory: [
       { id: 1, fromStatus: 'PENDING', toStatus: 'CONFIRMED', changedBy: 'System', notes: 'Payment verified', createdAt: '2026-01-01T10:00:00.000Z' },
@@ -110,8 +110,8 @@ const mockOrders: Order[] = [
       addressType: 'home',
     },
     items: [
-      { id: 4, productId: 3, productName: 'Cold Pressed Coconut Oil (1L)', productImage: 'https://images.unsplash.com/photo-1611262588024-d12430b98920?w=200&q=80', quantity: 1, unitPrice: 499, sellingPrice: 499, totalPrice: 499, isCancelled: false, isReturned: false },
-      { id: 5, productId: 12, productName: 'Herbal Ashwagandha Powder (200g)', productImage: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=200&q=80', quantity: 1, unitPrice: 49, sellingPrice: 49, totalPrice: 49, isCancelled: false, isReturned: false },
+      { id: 4, productId: 3, productName: 'Cold Pressed Coconut Oil (1L)', productImage: 'https://images.pexels.com/photos/4110003/pexels-photo-4110003.jpeg?auto=compress&cs=tinysrgb&w=200', quantity: 1, unitPrice: 499, sellingPrice: 499, totalPrice: 499, isCancelled: false, isReturned: false },
+      { id: 5, productId: 12, productName: 'Herbal Ashwagandha Powder (200g)', productImage: 'https://images.pexels.com/photos/6621462/pexels-photo-6621462.jpeg?auto=compress&cs=tinysrgb&w=200', quantity: 1, unitPrice: 49, sellingPrice: 49, totalPrice: 49, isCancelled: false, isReturned: false },
     ],
     statusHistory: [
       { id: 5, fromStatus: 'PENDING', toStatus: 'PENDING', changedBy: 'System', notes: 'Order placed successfully', createdAt: '2026-01-05T18:30:00.000Z' },

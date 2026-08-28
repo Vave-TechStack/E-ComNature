@@ -4,7 +4,7 @@ import { Suspense, useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Smartphone, Loader2, ArrowLeft } from 'lucide-react';
+import { Smartphone, Loader2, ArrowLeft, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AuthLayout } from '@/components/auth/AuthLayout';
@@ -43,7 +43,6 @@ function OtpVerifyForm() {
     newOtp[index] = value;
     setOtp(newOtp);
 
-    // Auto-advance to next input
     if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
@@ -120,9 +119,10 @@ function OtpVerifyForm() {
           </motion.div>
         )}
 
+        {/* Icon */}
         <div className="flex justify-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-50">
-            <Smartphone className="h-8 w-8 text-primary-600" />
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-50 border border-primary-100">
+            <ShieldCheck className="h-8 w-8 text-primary-600" />
           </div>
         </div>
 
@@ -138,9 +138,9 @@ function OtpVerifyForm() {
               value={digit}
               onChange={(e) => handleChange(index, e.target.value)}
               onKeyDown={(e) => handleKeyDown(index, e)}
-              className="h-14 w-12 rounded-xl border-2 border-gray-200 text-center text-xl font-bold
+              className="h-14 w-12 rounded-xl border-2 border-noble-200 text-center text-xl font-bold text-noble-900
                          focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none
-                         transition-all duration-200"
+                         transition-all duration-200 bg-white"
               aria-label={`OTP digit ${index + 1}`}
             />
           ))}
@@ -149,7 +149,7 @@ function OtpVerifyForm() {
         <Button
           type="submit"
           disabled={isLoading || otp.join('').length !== 6}
-          className="w-full h-12 gradient-primary text-base"
+          className="w-full h-12 bg-primary-700 hover:bg-primary-800 text-white font-semibold rounded-xl shadow-sm shadow-primary-200/50 text-base"
         >
           {isLoading ? (
             <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Verifying...</>
@@ -160,18 +160,18 @@ function OtpVerifyForm() {
 
         <div className="text-center">
           {canResend ? (
-            <Button variant="link" onClick={handleResend} className="text-primary-600">
+            <Button variant="link" onClick={handleResend} className="text-primary-700 hover:text-primary-800 font-semibold">
               Resend OTP
             </Button>
           ) : (
-            <p className="text-sm text-gray-500">
-              Resend code in <span className="font-semibold text-gray-700">{resendTimer}s</span>
+            <p className="text-sm text-noble-500">
+              Resend code in <span className="font-semibold text-noble-800">{resendTimer}s</span>
             </p>
           )}
         </div>
 
         <Link href="/auth/login">
-          <Button variant="ghost" className="w-full gap-2">
+          <Button variant="ghost" className="w-full gap-2 text-noble-500 hover:text-primary-700 hover:bg-primary-50 font-semibold">
             <ArrowLeft className="h-4 w-4" />
             Back to Login
           </Button>

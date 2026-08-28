@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import { Mail, Loader2, ArrowLeft, CheckCircle } from 'lucide-react';
+import { Mail, Loader2, ArrowLeft, CheckCircle, Leaf, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { AuthLayout } from '@/components/auth/AuthLayout';
@@ -53,17 +53,27 @@ export default function ForgotPasswordPage() {
           animate={{ scale: 1, opacity: 1 }}
           className="text-center space-y-6"
         >
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-            <CheckCircle className="h-8 w-8 text-green-600" />
+          {/* Success Icon */}
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary-50 border border-primary-100">
+            <CheckCircle className="h-8 w-8 text-primary-600" />
           </div>
 
+          {/* Message */}
           <div className="space-y-2">
-            <p className="text-sm text-gray-600">
-              Didn't receive the email? Check your spam folder or
+            <h3 className="text-lg font-heading text-noble-900">Reset Link Sent!</h3>
+            <p className="text-sm text-noble-500">
+              Check your email or phone for the password reset link. The link expires in 30 minutes.
+            </p>
+          </div>
+
+          {/* Actions */}
+          <div className="space-y-3">
+            <p className="text-sm text-noble-500">
+              Didn&apos;t receive the email? Check your spam folder or
             </p>
             <Button
               variant="link"
-              className="text-primary-600"
+              className="text-primary-700 hover:text-primary-800 font-semibold"
               onClick={() => setIsSent(false)}
             >
               Try another email/phone
@@ -71,7 +81,7 @@ export default function ForgotPasswordPage() {
           </div>
 
           <a href="/auth/login">
-            <Button variant="outline" className="gap-2">
+            <Button variant="outline" className="gap-2 rounded-xl border-noble-200 text-noble-600 hover:bg-noble-50 font-semibold">
               <ArrowLeft className="h-4 w-4" />
               Back to Login
             </Button>
@@ -91,24 +101,37 @@ export default function ForgotPasswordPage() {
         label: 'Sign in',
       }}
     >
+      {/* Info Banner */}
+      <div className="rounded-xl bg-primary-50 border border-primary-100 p-3.5 mb-6">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-600 shadow-sm shrink-0">
+            <Send className="h-4 w-4 text-white" />
+          </div>
+          <div>
+            <p className="text-xs font-bold text-primary-800">Quick Recovery</p>
+            <p className="text-[11px] text-primary-600">We'll send a secure link to reset your password instantly</p>
+          </div>
+        </div>
+      </div>
+
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {error && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">{error}</div>
+            <div className="rounded-xl bg-red-50 border border-red-100 p-3 text-sm text-red-600">{error}</div>
           </motion.div>
         )}
 
         <div>
-          <label htmlFor="emailOrPhone" className="block text-sm font-medium text-gray-700 mb-1.5">
+          <label htmlFor="emailOrPhone" className="block text-sm font-medium text-noble-600 mb-1.5">
             Email or Phone Number
           </label>
           <div className="relative">
-            <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-noble-400" />
             <Input
               id="emailOrPhone"
               type="text"
               placeholder="Enter your email or phone"
-              className="pl-10 h-12"
+              className="pl-10 h-12 rounded-xl border-noble-200 focus:border-primary-500 focus:ring-primary-500/20"
               {...register('emailOrPhone')}
             />
           </div>
@@ -117,7 +140,7 @@ export default function ForgotPasswordPage() {
           )}
         </div>
 
-        <Button type="submit" disabled={isLoading} className="w-full h-12 gradient-primary">
+        <Button type="submit" disabled={isLoading} className="w-full h-12 bg-primary-700 hover:bg-primary-800 text-white font-semibold rounded-xl shadow-sm shadow-primary-200/50">
           {isLoading ? (
             <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Sending...</>
           ) : (

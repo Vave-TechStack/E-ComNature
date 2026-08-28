@@ -25,7 +25,7 @@ const blogPosts: BlogPost[] = [
     id: 1,
     title: 'The Ancient Wisdom of Millets: Why Our Grandparents Were Right',
     excerpt: 'Discover the incredible health benefits of traditional millets that our ancestors thrived on. From foxtail to finger millets, learn how these ancient grains can transform your health.',
-    image: 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=800&q=80',
+    image: 'https://images.pexels.com/photos/5486525/pexels-photo-5486525.jpeg?auto=compress&cs=tinysrgb&w=800',
     category: 'Nutrition',
     author: 'Dr. Lakshmi Prasad',
     date: 'Mar 15, 2026',
@@ -47,7 +47,7 @@ const blogPosts: BlogPost[] = [
     id: 3,
     title: 'Cold Pressed vs Refined Oils: What Your Kitchen Deserves',
     excerpt: 'Understand the critical difference between traditionally cold-pressed oils and refined oils. Why the wood-pressed method matters for your health and cooking.',
-    image: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800&q=80',
+    image: 'https://images.pexels.com/photos/4110003/pexels-photo-4110003.jpeg?auto=compress&cs=tinysrgb&w=800',
     category: 'Healthy Living',
     author: 'Chef Arun Kumar',
     date: 'Mar 5, 2026',
@@ -57,9 +57,9 @@ const blogPosts: BlogPost[] = [
 ];
 
 const categoryColors: Record<string, string> = {
-  Nutrition: 'bg-emerald-500',
-  Wellness: 'bg-teal-500',
-  'Healthy Living': 'bg-primary-500',
+  Nutrition: 'bg-primary-600',
+  Wellness: 'bg-secondary-600',
+  'Healthy Living': 'bg-accent-600',
 };
 
 export function BlogSection() {

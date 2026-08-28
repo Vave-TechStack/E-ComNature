@@ -17,14 +17,14 @@ interface GalleryItem {
 }
 
 const galleryItems: GalleryItem[] = [
-  { id: 1, image: 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=400&q=80', likes: '2.4k', comments: '89', caption: 'Fresh harvest from organic farms! 🌾' },
+  { id: 1, image: 'https://images.pexels.com/photos/5486525/pexels-photo-5486525.jpeg?auto=compress&cs=tinysrgb&w=400', likes: '2.4k', comments: '89', caption: 'Fresh harvest from organic farms! 🌾' },
   { id: 2, image: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=400&q=80', likes: '1.8k', comments: '56', caption: 'Morning ritual with herbal tea 🍵' },
   { id: 3, image: 'https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=400&q=80', likes: '3.1k', comments: '124', caption: 'Pure forest honey tasting session 🍯' },
   { id: 4, image: 'https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?w=400&q=80', likes: '2.7k', comments: '92', caption: 'From our farm to your table 🌿' },
   { id: 5, image: 'https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?w=400&q=80', likes: '4.2k', comments: '156', caption: 'Rainbow of fresh organic vegetables 🥗' },
   { id: 6, image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&q=80', likes: '1.5k', comments: '43', caption: 'Dry fruits - nature\'s superfoods 🥜' },
   { id: 7, image: 'https://images.unsplash.com/photo-1509358271058-acd01cc9386a?w=400&q=80', likes: '2.9k', comments: '108', caption: 'Spices that tell a story 🌶️' },
-  { id: 8, image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&q=80', likes: '1.2k', comments: '34', caption: 'Homemade pickles - taste of tradition 🥒' },
+  { id: 8, image: 'https://images.pexels.com/photos/8477068/pexels-photo-8477068.jpeg?auto=compress&cs=tinysrgb&w=400', likes: '1.2k', comments: '34', caption: 'Homemade pickles - taste of tradition 🥒' },
 ];
 
 export function InstagramGallery() {

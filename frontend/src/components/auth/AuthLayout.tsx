@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { Leaf } from 'lucide-react';
 import { APP_NAME } from '@/lib/constants';
 
 interface AuthLayoutProps {
@@ -23,11 +24,16 @@ export function AuthLayout({ children, title, subtitle, alternateLink }: AuthLay
         <div className="w-full max-w-md">
           {/* Logo */}
           <div className="text-center mb-8">
-            <Link href="/" className="inline-flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl gradient-primary">
-                <span className="text-lg font-bold text-white">EN</span>
+            <Link href="/" className="inline-flex items-center gap-2.5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-700 shadow-md shadow-primary-700/20">
+                <Leaf className="h-5 w-5 text-white" strokeWidth={2.5} />
               </div>
-              <span className="text-2xl font-bold gradient-text">{APP_NAME}</span>
+              <div className="flex flex-col">
+                <span className="text-xl font-heading text-noble-900 leading-none">{APP_NAME}</span>
+                <span className="text-[10px] font-medium text-primary-600 uppercase tracking-[0.15em] leading-none mt-0.5">
+                  Pure & Natural
+                </span>
+              </div>
             </Link>
           </div>
 
@@ -36,7 +42,7 @@ export function AuthLayout({ children, title, subtitle, alternateLink }: AuthLay
             <motion.h1
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-2xl sm:text-3xl font-bold text-gray-900"
+              className="text-2xl sm:text-3xl font-heading text-noble-900"
             >
               {title}
             </motion.h1>
@@ -44,7 +50,7 @@ export function AuthLayout({ children, title, subtitle, alternateLink }: AuthLay
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="mt-2 text-sm text-gray-600"
+              className="mt-2.5 text-sm text-noble-500"
             >
               {subtitle}
             </motion.p>
@@ -64,12 +70,12 @@ export function AuthLayout({ children, title, subtitle, alternateLink }: AuthLay
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="mt-8 text-center text-sm text-gray-600"
+            className="mt-8 text-center text-sm text-noble-500"
           >
             {alternateLink.text}{' '}
             <Link
               href={alternateLink.href}
-              className="font-semibold text-primary-600 hover:text-primary-500 transition-colors"
+              className="font-semibold text-primary-700 hover:text-primary-800 transition-colors"
             >
               {alternateLink.label}
             </Link>
@@ -77,13 +83,17 @@ export function AuthLayout({ children, title, subtitle, alternateLink }: AuthLay
         </div>
       </div>
 
-      {/* Right - Visual Section */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-primary-600 via-primary-700 to-accent-600">
-        <div className="absolute inset-0 opacity-10">
+      {/* Right - Visual Section (earthy, natural brand feel) */}
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-noble-800 via-noble-900 to-primary-900">
+        {/* Decorative circles */}
+        <div className="absolute inset-0 opacity-5">
           <div className="absolute -right-20 -top-20 h-96 w-96 rounded-full border-[30px] border-white" />
           <div className="absolute -bottom-40 -left-40 h-[600px] w-[600px] rounded-full border-[40px] border-white" />
           <div className="absolute top-1/3 left-1/4 h-48 w-48 rounded-full border-[15px] border-white" />
         </div>
+
+        {/* Subtle grain texture overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
 
         <div className="relative z-10 flex flex-col items-center justify-center p-12 text-center">
           <motion.div
@@ -91,33 +101,33 @@ export function AuthLayout({ children, title, subtitle, alternateLink }: AuthLay
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="mb-8 flex h-20 w-20 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
-              <svg className="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
+            {/* Icon */}
+            <div className="mb-8 flex h-20 w-20 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10">
+              <Leaf className="h-10 w-10 text-primary-300" strokeWidth={1.5} />
             </div>
 
-            <h2 className="text-3xl font-bold text-white mb-4">
-              Premium Shopping Experience
+            {/* Heading */}
+            <h2 className="text-3xl font-heading text-white mb-4">
+              Pure & Natural Shopping
             </h2>
-            <p className="text-lg text-white/80 max-w-md">
-              Discover thousands of premium products at unbeatable prices. 
-              Fast shipping, easy returns, and dedicated support.
+            <p className="text-lg text-white/50 max-w-md leading-relaxed">
+              Discover premium natural foods sourced directly from farms, forests, and tribal communities across India.
             </p>
 
+            {/* Trust points */}
             <div className="mt-12 space-y-4">
               {[
+                { icon: '🌿', text: '100% natural & chemical-free products' },
                 { icon: '🚚', text: 'Free delivery on orders above ₹499' },
-                { icon: '🔒', text: '100% secure payment gateway' },
+                { icon: '🔒', text: 'Secure payments & data protection' },
                 { icon: '↩️', text: '30-day hassle-free returns' },
-                { icon: '💬', text: '24/7 customer support' },
               ].map((item, i) => (
                 <motion.div
                   key={item.text}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3 + i * 0.1 }}
-                  className="flex items-center gap-3 text-white/80"
+                  className="flex items-center gap-3 text-white/50"
                 >
                   <span className="text-xl">{item.icon}</span>
                   <span className="text-sm">{item.text}</span>

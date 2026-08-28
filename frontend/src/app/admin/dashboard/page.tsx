@@ -43,10 +43,10 @@ function useCountUp(target: number, duration = 1500, enabled = true) {
 
 // ===== Data =====
 const statCards = [
-  { label: 'Total Revenue', value: 12456789, change: 12.5, trend: 'up', icon: DollarSign, gradient: 'from-emerald-500 to-emerald-600', bg: 'bg-emerald-50', format: (v: number) => formatPrice(v) },
-  { label: 'Total Orders', value: 12456, change: 8.2, trend: 'up', icon: ShoppingBag, gradient: 'from-blue-500 to-blue-600', bg: 'bg-blue-50', format: (v: number) => v.toLocaleString() },
-  { label: 'Total Customers', value: 34256, change: -3.1, trend: 'down', icon: Users, gradient: 'from-purple-500 to-purple-600', bg: 'bg-purple-50', format: (v: number) => v.toLocaleString() },
-  { label: 'Active Products', value: 5678, change: 15.7, trend: 'up', icon: Package, gradient: 'from-orange-500 to-orange-600', bg: 'bg-orange-50', format: (v: number) => v.toLocaleString() },
+  { label: 'Total Revenue', value: 12456789, change: 12.5, trend: 'up', icon: DollarSign, gradient: 'from-primary-500 to-primary-600', bg: 'bg-primary-50', format: (v: number) => formatPrice(v) },
+  { label: 'Total Orders', value: 12456, change: 8.2, trend: 'up', icon: ShoppingBag, gradient: 'from-secondary-500 to-secondary-600', bg: 'bg-secondary-50', format: (v: number) => v.toLocaleString() },
+  { label: 'Total Customers', value: 34256, change: -3.1, trend: 'down', icon: Users, gradient: 'from-accent-500 to-accent-600', bg: 'bg-accent-50', format: (v: number) => v.toLocaleString() },
+  { label: 'Active Products', value: 5678, change: 15.7, trend: 'up', icon: Package, gradient: 'from-warm-500 to-warm-600', bg: 'bg-warm-50', format: (v: number) => v.toLocaleString() },
 ];
 
 const dailyComparison = {
@@ -76,7 +76,7 @@ const activityIcons: Record<string, typeof Activity> = {
   shipping: Truck, user: Users, return: XCircle, coupon: Tag,
 };
 
-const iconColorMap: Record<string, string> = { blue: 'text-blue-600', emerald: 'text-emerald-600', purple: 'text-purple-600', orange: 'text-orange-600' };
+const iconColorMap: Record<string, string> = { primary: 'text-primary-600', secondary: 'text-secondary-600', accent: 'text-accent-600', warm: 'text-warm-600' };
 
 const revenueData = [
   { month: 'Jan', revenue: 450000, orders: 1200, profit: 180000 },
@@ -94,12 +94,12 @@ const revenueData = [
 ];
 
 const orderStatusData = [
-  { name: 'Delivered', value: 8560, color: '#22c55e' },
-  { name: 'Processing', value: 2450, color: '#3b82f6' },
-  { name: 'Shipped', value: 1890, color: '#8b5cf6' },
-  { name: 'Pending', value: 980, color: '#f59e0b' },
-  { name: 'Cancelled', value: 456, color: '#ef4444' },
-  { name: 'Returned', value: 320, color: '#64748b' },
+  { name: 'Delivered', value: 8560, color: '#3D7A3D' },
+  { name: 'Processing', value: 2450, color: '#D47D2A' },
+  { name: 'Shipped', value: 1890, color: '#C9990E' },
+  { name: 'Pending', value: 980, color: '#E5B81F' },
+  { name: 'Cancelled', value: 456, color: '#C53030' },
+  { name: 'Returned', value: 320, color: '#858072' },
 ];
 
 const recentOrders = [
@@ -143,7 +143,7 @@ function AnimatedStatCard({ stat: s, index }: { stat: typeof statCards[0]; index
       <div className="relative">
         <div className="flex items-start justify-between">
           <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${s.bg} group-hover:scale-110 transition-transform duration-300`}>
-            <Icon className={`h-5 w-5 ${iconColorMap[s.gradient.split('-')[1]] || 'text-gray-600'}`} />
+            <Icon className={`h-5 w-5 ${iconColorMap[s.gradient.split('-')[1]] || 'text-noble-600'}`} />
           </div>
           <Badge className={cn(
             'gap-1 text-xs font-semibold rounded-full border-0',
@@ -188,7 +188,7 @@ export default function AdminDashboard() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary-50 to-primary-100">
               <Sparkles className="h-4 w-4 text-primary-600" />
             </div>
-            <span className="text-xs font-bold text-primary-600 uppercase tracking-widest">Analytics</span>
+            <span className="text-xs font-bold text-primary-600 uppercase tracking-[0.15em]">Analytics</span>
           </div>
           <h1 className="text-2xl font-bold text-noble-900">Dashboard</h1>
           <p className="text-sm text-noble-400">Your e-commerce performance at a glance</p>
@@ -295,20 +295,20 @@ export default function AdminDashboard() {
               <AreaChart data={revenueData}>
                 <defs>
                   <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10B981" stopOpacity={0.25}/>
-                    <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#3D7A3D" stopOpacity={0.25}/>
+                    <stop offset="95%" stopColor="#3D7A3D" stopOpacity={0}/>
                   </linearGradient>
                   <linearGradient id="profitGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#059669" stopOpacity={0.2}/>
-                    <stop offset="95%" stopColor="#059669" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#2D5F2D" stopOpacity={0.2}/>
+                    <stop offset="95%" stopColor="#2D5F2D" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E3E4DA" strokeOpacity={0.5} />
-                <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#888A7C' }} axisLine={{ stroke: '#E3E4DA' }} tickLine={false} />
-                <YAxis tick={{ fontSize: 12, fill: '#888A7C' }} axisLine={false} tickLine={false} tickFormatter={(v) => `₹${(v / 100000).toFixed(1)}L`} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E5E2D8" strokeOpacity={0.5} />
+                <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#858072' }} axisLine={{ stroke: '#E5E2D8' }} tickLine={false} />
+                <YAxis tick={{ fontSize: 12, fill: '#858072' }} axisLine={false} tickLine={false} tickFormatter={(v) => `₹${(v / 100000).toFixed(1)}L`} />
                 <Tooltip content={<ChartTooltip />} />
-                <Area type="monotone" dataKey="revenue" stroke="#10B981" strokeWidth={2.5} fill="url(#revenueGradient)" name="revenue" />
-                <Area type="monotone" dataKey="profit" stroke="#059669" strokeWidth={2} fill="url(#profitGradient)" name="profit" strokeDasharray="5 5" />
+                <Area type="monotone" dataKey="revenue" stroke="#3D7A3D" strokeWidth={2.5} fill="url(#revenueGradient)" name="revenue" />
+                <Area type="monotone" dataKey="profit" stroke="#2D5F2D" strokeWidth={2} fill="url(#profitGradient)" name="profit" strokeDasharray="5 5" />
               </AreaChart>
             </ResponsiveContainer>
           </div>

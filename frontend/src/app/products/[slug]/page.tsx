@@ -39,7 +39,7 @@ const product: Product = {
     { id: 1, imageUrl: 'https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=800&q=80', isPrimary: true, altText: 'Forest honey jar with honey dipper' },
     { id: 2, imageUrl: 'https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=800&q=80', isPrimary: false, altText: 'Honey pouring from dipper' },
     { id: 3, imageUrl: 'https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=800&q=80', isPrimary: false, altText: 'Honeycomb and honey jar' },
-    { id: 4, imageUrl: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800&q=80', isPrimary: false, altText: 'Forest honey packaging' },
+    { id: 4, imageUrl: 'https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=800&q=80', isPrimary: false, altText: 'Forest honey packaging' },
   ],
   variants: [
     { id: 1, variantType: 'size', variantValue: '250g', color: '#D4A017', stock: 35, additionalPrice: 0, isActive: true },
@@ -339,7 +339,7 @@ export default function ProductDetailPage() {
                       )}
                     </div>
                   )}
-                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-noble-900 leading-tight heading-lg">
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-heading text-noble-900 leading-tight">
                     {product.name}
                   </h1>
 

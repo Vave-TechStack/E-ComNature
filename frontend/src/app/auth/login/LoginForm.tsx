@@ -64,12 +64,12 @@ export default function LoginForm() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 mb-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary-600 to-emerald-500">
-              <span className="text-lg font-bold text-white">EN</span>
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-700">
+              <span className="text-lg font-heading text-white">N</span>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-emerald-500 bg-clip-text text-transparent">NatureKart</span>
+            <span className="text-2xl font-heading text-primary-700">NatureKart</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Welcome Back</h1>
+          <h1 className="text-2xl sm:text-3xl font-heading text-gray-900">Welcome Back</h1>
           <p className="mt-2 text-sm text-gray-600">Sign in to your account to continue shopping</p>
         </div>
 
@@ -125,7 +125,7 @@ export default function LoginForm() {
             {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password.message}</p>}
           </div>
 
-          <Button type="submit" disabled={isLoading} className="w-full h-12 text-base font-semibold bg-gradient-to-r from-primary-600 to-emerald-500 hover:from-primary-700 hover:to-emerald-600 text-white shadow-lg shadow-primary-200/50">
+          <Button type="submit" disabled={isLoading} className="w-full h-12 text-base font-semibold bg-primary-700 hover:bg-primary-800 text-white shadow-lg shadow-primary-200/50">
             {isLoading ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Signing in...</> : 'Sign In'}
           </Button>
 
